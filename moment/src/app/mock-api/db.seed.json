@@ -1,0 +1,13 @@
+{
+  "usuarios": [
+    { "id": 1, "nombre": "Eze Demo", "email": "eze@demo.com", "contrasena": "demo1234", "rol": "ADMIN" }
+  ],
+  "eventos": [],
+  "mesas": [],
+  "invitados": [],
+  "retos": [],
+  "fotos": [],
+  "albumes": [],
+  "encuestas": [],
+  "votos": []
+}
