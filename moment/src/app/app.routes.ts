@@ -1,12 +1,15 @@
 import { Routes } from '@angular/router';
-import { ROUTE_SEGMENTS } from './app.route.segments';
+import { LoginComponent } from './auth/features/login/login'; // <--- Viene de la rama de Mati
+import { ROUTE_SEGMENTS } from './app.route.segments';       // <--- Viene de develop
 
 export const routes: Routes = [
-  
+  // Ruta de inicio de sesión (Mati)
+  { path: 'login', component: LoginComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+
+  // Rutas de los submódulos existentes (Ezequiel / develop)
   {
     path: ROUTE_SEGMENTS.eventos,
-    loadChildren: () => import('./eventos/evento.routes'),
+    loadChildren: () => import('./eventos/evento.routes').then(m => m.EVENTO_ROUTES),
   },
-
- 
 ];
