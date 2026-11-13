@@ -1,8 +1,19 @@
 import { Component, inject, input, OnInit, output, signal } from '@angular/core';
 import { EventoClient } from '../../data-access/evento-client';
-import { ESTADOS, Evento, eventoFormulario, TIPOS } from '../../data-access/evento.model';
-import { form, FormField, FormRoot, required} from '@angular/forms/signals';
-import { firstValueFrom } from 'rxjs'; 
+import {
+  ESTADOS,
+  Evento,
+  eventoFormulario,
+  TIPOS,
+  eventoNuevo,
+} from '../../data-access/evento.model';
+import { form, FormField, FormRoot, required, validate } from '@angular/forms/signals';
+import { firstValueFrom } from 'rxjs';
+import {
+  buscarProblemaDeFecha,
+  FECHA_MAXIMA_DEL_EVENTO,
+  FECHA_MINIMA_DEL_EVENTO,
+} from '../../data-access/evento-validacionesFecha';
 
 @Component({
   imports: [FormField, FormRoot],
@@ -14,6 +25,9 @@ export class EventoFormulario implements OnInit {
   private readonly servicio = inject(EventoClient);
   protected readonly tipos = TIPOS;
   protected readonly estados = ESTADOS;
+
+  protected readonly fechaMinima = FECHA_MINIMA_DEL_EVENTO();
+  protected readonly fechaMaxima = FECHA_MAXIMA_DEL_EVENTO();
 
   readonly aEditar = input<Evento>();
   readonly aCargar = output<Evento>();
@@ -38,9 +52,10 @@ export class EventoFormulario implements OnInit {
       required(e.fecha, { message: 'La fecha es obligatoria' });
       required(e.tipo, { message: 'El tipo es obligatorio' });
 
-      // aqui falta crear validaciones para fecha por ejemplo que la fecha no sea menor a la fecha actual 
-      // por ej que solo deje crear con 6 meses o un año de anticipacion
-
+      validate(e.fecha, ({ value }) => {
+        const problema = buscarProblemaDeFecha(value(), this.aEditar()?.fecha);
+        return problema ?? undefined;
+      });
     },
     {
       submission: {
@@ -56,9 +71,15 @@ export class EventoFormulario implements OnInit {
             alert('Evento actualizado correctamente');
             this.aCargar.emit(resultado);
           } else {
-            const resultado = await firstValueFrom(this.servicio.crearEvento(valores));
+            const usuarioId = 1; // esto es temporal, tengo que poder obtener el id del usuario en sesion
+            const nuevoEvento: eventoNuevo = {
+              ...valores,
+              usuarioId,
+              estado: ESTADOS[0], // 'Pendiente'
+            };
+            const resultado = await firstValueFrom(this.servicio.crearEvento(nuevoEvento));
             alert('Evento creado correctamente');
-            this.aCargar.emit(resultado); 
+            this.aCargar.emit(resultado);
             this.limpiarFormulario();
           }
         },
@@ -73,5 +94,3 @@ export class EventoFormulario implements OnInit {
     this.formu().reset({ ...this.formularioVacio });
   }
 }
-
-

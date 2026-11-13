@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
-import { Evento, eventoFormulario } from './evento.model';
+import { Evento, eventoFormulario , eventoNuevo } from './evento.model';
 
 @Service()
 export class EventoClient {
@@ -12,8 +12,8 @@ export class EventoClient {
         return this.http.get<Evento[]>(this.url);
     }
 
-    crearEvento(formularioEvento : eventoFormulario) {
-        return this.http.post<Evento>(this.url, formularioEvento);
+    crearEvento(evento : eventoNuevo) {
+        return this.http.post<Evento>(this.url, evento);
     }
 
     borrarEvento(id : string | number) {
