@@ -25,7 +25,7 @@
     </div>
 
     @if (errorMessage()) {
-      <div class="alert-error" style="color: red; margin: 10px 0;">
+      <div class="alert-error">
         {{ errorMessage() }}
       </div>
     }
@@ -34,4 +34,14 @@
       {{ isLoading() ? 'Cargando...' : 'Ingresar' }}
     </button>
   </form>
+
+  @if (isLoggedIn()) {
+  <div>
+    <p><strong>Estado de prueba:</strong> ¡Sesión iniciada correctamente!</p>
+    
+    <button (click)="cerrarSesion()">
+      Cerrar sesión (Prueba)
+    </button>
+  </div>
+}
 </div>  
