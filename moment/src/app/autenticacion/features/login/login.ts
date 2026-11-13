@@ -1,8 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../data-access/auth.service';
-import { AuthStateService } from '../../data-access/auth-state.service';
+import { AutenticacionStateService,  } from '../../data-access/autenticacion-state.service';
+import { Router } from '@angular/router';
+import { AutenticacionService } from '../../data-access/autenticacion.service';
 
 @Component({
   selector: 'app-login',
@@ -12,13 +13,16 @@ import { AuthStateService } from '../../data-access/auth-state.service';
   styleUrl: './login.css'
 })
 export class LoginComponent {
-  private authService = inject(AuthService);
-  private authState = inject(AuthStateService);
+  private authService = inject(AutenticacionService);
+  private authState = inject(AutenticacionStateService);
+  private router = inject(Router);
 
   email = signal('');
   password = signal('');
   errorMessage = signal('');
   isLoading = signal(false);
+
+  public isLoggedIn = this.authState.isLoggedIn;
 
   onLogin() {
     if (!this.email() || !this.password()) {
@@ -58,5 +62,9 @@ export class LoginComponent {
         this.errorMessage.set('No se pudo conectar con el servidor.');
       }
     });
+  }
+  cerrarSesion() {
+    this.authState.logout();
+    console.log('Sesión cerrada de forma exitosa');
   }
 }

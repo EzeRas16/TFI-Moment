@@ -1,10 +1,10 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { Usuario } from '../data-access/usuario.model'; // Ajusta la ruta según tu estructura
+import { Usuario } from './usuario.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthStateService {
+export class AutenticacionStateService {
   private currentUserSignal = signal<Usuario | null>(null);
 
   // Señal de solo lectura para consumir en la app
