@@ -11,26 +11,22 @@ export class MesaClient {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:3000/mesas';
 
-  getMesasPorEvento(eventoId: string | number): Observable<Mesa[]> {
-    return this.http.get<Mesa[]>(`${this.apiUrl}?eventoId=${eventoId}`);
+  // Obtener listado de todas las mesas
+  getMesas(): Observable<Mesa[]> {
+    return this.http.get<Mesa[]>(this.apiUrl);
   }
 
-  getMesaById(id: string | number): Observable<Mesa> {
-    return this.http.get<Mesa>(`${this.apiUrl}/${id}`);
-  }
-
+  // SCRUM-15: Alta de mesa 
   crearMesa(datos: MesaFormulario): Observable<Mesa> {
-    const nuevaMesa: Omit<Mesa, 'id'> = {
-      ...datos,
-      codigoQr: crypto.randomUUID(),
-    };
-    return this.http.post<Mesa>(this.apiUrl, nuevaMesa);
+    return this.http.post<Mesa>(this.apiUrl, datos);
   }
 
+  // SCRUM-17: Modificación de mesa existente
   actualizarMesa(id: string | number, cambios: Partial<Mesa>): Observable<Mesa> {
     return this.http.patch<Mesa>(`${this.apiUrl}/${id}`, cambios);
   }
 
+  // SCRUM-16: Eliminación de mesa
   eliminarMesa(id: string | number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
