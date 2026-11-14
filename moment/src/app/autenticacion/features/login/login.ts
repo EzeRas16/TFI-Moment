@@ -41,17 +41,14 @@ export class LoginComponent {
         console.log('Objeto usuario recibido del servicio:', usuario);
 
         if (usuario) {
-          // Usamos 'usuario.nombre' (o 'usuario.name' por si en tu db.json está en inglés)
+          
           console.log('¡Login exitoso! Bienvenido:', usuario.nombre || (usuario as any).name);
           
-          // Guardamos la sesión en el estado global
           this.authState.setSession(usuario);
 
-          // Limpiamos los campos del formulario
           this.email.set('');
           this.password.set('');
 
-          // Aquí luego agregaremos la redirección a la pantalla principal
         } else {
           this.errorMessage.set('Correo o contraseña incorrectos.');
         }
@@ -63,8 +60,9 @@ export class LoginComponent {
       }
     });
   }
-  cerrarSesion() {
-    this.authState.logout();
-    console.log('Sesión cerrada de forma exitosa');
-  }
+  showPassword = signal(false);
+
+  toggleShowPassword() {
+  this.showPassword.update(value => !value);
+}
 }
