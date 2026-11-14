@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
   imports: [RouterOutlet],
+  standalone: true,
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
@@ -10,3 +11,4 @@ import { RouterOutlet } from '@angular/router';
 export class App {
   protected readonly title = signal('moment');
 }
+
