@@ -12,3 +12,4 @@ export const ESTADOS = ['Pendiente', 'Finalizado', 'Cancelado'] as const; // por
 export const TIPOS = ['Casamiento'] as const; // por el momento solo hay casamientos pero en un futuro se podrian agregar mas tipos de eventos
 
 export type eventoFormulario = Omit<Evento, 'id' | 'usuarioId' | 'estado'>; 
+export type eventoNuevo = Omit<Evento, 'id'>;
