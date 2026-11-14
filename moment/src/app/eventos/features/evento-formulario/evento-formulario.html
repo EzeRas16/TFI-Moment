@@ -1,0 +1,34 @@
+<form [formRoot]="formu">
+  <div class="form-group">
+    <label>Nombre del Evento</label>
+    <input type="text" [formField]="formu.nombre" placeholder="Ej: Mi Casamiento " />
+    @if (formu.nombre().invalid() && formu.nombre().touched()) {
+      <span class="errors">{{ formu.nombre().errors()[0].message }}</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <input type="date" [formField]="formu.fecha" [min]="fechaMinima" [max]="fechaMaxima" />
+    @if (formu.fecha().touched()) {
+      @for (error of formu.fecha().errors(); track error.kind) {
+        <span class="errors">{{ error.message }}</span>
+      }
+    }
+  </div>
+
+  <div class="form-group">
+    <label>Tipo de Evento</label>
+    <select [formField]="formu.tipo">
+      <option value="" disabled selected>Seleccione un tipo</option>
+      @for (t of tipos; track t) {
+        <option [value]="t">{{ t }}</option>
+      }
+    </select>
+    @if (formu.tipo().invalid() && formu.tipo().touched()) {
+      <span class="errors">{{ formu.tipo().errors()[0].message }}</span>
+    }
+  </div>
+
+  <button type="submit">Guardar Evento</button>
+  <button type="button" (click)="limpiarFormulario()">Cancelar</button>
+</form>
