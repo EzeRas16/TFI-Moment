@@ -39,10 +39,9 @@ export function buscarProblemaDeFecha(
   const fecha = convertirTextoEnFecha(textoFecha);
   if (!fecha) return { kind: 'fechaInvalida', message: 'La fecha no es válida' };
 
-  // Al editar sin tocar la fecha, no se vuelve a validar
-  const cambioFecha =
-    fechaOriginalDelEvento && textoFecha.slice(0, 10) === fechaOriginalDelEvento.slice(0, 10);
-  if (!cambioFecha) return null;
+ const laFechaNoCambio =
+  fechaOriginalDelEvento && textoFecha.slice(0, 10) === fechaOriginalDelEvento.slice(0, 10);
+if (laFechaNoCambio) return null;
 
   const hoy = obtenerHoySinHora();
   if (fecha < hoy) {
