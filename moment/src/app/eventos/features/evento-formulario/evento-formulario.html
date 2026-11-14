@@ -8,10 +8,11 @@
   </div>
 
   <div class="form-group">
-    <label>Fecha</label>
-    <input type="date" [formField]="formu.fecha" />
-    @if (formu.fecha().invalid() && formu.fecha().touched()) {
-      <span class="errors">{{ formu.fecha().errors()[0].message }}</span>
+    <input type="date" [formField]="formu.fecha" [min]="fechaMinima" [max]="fechaMaxima" />
+    @if (formu.fecha().touched()) {
+      @for (error of formu.fecha().errors(); track error.kind) {
+        <span class="errors">{{ error.message }}</span>
+      }
     }
   </div>
 
@@ -30,5 +31,4 @@
 
   <button type="submit">Guardar Evento</button>
   <button type="button" (click)="limpiarFormulario()">Cancelar</button>
-
 </form>
