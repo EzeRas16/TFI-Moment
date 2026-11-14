@@ -11,3 +11,4 @@ import { Header } from './shared/components/header/header';
 export class App {
   protected readonly title = signal('moment');
 }
+
