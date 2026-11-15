@@ -15,13 +15,16 @@ export class MesaStore {
   readonly mesas = signal<Mesa[]>([]);
   readonly cargando = signal<boolean>(false);
 
-  async cargarMesasPorEvento(eventoId: string | number): Promise<void> {
+async cargarMesasPorEvento(eventoId: string | number): Promise<void> {
     this.cargando.set(true);
     try {
       const lista = await firstValueFrom(this.client.getMesasPorEvento(eventoId));
       this.mesas.set(lista);
+    } catch (err) {
+      console.error('Error al cargar mesas por evento', err);
+      this.mesas.set([]); // En caso de error, dejamos la lista vacía para no romper la UI
     } finally {
-      this.cargando.set(false);
+      this.cargando.set(false); // <--- Garantiza que el spinner siempre se apague
     }
   }
 
@@ -42,5 +45,25 @@ export class MesaStore {
   async eliminarMesa(id: string | number): Promise<void> {
     await firstValueFrom(this.client.eliminarMesa(id));
     this.mesas.update((actuales) => actuales.filter((m) => m.id !== id));
+  }
+
+ // SCRUM-18: Genera el enlace único y persiste el QR (con async/await)
+  async generarQrParaMesa(mesa: Mesa): Promise<Mesa> {
+    const tokenUnico = 'mesa-' + mesa.numero + '-' + Math.random().toString(36).substring(2, 9);
+    const enlaceAcceso = `https://tuapp-evento.com/unirse?token=${tokenUnico}`;
+
+    try {
+      const mesaActualizada = await firstValueFrom(this.client.generarQrMesa(mesa.id, enlaceAcceso));
+      
+      // Actualizamos la mesa 
+      this.mesas.update(mesas =>
+        mesas.map(m => m.id === mesaActualizada.id ? mesaActualizada : m)
+      );
+      
+      return mesaActualizada;
+    } catch (err) {
+      console.error('Error al generar el QR de la mesa', err);
+      throw err;
+    }
   }
 }

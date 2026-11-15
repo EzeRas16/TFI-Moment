@@ -1,9 +1,10 @@
 export interface Mesa {
   id: number;
-  eventoId: number;
+  eventoId: string | number;
+  capacidad?: number;
   numero: number;
   nombre?: string;
-  codigoQr: string;
+  codigoQr?: string;
   activa: boolean;
 }
 
