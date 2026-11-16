@@ -1,0 +1,29 @@
+{
+  "usuarios": [
+    {
+      "id": "1",
+      "nombre": "Eze Demo",
+      "email": "eze@demo.com",
+      "contrasena": "demo1234",
+      "rol": "ADMIN"
+    }
+  ],
+  "eventos": [
+    {
+      "nombre": "CasamientoPrueba",
+      "fecha": "2026-12-12",
+      "tipo": "Casamiento",
+      "usuarioId": 1,
+      "estado": "Pendiente",
+      "id": "W9CXhxonQk0"
+    }
+  ],
+  "mesas": [],
+  "invitados": [],
+  "retos": [],
+  "fotos": [],
+  "albumes": [],
+  "encuestas": [],
+  "votos": [],
+  "$schema": "./node_modules/json-server/schema.json"
+}

@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 70px);
+  flex: 1;
   width: 100%;
   background-color: #0b2528;
   box-sizing: border-box;
