@@ -163,3 +163,21 @@
     font-size: 0.95rem;
   }
 }
+
+.btn-volver {
+  align-self: flex-start;
+  min-height: 44px;
+  margin-bottom: 8px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #9cb8ba;
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.btn-volver:hover {
+  color: #ffffff;
+}
