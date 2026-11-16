@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MesaStore } from '../../data-access/mesa-store';
+import { Mesa } from '../../data-access/mesa.model'; // Asegurate de tener la ruta correcta a tu interfaz
+
 
 @Component({
   selector: 'app-mesa-formulario',
@@ -100,5 +102,42 @@ export class MesaFormulario implements OnInit {
     if (confirm('¿Estás seguro de eliminar esta mesa?')) {
       this.mesaStore.eliminarMesa(id);
     }
+  }
+
+  // SCRUM-19: Descargar QR individual de una mesa como imagen PNG
+  async descargarQrIndividual(mesa: Mesa): Promise<void> {
+    if (!mesa.codigoQr) return;
+
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(mesa.codigoQr)}`;
+    
+    try {
+      const response = await fetch(qrUrl);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = `QR-Mesa-${mesa.numero}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error('Error al descargar el código QR', err);
+      alert('No se pudo descargar el código QR.');
+    }
+  }
+
+  // SCRUM-19: Exportar / Imprimir todos los códigos QR activos
+  exportarTodosQr(): void {
+    const mesasConQr = this.mesaStore.mesas().filter(m => m.codigoQr);
+    
+    if (mesasConQr.length === 0) {
+      alert('No hay mesas con códigos QR generados para exportar.');
+      return;
+    }
+
+    // impresión nativa del navegador (permite imprimir en papel o guardar como PDF)
+    window.print();
   }
 }

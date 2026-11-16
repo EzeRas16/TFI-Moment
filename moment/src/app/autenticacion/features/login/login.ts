@@ -17,11 +17,13 @@ export class LoginComponent {
   private authState = inject(AutenticacionStateService);
   private router = inject(Router);
 
-  // Propiedades del formulario (ngModel funciona perfecto con strings normales)
+  protected readonly modo = signal<'login' | 'registro'>('login');
+
+  nombre = '';
   email = '';
   password = '';
 
-  // Signals para los estados visuales
+  // Signals para estados visuales
   errorMessage = signal('');
   isLoading = signal(false);
   showPassword = signal(false);
@@ -32,7 +34,28 @@ export class LoginComponent {
     this.showPassword.update(value => !value);
   }
 
-  onLogin() {
+  // Método para cambiar de pestaña y limpiar errores
+  cambiarModo(nuevoModo: 'login' | 'registro') {
+    this.modo.set(nuevoModo);
+    this.errorMessage.set('');
+    this.limpiarCampos();
+  }
+
+  limpiarCampos() {
+    this.nombre = '';
+    this.email = '';
+    this.password = '';
+  }
+
+  onSubmit() {
+    if (this.modo() === 'login') {
+      this.ejecutarLogin();
+    } else {
+      this.ejecutarRegistro();
+    }
+  }
+
+  private ejecutarLogin() {
     if (!this.email || !this.password) {
       this.errorMessage.set('Por favor, completa todos los campos.');
       return;
@@ -44,22 +67,10 @@ export class LoginComponent {
     this.authService.login(this.email, this.password).subscribe({
       next: (usuario) => {
         this.isLoading.set(false);
-        
-        console.log('Objeto usuario recibido del servicio:', usuario);
-
         if (usuario) {
-          console.log('¡Login exitoso! Bienvenido:', usuario.nombre || (usuario as any).name);
-          
-          // Guardamos la sesión en el servicio (que a su vez lo guarda en el localStorage)
           this.authState.setSession(usuario);
-
-          // Limpiamos campos
-          this.email = '';
-          this.password = '';
-
-          // 🚀 Redirigimos a la pantalla principal o de eventos de la app
-          this.router.navigate(['/eventos']); // Ajusta la ruta según tu app
-
+          this.limpiarCampos();
+          this.router.navigate(['/eventos']);
         } else {
           this.errorMessage.set('Correo o contraseña incorrectos.');
         }
@@ -68,6 +79,37 @@ export class LoginComponent {
         this.isLoading.set(false);
         console.error('Error de conexión:', err);
         this.errorMessage.set('No se pudo conectar con el servidor.');
+      }
+    });
+  }
+
+  private ejecutarRegistro() {
+    if (!this.nombre || !this.email || !this.password) {
+      this.errorMessage.set('Por favor, completa todos los campos para registrarte.');
+      return;
+    }
+
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
+    const payload = {
+      nombre: this.nombre,
+      email: this.email,
+      contrasena: this.password,
+      rol: 'usuario' 
+    };
+
+    this.authService.registrar(payload).subscribe({
+      next: (usuarioCreado) => {
+        this.isLoading.set(false);
+        this.authState.setSession(usuarioCreado);
+        this.limpiarCampos();
+        this.router.navigate(['/eventos']);
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        console.error('Error en registro:', err);
+        this.errorMessage.set('No se pudo crear el usuario. Intente con otro correo.');
       }
     });
   }

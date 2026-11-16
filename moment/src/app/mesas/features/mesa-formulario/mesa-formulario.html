@@ -4,11 +4,17 @@
   @if (modoVista() === 'lista') {
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2>Gestión de Mesas</h2>
-      <button class="btn btn-primary" (click)="irNuevo()">+ Nueva Mesa</button>
+      <div class="d-flex gap-2">
+        <!-- SCRUM-19: Botón de Exportación / Impresión masiva -->
+        <button class="btn btn-outline-secondary d-print-none" (click)="exportarTodosQr()">
+          🖨️ Exportar / Imprimir QRs
+        </button>
+        <button class="btn btn-primary d-print-none" (click)="irNuevo()">+ Nueva Mesa</button>
+      </div>
     </div>
 
     @if (mesaStore.cargando()) {
-      <div class="text-center my-4">
+      <div class="text-center my-4 d-print-none">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Cargando...</span>
         </div>
@@ -31,23 +37,28 @@
                 
                 <p class="text-muted small mb-3">Capacidad: {{ mesa.capacidad || 'N/A' }}</p>
 
-                <!-- SECCIÓN SCRUM-18: Visualización o Generación del QR a demanda -->
+                <!-- SECCIÓN SCRUM-18 y 19: Visualización, Generación y Descarga del QR -->
                 @if (mesa.codigoQr) {
-                  <!-- Si YA tiene QR: Mostramos la imagen y el texto -->
+                  <!-- Si YA tiene QR: Mostramos la imagen, el texto y el botón de descarga individual -->
                   <div class="text-center bg-light p-2 rounded mb-3">
                     <img [src]="'https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=' + mesa.codigoQr" alt="Código QR" class="img-fluid mb-1">
-                    <div class="text-truncate small text-muted" style="max-width: 100%;">{{ mesa.codigoQr }}</div>
+                    <div class="text-truncate small text-muted mb-2" style="max-width: 100%;">{{ mesa.codigoQr }}</div>
+                    
+                    <!-- SCRUM-19: Botón de descarga individual -->
+                    <button class="btn btn-sm btn-outline-dark w-100 py-1 d-print-none" (click)="descargarQrIndividual(mesa)">
+                      Descargar Imagen QR
+                    </button>
                   </div>
                 } @else {
                   <!-- Si NO tiene QR: Mostramos el botón para generarlo a demanda -->
-                  <button class="btn btn-sm w-100 py-2 fw-bold text-white mb-3" style="background-color: #0d9488;" (click)="mesaStore.generarQrParaMesa(mesa)">
+                  <button class="btn btn-sm w-100 py-2 fw-bold text-white mb-3 d-print-none" style="background-color: #0d9488;" (click)="mesaStore.generarQrParaMesa(mesa)">
                     Generar QR
                   </button>
                 }
               </div>
 
               <!-- Botones de Acción (Editar / Eliminar) -->
-              <div class="d-flex gap-2 mt-2">
+              <div class="d-flex gap-2 mt-2 d-print-none">
                 <button class="btn btn-sm btn-outline-primary w-50" (click)="irEditar(mesa)">Editar</button>
                 <button class="btn btn-sm btn-outline-danger w-50" (click)="eliminar(mesa.id)">Eliminar</button>
               </div>
@@ -62,7 +73,7 @@
      <!-- Formulario de Alta y edicion con validaciones (Vista 2) -->
 
   @if (modoVista() === 'formulario') {
-    <div class="card p-4 shadow-sm mx-auto" style="max-width: 600px;">
+    <div class="card p-4 shadow-sm mx-auto d-print-none" style="max-width: 600px;">
       <h3>{{ editandoId() !== null ? 'Modificar Mesa' : 'Nueva Mesa' }}</h3>
       
       <form [formGroup]="mesaForm" (ngSubmit)="guardar()" class="mt-3">
