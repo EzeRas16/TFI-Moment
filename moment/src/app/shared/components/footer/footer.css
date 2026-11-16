@@ -1,0 +1,30 @@
+.footer-container {
+  background-color: #071b1d; 
+  color: #9cb8ba;
+  padding: 15px 20px;
+  text-align: center;
+  border-top: 1px solid #1c4b4e;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.footer-brand {
+  margin: 0 0 6px 0;
+  font-size: 0.8rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #9cb8ba;
+}
+
+.footer-divider {
+  width: 35px;
+  height: 1px;
+  background-color: #dfc2ad; 
+  margin: 6px auto;
+}
+
+.footer-copy {
+  margin: 6px 0 0 0;
+  font-size: 0.75rem;
+  color: #4a6c6e;
+}
