@@ -1,8 +1,42 @@
 <div class="login-container">
   <div class="login-card">
-    <h2 class="login-title">Iniciar Sesión</h2>
+    
+    <div class="auth-tabs">
+      <button 
+        type="button" 
+        class="tab-btn" 
+        [class.active]="modo() === 'login'" 
+        (click)="cambiarModo('login')">
+        Iniciar Sesión
+      </button>
+      <button 
+        type="button" 
+        class="tab-btn" 
+        [class.active]="modo() === 'registro'" 
+        (click)="cambiarModo('registro')">
+        Crear Cuenta
+      </button>
+    </div>
 
-    <form (ngSubmit)="onLogin()">
+    <h2 class="login-title">
+      {{ modo() === 'login' ? 'Iniciar Sesión' : 'Registrarse' }}
+    </h2>
+
+    <form (ngSubmit)="onSubmit()">
+      @if (modo() === 'registro') {
+        <div class="form-group">
+          <label for="nombre">Nombre:</label>
+          <input 
+            type="text" 
+            id="nombre" 
+            [(ngModel)]="nombre" 
+            name="nombre" 
+            placeholder="Tu nombre completo"
+            [required]="modo() === 'registro'" 
+          />
+        </div>
+      }
+
       <div class="form-group">
         <label for="email">Correo:</label>
         <input 
@@ -40,7 +74,7 @@
       }
 
       <button type="submit" class="btn-submit" [disabled]="isLoading()">
-        {{ isLoading() ? 'Cargando...' : 'INGRESAR' }}
+        {{ isLoading() ? 'Procesando...' : (modo() === 'login' ? 'INGRESAR' : 'REGISTRARSE') }}
       </button>
     </form>
   </div>

@@ -1,6 +1,19 @@
 {
   "usuarios": [
-    { "id": 1, "nombre": "Eze Demo", "email": "eze@demo.com", "contrasena": "demo1234", "rol": "ADMIN" }
+    {
+      "id": "1",
+      "nombre": "Eze Demo",
+      "email": "eze@demo.com",
+      "contrasena": "demo1234",
+      "rol": "ADMIN"
+    },
+    {
+      "nombre": "Matias",
+      "email": "matias@gmail.com",
+      "contraseña": "1917",
+      "rol": "usuario",
+      "id": "s5Hf2-1MXzw"
+    }
   ],
   "eventos": [],
   "mesas": [],
@@ -9,5 +22,6 @@
   "fotos": [],
   "albumes": [],
   "encuestas": [],
-  "votos": []
+  "votos": [],
+  "$schema": "./node_modules/json-server/schema.json"
 }

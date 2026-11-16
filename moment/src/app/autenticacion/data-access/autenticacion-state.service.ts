@@ -1,11 +1,13 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { ROUTE_SEGMENTS } from '../../app.route.segments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AutenticacionStateService {
   
-  // Clave para guardar en el navegador
+  private router = inject(Router); 
   private readonly STORAGE_KEY = 'usuario_moment';
 
   // Inicializamos el signal leyendo del localStorage si existe una sesión previa
@@ -20,7 +22,6 @@ export class AutenticacionStateService {
     return storedUser ? JSON.parse(storedUser) : null;
   }
 
-  // Método que ejecutas cuando el login es exitoso
   setSession(usuarioData: any) {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(usuarioData));
     this.currentUserSignal.set(usuarioData);
@@ -30,5 +31,7 @@ export class AutenticacionStateService {
   logout() {
     localStorage.removeItem(this.STORAGE_KEY);
     this.currentUserSignal.set(null);
+
+    this.router.navigate(['/auth']);
   }
 }
