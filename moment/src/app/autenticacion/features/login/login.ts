@@ -1,9 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AutenticacionStateService,  } from '../../data-access/autenticacion-state.service';
 import { Router } from '@angular/router';
 import { AutenticacionService } from '../../data-access/autenticacion.service';
+import { AutenticacionStateService } from '../../data-access/autenticacion-state.service';
 
 @Component({
   selector: 'app-login',
@@ -17,15 +17,23 @@ export class LoginComponent {
   private authState = inject(AutenticacionStateService);
   private router = inject(Router);
 
-  email = signal('');
-  password = signal('');
+  // Propiedades del formulario (ngModel funciona perfecto con strings normales)
+  email = '';
+  password = '';
+
+  // Signals para los estados visuales
   errorMessage = signal('');
   isLoading = signal(false);
+  showPassword = signal(false);
 
   public isLoggedIn = this.authState.isLoggedIn;
 
+  toggleShowPassword() {
+    this.showPassword.update(value => !value);
+  }
+
   onLogin() {
-    if (!this.email() || !this.password()) {
+    if (!this.email || !this.password) {
       this.errorMessage.set('Por favor, completa todos los campos.');
       return;
     }
@@ -33,21 +41,24 @@ export class LoginComponent {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    this.authService.login(this.email(), this.password()).subscribe({
+    this.authService.login(this.email, this.password).subscribe({
       next: (usuario) => {
         this.isLoading.set(false);
         
-        // Imprimimos el objeto completo para verificar qué propiedades trae exactamente
         console.log('Objeto usuario recibido del servicio:', usuario);
 
         if (usuario) {
-          
           console.log('¡Login exitoso! Bienvenido:', usuario.nombre || (usuario as any).name);
           
+          // Guardamos la sesión en el servicio (que a su vez lo guarda en el localStorage)
           this.authState.setSession(usuario);
 
-          this.email.set('');
-          this.password.set('');
+          // Limpiamos campos
+          this.email = '';
+          this.password = '';
+
+          // 🚀 Redirigimos a la pantalla principal o de eventos de la app
+          this.router.navigate(['/eventos']); // Ajusta la ruta según tu app
 
         } else {
           this.errorMessage.set('Correo o contraseña incorrectos.');
@@ -60,9 +71,4 @@ export class LoginComponent {
       }
     });
   }
-  showPassword = signal(false);
-
-  toggleShowPassword() {
-  this.showPassword.update(value => !value);
-}
 }
