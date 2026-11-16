@@ -19,7 +19,7 @@ export const routes: Routes = [
   },
 
   {
-    path: ROUTE_SEGMENTS.mesas,
+    path: ROUTE_SEGMENTS.eventos + '/:eventoId/' + ROUTE_SEGMENTS.mesas,
     loadChildren: () => import('./mesas/mesa.routes').then((m) => m.MESA_ROUTES),
   },
 ];

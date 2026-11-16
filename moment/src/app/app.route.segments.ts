@@ -1,5 +1,5 @@
 export const ROUTE_SEGMENTS = {
   eventos: 'eventos',
   auth: 'auth',
-  mesas: 'mesas'
+  mesas: 'mesas',
 } as const;

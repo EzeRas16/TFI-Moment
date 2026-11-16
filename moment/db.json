@@ -1,0 +1,51 @@
+{
+  "usuarios": [
+    {
+      "id": "1",
+      "nombre": "Eze Demo",
+      "email": "eze@demo.com",
+      "contrasena": "demo1234",
+      "rol": "ADMIN"
+    }
+  ],
+  "eventos": [
+    {
+      "id": "1",
+      "nombre": "Casamiento de Prueba",
+      "descripcion": "Evento de testeo para gestión de mesas",
+      "fecha": "2026-12-01"
+    }
+  ],
+  "mesas": [
+    {
+      "numero": 1,
+      "capacidad": 7,
+      "activa": true,
+      "eventoId": "1",
+      "id": "WyQGJs9cMEM",
+      "codigoQr": "https://tuapp-evento.com/unirse?token=mesa-1-bj9anl5"
+    },
+    {
+      "numero": 2,
+      "capacidad": 8,
+      "activa": true,
+      "eventoId": "1", 
+      "id": "nPz60B04Ggw",
+      "codigoQr": "https://tuapp-evento.com/unirse?token=mesa-2-bjx584p"
+    },
+    {
+      "numero": 3,
+      "capacidad": 12,
+      "activa": true,
+      "eventoId": "1",
+      "id": "XBOzlu1Rp60"
+    }
+  ],
+  "invitados": [],
+  "retos": [],
+  "fotos": [],
+  "albumes": [],
+  "encuestas": [],
+  "votos": [],
+  "$schema": "./node_modules/json-server/schema.json"
+}

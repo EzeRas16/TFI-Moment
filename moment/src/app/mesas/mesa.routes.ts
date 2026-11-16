@@ -7,7 +7,7 @@ export const MESA_ROUTES: Routes = [
   {
     path: 'gestion',
     loadComponent: () =>
-      import('./features/mesa-formulario/mesa-formulario').then((m) => m.MesaFormularioComponent),
+      import('./features/mesa-formulario/mesa-formulario').then((m) => m.MesaFormulario),
   },
 ];
 
