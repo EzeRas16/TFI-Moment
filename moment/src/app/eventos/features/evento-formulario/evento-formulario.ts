@@ -14,6 +14,7 @@ import {
   FECHA_MAXIMA_DEL_EVENTO,
   FECHA_MINIMA_DEL_EVENTO,
 } from '../../data-access/evento-validacionesFecha';
+import { AutenticacionStateService } from '../../../autenticacion/data-access/autenticacion-state.service';
 
 @Component({
   imports: [FormField, FormRoot],
@@ -31,6 +32,8 @@ export class EventoFormulario implements OnInit {
 
   readonly aEditar = input<Evento>();
   readonly aCargar = output<Evento>();
+
+  private readonly sesion = inject(AutenticacionStateService);
 
   protected readonly formularioVacio: eventoFormulario = {
     nombre: '',
@@ -71,11 +74,15 @@ export class EventoFormulario implements OnInit {
             alert('Evento actualizado correctamente');
             this.aCargar.emit(resultado);
           } else {
-            const usuarioId = 1; // esto es temporal, tengo que poder obtener el id del usuario en sesion
+            const usuario = this.sesion.currentUser();
+            if (!usuario) {
+              alert('Debe iniciar sesión para crear un evento');
+              return;
+            }
             const nuevoEvento: eventoNuevo = {
               ...valores,
-              usuarioId,
-              estado: ESTADOS[0], // 'Pendiente'
+              usuarioId: usuario.id,
+              estado: ESTADOS[0], // Pendiente
             };
             const resultado = await firstValueFrom(this.servicio.crearEvento(nuevoEvento));
             alert('Evento creado correctamente');
