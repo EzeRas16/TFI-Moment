@@ -1,0 +1,33 @@
+<div class="reto-form-container">
+  <h2>Alta de Nuevo Reto</h2>
+  
+  <form (ngSubmit)="guardarReto()">
+    <div class="form-group">
+      <label for="descripcion">Descripción del Reto:</label>
+      <input 
+        type="text" 
+        id="descripcion" 
+        [(ngModel)]="descripcion" 
+        name="descripcion" 
+        placeholder="Ej: Sacarse una foto con los novios" 
+        required 
+      />
+    </div>
+
+    @if (errorMessage()) {
+      <div class="alert-error">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (successMessage()) {
+      <div class="alert-success">
+        {{ successMessage() }}
+      </div>
+    }
+
+    <button type="submit" class="btn-submit" [disabled]="isLoading()">
+      {{ isLoading() ? 'Guardando...' : 'GUARDAR RETO' }}
+    </button>
+  </form>
+</div>

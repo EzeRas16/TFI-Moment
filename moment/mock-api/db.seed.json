@@ -18,7 +18,12 @@
   "eventos": [],
   "mesas": [],
   "invitados": [],
-  "retos": [],
+  "retos": [
+    {
+      "descripcion": "Hola",
+      "id": "C4NJ340uO5k"
+    }
+  ],
   "fotos": [],
   "albumes": [],
   "encuestas": [],
