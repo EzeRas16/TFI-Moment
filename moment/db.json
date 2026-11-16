@@ -29,7 +29,7 @@
       "numero": 2,
       "capacidad": 8,
       "activa": true,
-      "eventoId": "1",
+      "eventoId": "1", 
       "id": "nPz60B04Ggw",
       "codigoQr": "https://tuapp-evento.com/unirse?token=mesa-2-bjx584p"
     },
