@@ -15,6 +15,8 @@ import {
   FECHA_MINIMA_DEL_EVENTO,
 } from '../../data-access/evento-validacionesFecha';
 import { AutenticacionStateService } from '../../../autenticacion/data-access/autenticacion-state.service';
+import { Router } from '@angular/router';
+import { ROUTE_SEGMENTS } from '../../../app.route.segments';
 
 @Component({
   imports: [FormField, FormRoot],
@@ -24,6 +26,7 @@ import { AutenticacionStateService } from '../../../autenticacion/data-access/au
 })
 export class EventoFormulario implements OnInit {
   private readonly servicio = inject(EventoClient);
+  protected readonly router = inject(Router);
   protected readonly tipos = TIPOS;
   protected readonly estados = ESTADOS;
 
@@ -73,6 +76,7 @@ export class EventoFormulario implements OnInit {
             );
             alert('Evento actualizado correctamente');
             this.aCargar.emit(resultado);
+            this.irALista();
           } else {
             const usuario = this.sesion.currentUser();
             if (!usuario) {
@@ -87,7 +91,7 @@ export class EventoFormulario implements OnInit {
             const resultado = await firstValueFrom(this.servicio.crearEvento(nuevoEvento));
             alert('Evento creado correctamente');
             this.aCargar.emit(resultado);
-            this.limpiarFormulario();
+            this.irALista();
           }
         },
         onInvalid: () => {
@@ -100,4 +104,8 @@ export class EventoFormulario implements OnInit {
   limpiarFormulario() {
     this.formu().reset({ ...this.formularioVacio });
   }
+
+  protected irALista() {
+  this.router.navigate(['/', ROUTE_SEGMENTS.eventos]);
+}
 }

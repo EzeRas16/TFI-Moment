@@ -1,16 +1,12 @@
 <div class="evento-container">
   <div class="evento-card">
-    <h2 class="evento-title">{{ aEditar() ? 'Editar Evento' : 'Nuevo Evento' }}</h2>
+    <button type="button" class="btn-volver" (click)="irALista()">← VOLVER A LA LISTA</button>
+    <h2 class="evento-title">{{ aEditar() ? 'Editar Evento' : 'Nuevo Evento' }}</h2> <!-- Todavia no hice modificacion -->>
 
     <form [formRoot]="formu">
       <div class="form-group">
         <label for="nombre">Nombre del Evento</label>
-        <input
-          id="nombre"
-          type="text"
-          [formField]="formu.nombre"
-          placeholder="Ej: Mi Casamiento"
-        />
+        <input id="nombre" type="text" [formField]="formu.nombre" placeholder="Ej: Mi Casamiento" />
         @if (formu.nombre().invalid() && formu.nombre().touched()) {
           <span class="errors">{{ formu.nombre().errors()[0].message }}</span>
         }
@@ -46,9 +42,7 @@
       </div>
 
       <div class="form-actions">
-        <button type="button" class="btn-cancel" (click)="limpiarFormulario()">
-          CANCELAR
-        </button>
+        <button type="button" class="btn-cancel" (click)="limpiarFormulario()">CANCELAR</button>
         <button type="submit" class="btn-submit" [disabled]="formu().submitting()">
           {{ aEditar() ? 'GUARDAR CAMBIOS' : 'GUARDAR EVENTO' }}
         </button>

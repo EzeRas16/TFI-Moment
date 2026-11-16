@@ -1,0 +1,153 @@
+.lista-container {
+  min-height: calc(100vh - 70px);
+  background-color: #0b2528;
+  padding: 16px 12px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.lista-encabezado {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.lista-titulo {
+  color: #ffffff;
+  font-weight: 400;
+  margin: 0;
+  text-align: center;
+}
+
+.btn-nuevo {
+  min-height: 44px;
+  background-color: #dfc2ad;
+  color: #0b2528;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.btn-nuevo:hover {
+  background-color: #ebd2be;
+}
+
+.filtros {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filtros input,
+.filtros select {
+  min-height: 44px;
+  padding: 10px 14px;
+  background-color: #071b1d;
+  border: 1px solid #205053;
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.filtros input:focus,
+.filtros select:focus {
+  border-color: #dfc2ad;
+}
+
+.filtros select {
+  color-scheme: dark;
+}
+
+.btn-limpiar {
+  min-height: 44px;
+  background-color: transparent;
+  color: #9cb8ba;
+  border: 1px solid #205053;
+  border-radius: 4px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.btn-limpiar:hover {
+  background-color: rgba(28, 75, 78, 0.4);
+  border-color: #9cb8ba;
+  color: #ffffff;
+}
+
+.evento-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: #0f3033;
+  border: 1px solid #1c4b4e;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.evento-nombre {
+  color: #ffffff;
+  margin: 0 0 4px;
+  font-weight: 400;
+}
+
+.evento-detalle {
+  color: #9cb8ba;
+  font-size: 0.85rem;
+}
+
+.evento-estado {
+  color: #dfc2ad;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mensaje {
+  color: #9cb8ba;
+  text-align: center;
+}
+
+@media (min-width: 600px) {
+  .lista-container {
+    padding: 30px 20px;
+  }
+
+  .lista-encabezado {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .lista-titulo {
+    text-align: left;
+  }
+
+  .btn-nuevo {
+    padding: 0 20px;
+  }
+
+  .filtros {
+    flex-direction: row;
+  }
+
+  .filtros input {
+    flex: 1;
+  }
+
+  .evento-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
