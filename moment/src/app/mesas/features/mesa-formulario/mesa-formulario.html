@@ -55,7 +55,7 @@
                 </button>
               </div>
 
-              <!-- Botones de Acción (Editar / Eliminar Mesa) -->
+              <!-- Botones de Acción (Editar / Eliminar Mesa) con soporte print -->
               <div class="d-flex gap-2 mt-2 d-print-none border-top pt-2">
                 <button class="btn btn-sm btn-outline-primary w-50" (click)="irEditar(mesa)">Editar</button>
                 <button class="btn btn-sm btn-outline-danger w-50" (click)="eliminar(mesa.id)">Eliminar</button>
@@ -114,42 +114,4 @@
           <label for="numero" class="form-label">Número de Mesa *</label>
           <input type="number" id="numero" class="form-control" formControlName="numero"
             [ngClass]="{'is-invalid': mesaForm.get('numero')?.invalid && mesaForm.get('numero')?.touched}">
-          @if (mesaForm.get('numero')?.hasError('required') && mesaForm.get('numero')?.touched) {
-            <div class="invalid-feedback">El número de mesa es obligatorio.</div>
-          } @else if (mesaForm.get('numero')?.hasError('min') && mesaForm.get('numero')?.touched) {
-            <div class="invalid-feedback">El número de mesa debe ser mayor a 0.</div>
-          } @else if (mesaForm.get('numero')?.hasError('max') && mesaForm.get('numero')?.touched) {
-            <div class="invalid-feedback">El número de mesa no puede superar el límite de 150.</div>
-          } @else if (mesaForm.get('numero')?.hasError('duplicado') && mesaForm.get('numero')?.touched) {
-            <div class="invalid-feedback">¡Ya existe una mesa con ese número en este evento!</div>
-          }
-        </div>
-
-        <div class="mb-3">
-          <label for="capacidad" class="form-label">Capacidad de Personas *</label>
-          <input type="number" id="capacidad" class="form-control" formControlName="capacidad"
-            [ngClass]="{'is-invalid': mesaForm.get('capacidad')?.invalid && mesaForm.get('capacidad')?.touched}">
-          @if (mesaForm.get('capacidad')?.hasError('required') && mesaForm.get('capacidad')?.touched) {
-            <div class="invalid-feedback">La capacidad es obligatoria.</div>
-          } @else if (mesaForm.get('capacidad')?.hasError('min') && mesaForm.get('capacidad')?.touched) {
-            <div class="invalid-feedback">La capacidad mínima es de 1 persona.</div>
-          } @else if (mesaForm.get('capacidad')?.hasError('max') && mesaForm.get('capacidad')?.touched) {
-            <div class="invalid-feedback">La capacidad máxima permitida por mesa es de 12 personas.</div>
-          }
-        </div>
-
-        <div class="mb-3 form-check">
-          <input type="checkbox" id="activa" class="form-check-input" formControlName="activa">
-          <label class="form-check-label" for="activa">Mesa Activa</label>
-        </div>
-
-        <div class="d-flex gap-2">
-          <button type="submit" class="btn btn-success w-50" [disabled]="mesaForm.invalid">Guardar</button>
-          <button type="button" class="btn btn-secondary w-50" (click)="volverALista()">Cancelar</button>
-        </div>
-
-      </form>
-    </div>
-  }
-
-</div>
+          @if (mesaForm.get('numero')?.hasError('required

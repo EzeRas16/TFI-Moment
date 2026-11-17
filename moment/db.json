@@ -26,14 +26,7 @@
       "codigoQr": "http://localhost:4200/unirse?mesaId=OoYjjiJqtTY&token=mesa-1-ikb56jx"
     }
   ],
-  "invitados": [
-    {
-      "nombre": "Ezequiel",
-      "apodo": "LaChancha",
-      "mesaId": "mesa-1-ikb56jx",
-      "id": "JgZxpGM_XS8"
-    }
-  ],
+  "invitados": [],
   "retos": [],
   "fotos": [],
   "albumes": [],
