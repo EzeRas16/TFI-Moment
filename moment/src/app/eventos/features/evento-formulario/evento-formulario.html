@@ -1,7 +1,9 @@
 <div class="evento-container">
   <div class="evento-card">
-    <button type="button" class="btn-volver" (click)="irALista()">← VOLVER A LA LISTA</button>
-    <h2 class="evento-title">{{ aEditar() ? 'Editar Evento' : 'Nuevo Evento' }}</h2> <!-- Todavia no hice modificacion -->>
+    @if (!aEditar()) {
+      <button type="button" class="btn-volver" (click)="irALista()">← VOLVER A LA LISTA</button>
+    }
+    <h2 class="evento-title">{{ aEditar() ? 'Editar Evento' : 'Nuevo Evento' }}</h2>
 
     <form [formRoot]="formu">
       <div class="form-group">

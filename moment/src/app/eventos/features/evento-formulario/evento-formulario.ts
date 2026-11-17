@@ -76,7 +76,6 @@ export class EventoFormulario implements OnInit {
             );
             alert('Evento actualizado correctamente');
             this.aCargar.emit(resultado);
-            this.irALista();
           } else {
             const usuario = this.sesion.currentUser();
             if (!usuario) {
@@ -101,9 +100,10 @@ export class EventoFormulario implements OnInit {
     },
   );
 
-  limpiarFormulario() {
-    this.formu().reset({ ...this.formularioVacio });
-  }
+limpiarFormulario() {
+  const e = this.aEditar();
+  this.formu().reset(e ? { nombre: e.nombre, fecha: e.fecha, tipo: e.tipo } : { ...this.formularioVacio });
+}
 
   protected irALista() {
   this.router.navigate(['/', ROUTE_SEGMENTS.eventos]);
