@@ -1,0 +1,113 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-6 col-lg-5">
+
+      <!-- ESTADO B: El invitado ya dio el presente en esta mesa -->
+      @if (invitadoActual(); as invitado) {
+        <div class="card shadow border-success">
+          <div class="card-header bg-success text-white text-center py-3">
+            <h5 class="mb-0">¡Ya estás adentro de la fiesta!</h5>
+          </div>
+          <div class="card-body p-4 text-center">
+            <div class="mb-3">
+              <span class="badge bg-light text-dark border px-3 py-2">
+                Mesa asignada: {{ invitado.mesaId }}
+              </span>
+            </div>
+
+            <h3 class="fw-bold mb-1">"{{ invitado.apodo }}"</h3>
+            <p class="text-muted mb-4">{{ invitado.nombre }}</p>
+
+            <!-- Espacios preparados para los próximos SCRUMs -->
+            <div class="d-grid gap-2 mb-3">
+              <button type="button" class="btn btn-primary" disabled>
+                Esperando inicio de retos...
+              </button>
+              <button type="button" class="btn btn-outline-secondary btn-sm" disabled>
+                Editar mi perfil (Próximamente)
+              </button>
+            </div>
+
+            <hr />
+            <button
+              type="button"
+              class="btn btn-link btn-sm text-muted text-decoration-none"
+              (click)="salirDeLaMesa()"
+            >
+              ¿No sos {{ invitado.apodo }}? Registrar otra persona
+            </button>
+          </div>
+        </div>
+      } 
+      
+      <!-- ESTADO A: Primera vez que escanea el QR -> Formulario de alta -->
+      @else {
+        <div class="card shadow-sm">
+          <div class="card-body p-4">
+            <h3 class="card-title text-center mb-2">¡Sumate a la mesa!</h3>
+            <p class="text-muted text-center small mb-4">
+              Completá tu nombre y tu apodo de fiesta para dar el presente
+            </p>
+
+            @if (errorMensaje()) {
+              <div class="alert alert-danger py-2 small" role="alert">
+                {{ errorMensaje() }}
+              </div>
+            }
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              <!-- Nombre -->
+              <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input
+                  id="nombre"
+                  type="text"
+                  class="form-control"
+                  formControlName="nombre"
+                  placeholder="Ej. Francesco"
+                  [class.is-invalid]="form.get('nombre')?.invalid && form.get('nombre')?.touched"
+                />
+                @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
+                  <div class="invalid-feedback">
+                    El nombre es obligatorio (mínimo 2 letras).
+                  </div>
+                }
+              </div>
+
+              <!-- Apodo -->
+              <div class="mb-4">
+                <label for="apodo" class="form-label">Apodo de fiesta</label>
+                <input
+                  id="apodo"
+                  type="text"
+                  class="form-control"
+                  formControlName="apodo"
+                  placeholder="Ej. Fran"
+                  [class.is-invalid]="form.get('apodo')?.invalid && form.get('apodo')?.touched"
+                />
+                @if (form.get('apodo')?.invalid && form.get('apodo')?.touched) {
+                  <div class="invalid-feedback">
+                    El apodo es obligatorio (mínimo 2 letras).
+                  </div>
+                }
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-primary w-100"
+                [disabled]="store.cargando()"
+              >
+                @if (store.cargando()) {
+                  <span>Registrando...</span>
+                } @else {
+                  <span>Ingresar a la mesa</span>
+                }
+              </button>
+            </form>
+          </div>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>

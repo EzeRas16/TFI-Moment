@@ -19,29 +19,35 @@
   "mesas": [
     {
       "numero": 1,
-      "capacidad": 7,
+      "capacidad": 4,
       "activa": true,
       "eventoId": "1",
-      "id": "WyQGJs9cMEM",
-      "codigoQr": "https://tuapp-evento.com/unirse?token=mesa-1-bj9anl5"
+      "id": "egjc2j-iqWM",
+      "codigoQr": "http://localhost:4200/unirse?mesaId=egjc2j-iqWM&token=mesa-1-tjtawmk"
     },
     {
       "numero": 2,
-      "capacidad": 8,
-      "activa": true,
-      "eventoId": "1", 
-      "id": "nPz60B04Ggw",
-      "codigoQr": "https://tuapp-evento.com/unirse?token=mesa-2-bjx584p"
-    },
-    {
-      "numero": 3,
-      "capacidad": 12,
+      "capacidad": 4,
       "activa": true,
       "eventoId": "1",
-      "id": "XBOzlu1Rp60"
+      "id": "BAOg8imsp_A",
+      "codigoQr": "http://localhost:4200/unirse?mesaId=BAOg8imsp_A&token=mesa-2-mosiddp"
     }
   ],
-  "invitados": [],
+  "invitados": [
+    {
+      "nombre": "Francesco",
+      "apodo": "Danserman",
+      "mesaId": "mesa-1-tjtawmk",
+      "id": "1o0F-_qfjyk"
+    },
+    {
+      "nombre": "Francesco",
+      "apodo": "Danserman",
+      "mesaId": "mesa-2-mosiddp",
+      "id": "QAXnOwp1d28"
+    }
+  ],
   "retos": [],
   "fotos": [],
   "albumes": [],

@@ -50,7 +50,7 @@ async cargarMesasPorEvento(eventoId: string | number): Promise<void> {
  // SCRUM-18: Genera el enlace único y persiste el QR (con async/await)
   async generarQrParaMesa(mesa: Mesa): Promise<Mesa> {
     const tokenUnico = 'mesa-' + mesa.numero + '-' + Math.random().toString(36).substring(2, 9);
-    const enlaceAcceso = `https://tuapp-evento.com/unirse?token=${tokenUnico}`;
+    const enlaceAcceso = `${window.location.origin}/unirse?mesaId=${mesa.id}&token=${tokenUnico}`;
 
     try {
       const mesaActualizada = await firstValueFrom(this.client.generarQrMesa(mesa.id, enlaceAcceso));
