@@ -34,20 +34,7 @@
       "codigoQr": "http://localhost:4200/unirse?mesaId=BAOg8imsp_A&token=mesa-2-mosiddp"
     }
   ],
-  "invitados": [
-    {
-      "nombre": "Francesco",
-      "apodo": "Danserman",
-      "mesaId": "mesa-1-tjtawmk",
-      "id": "1o0F-_qfjyk"
-    },
-    {
-      "nombre": "Francesco",
-      "apodo": "Danserman",
-      "mesaId": "mesa-2-mosiddp",
-      "id": "QAXnOwp1d28"
-    }
-  ],
+  "invitados": [],
   "retos": [],
   "fotos": [],
   "albumes": [],

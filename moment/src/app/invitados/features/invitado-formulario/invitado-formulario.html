@@ -15,31 +15,102 @@
               </span>
             </div>
 
-            <h3 class="fw-bold mb-1">"{{ invitado.apodo }}"</h3>
-            <p class="text-muted mb-4">{{ invitado.nombre }}</p>
+            <!-- SUB-ESTADO B2: Formulario de edición de perfil -->
+            @if (editandoPerfil()) {
+              @if (errorMensaje()) {
+                <div class="alert alert-danger py-2 small text-start" role="alert">
+                  {{ errorMensaje() }}
+                </div>
+              }
 
-            <!-- Espacios preparados para los próximos SCRUMs -->
-            <div class="d-grid gap-2 mb-3">
-              <button type="button" class="btn btn-primary" disabled>
-                Esperando inicio de retos...
-              </button>
-              <button type="button" class="btn btn-outline-secondary btn-sm" disabled>
-                Editar mi perfil (Próximamente)
-              </button>
-            </div>
+              <form [formGroup]="formEdicion" (ngSubmit)="guardarCambiosPerfil()" class="text-start">
+                <div class="mb-3">
+                  <label for="editNombre" class="form-label">Nombre</label>
+                  <input
+                    id="editNombre"
+                    type="text"
+                    class="form-control"
+                    formControlName="nombre"
+                    [class.is-invalid]="formEdicion.get('nombre')?.invalid && formEdicion.get('nombre')?.touched"
+                  />
+                  @if (formEdicion.get('nombre')?.invalid && formEdicion.get('nombre')?.touched) {
+                    <div class="invalid-feedback">
+                      El nombre es obligatorio (mínimo 2 letras).
+                    </div>
+                  }
+                </div>
 
-            <hr />
-            <button
-              type="button"
-              class="btn btn-link btn-sm text-muted text-decoration-none"
-              (click)="salirDeLaMesa()"
-            >
-              ¿No sos {{ invitado.apodo }}? Registrar otra persona
-            </button>
+                <div class="mb-4">
+                  <label for="editApodo" class="form-label">Apodo de fiesta</label>
+                  <input
+                    id="editApodo"
+                    type="text"
+                    class="form-control"
+                    formControlName="apodo"
+                    [class.is-invalid]="formEdicion.get('apodo')?.invalid && formEdicion.get('apodo')?.touched"
+                  />
+                  @if (formEdicion.get('apodo')?.invalid && formEdicion.get('apodo')?.touched) {
+                    <div class="invalid-feedback">
+                      El apodo es obligatorio (mínimo 2 letras).
+                    </div>
+                  }
+                </div>
+
+                <div class="d-grid gap-2">
+                  <button
+                    type="submit"
+                    class="btn btn-success"
+                    [disabled]="store.cargando()"
+                  >
+                    @if (store.cargando()) {
+                      <span>Guardando...</span>
+                    } @else {
+                      <span>Guardar cambios</span>
+                    }
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-sm"
+                    (click)="cancelarEdicion()"
+                    [disabled]="store.cargando()"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            }
+
+            <!-- SUB-ESTADO B1: Vista normal de bienvenida -->
+            @else {
+              <h3 class="fw-bold mb-1">"{{ invitado.apodo }}"</h3>
+              <p class="text-muted mb-4">{{ invitado.nombre }}</p>
+
+              <div class="d-grid gap-2 mb-3">
+                <button type="button" class="btn btn-primary" disabled>
+                  Esperando inicio de retos...
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary btn-sm"
+                  (click)="activarEdicion()"
+                >
+                  Editar mi perfil
+                </button>
+              </div>
+
+              <hr />
+              <button
+                type="button"
+                class="btn btn-link btn-sm text-muted text-decoration-none"
+                (click)="salirDeLaMesa()"
+              >
+                ¿No sos {{ invitado.apodo }}? Registrar otra persona
+              </button>
+            }
           </div>
         </div>
-      } 
-      
+      }
+
       <!-- ESTADO A: Primera vez que escanea el QR -> Formulario de alta -->
       @else {
         <div class="card shadow-sm">
@@ -56,7 +127,6 @@
             }
 
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
-              <!-- Nombre -->
               <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
                 <input
@@ -74,7 +144,6 @@
                 }
               </div>
 
-              <!-- Apodo -->
               <div class="mb-4">
                 <label for="apodo" class="form-label">Apodo de fiesta</label>
                 <input

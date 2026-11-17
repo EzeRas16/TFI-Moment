@@ -16,11 +16,17 @@ export class InvitadoFormulario implements OnInit {
   private readonly route = inject(ActivatedRoute);
   readonly store = inject(InvitadoStore);
 
-  // Estado B: Si tiene un invitado, muestra la tarjeta de bienvenida; si es null, muestra el formulario (Estado A)
   readonly invitadoActual = signal<Invitado | null>(null);
+  readonly editandoPerfil = signal<boolean>(false);
   readonly errorMensaje = signal<string | null>(null);
 
   form: FormGroup = this.fb.group({
+    nombre: ['', [Validators.required, Validators.minLength(2)]],
+    apodo: ['', [Validators.required, Validators.minLength(2)]]
+  });
+
+  // Formulario separado para la edición del perfil en el Estado B
+  formEdicion: FormGroup = this.fb.group({
     nombre: ['', [Validators.required, Validators.minLength(2)]],
     apodo: ['', [Validators.required, Validators.minLength(2)]]
   });
@@ -32,7 +38,6 @@ export class InvitadoFormulario implements OnInit {
     const tokenQuery = this.route.snapshot.queryParamMap.get('token');
     this.mesaToken = tokenParam || tokenQuery || '';
 
-    // Verificamos si este dispositivo ya se registró previamente en esta mesa
     const guardado = localStorage.getItem('invitado_actual');
     if (guardado) {
       const invitadoParsed: Invitado = JSON.parse(guardado);
@@ -61,17 +66,67 @@ export class InvitadoFormulario implements OnInit {
       mesaId: this.mesaToken
     };
 
-    // Llamamos al Store pasando el callback onSuccess que ya tenías preparado
-    this.store.registrarInvitado(nuevoInvitado, (creado) => {
-      localStorage.setItem('invitado_actual', JSON.stringify(creado));
-      this.invitadoActual.set(creado);
-      this.form.reset();
-    });
+    this.store.registrarInvitado(
+      nuevoInvitado,
+      (creado) => {
+        localStorage.setItem('invitado_actual', JSON.stringify(creado));
+        this.invitadoActual.set(creado);
+        this.form.reset();
+      },
+      (msgError) => this.errorMensaje.set(msgError)
+    );
   }
 
-  // Método auxiliar útil para testear o si alguien cambia de celular/usuario
+  activarEdicion(): void {
+    const actual = this.invitadoActual();
+    if (!actual) return;
+
+    this.errorMensaje.set(null);
+    this.formEdicion.patchValue({
+      nombre: actual.nombre,
+      apodo: actual.apodo
+    });
+    this.editandoPerfil.set(true);
+  }
+
+  cancelarEdicion(): void {
+    this.errorMensaje.set(null);
+    this.editandoPerfil.set(false);
+    this.formEdicion.reset();
+  }
+
+  guardarCambiosPerfil(): void {
+    const actual = this.invitadoActual();
+    if (!actual || actual.id === undefined) return;
+
+    this.errorMensaje.set(null);
+
+    if (this.formEdicion.invalid) {
+      this.formEdicion.markAllAsTouched();
+      return;
+    }
+
+    const datosActualizados: Partial<Invitado> = {
+      nombre: this.formEdicion.value.nombre.trim(),
+      apodo: this.formEdicion.value.apodo.trim()
+    };
+
+    this.store.actualizarInvitado(
+      actual.id,
+      datosActualizados,
+      (actualizado) => {
+        localStorage.setItem('invitado_actual', JSON.stringify(actualizado));
+        this.invitadoActual.set(actualizado);
+        this.editandoPerfil.set(false);
+      },
+      (msgError) => this.errorMensaje.set(msgError)
+    );
+  }
+
   salirDeLaMesa(): void {
     localStorage.removeItem('invitado_actual');
     this.invitadoActual.set(null);
+    this.editandoPerfil.set(false);
+    this.errorMensaje.set(null);
   }
 }
