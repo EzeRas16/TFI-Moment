@@ -1,0 +1,29 @@
+@let e = evento();
+
+<div class="detalle-container">
+  <button type="button" class="btn-volver" (click)="irALista()">← VOLVER A LA LISTA</button>
+
+  @if (e) {
+    <div class="detalle-card" [class.cancelado]="e.estado === estadoCancelado">
+      <p class="detalle-estado">{{ e.estado }}</p>
+      <h1 class="detalle-titulo">{{ e.nombre }}</h1>
+      <p class="detalle-dato">Fecha: {{ e.fecha }}</p>
+      <p class="detalle-dato">Tipo: {{ e.tipo }}</p>
+
+      @if (puedeModificar()) {
+        <div class="detalle-botones">
+          <button type="button" class="btn-editar" (click)="editando.update((v) => !v)">
+            {{ editando() ? 'CERRAR EDICIÓN' : 'EDITAR EVENTO' }}
+          </button>
+          <button type="button" class="btn-baja" (click)="darDeBaja()">DAR DE BAJA</button>
+        </div>
+      }
+
+      @if (editando()) {
+        <app-evento-formulario [aEditar]="e" (aCargar)="editar($event)" />
+      }
+    </div>
+  } @else {
+    <p class="mensaje">Cargando evento...</p>
+  }
+</div>

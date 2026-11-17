@@ -36,6 +36,7 @@
           @if (puedeDarDeBaja(evento)) {
             <button type="button" class="btn-baja" (click)="darDeBaja(evento)">DAR DE BAJA</button>
           }
+          <button type="button" class="btn-editar" (click)="router.navigate(['/', 'eventos', evento.id])">VER MÁS</button>
         </div>
       </div>
     } @empty {

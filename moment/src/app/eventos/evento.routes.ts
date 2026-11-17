@@ -12,6 +12,12 @@ const eventoRoutes: Routes = [
     loadComponent: () =>
       import('./features/evento-formulario/evento-formulario').then((m) => m.EventoFormulario),
   },
+
+  {
+  path: ':id',
+  loadComponent: () =>
+    import('./features/evento-detalle/evento-detalle').then((m) => m.EventoDetalle),
+},
 ];
 
 export default eventoRoutes;
