@@ -26,12 +26,17 @@
     </div>
 
     @for (evento of eventosFiltrados(); track evento.id) {
-      <div class="evento-item">
+      <div class="evento-item" [class.cancelado]="evento.estado === 'Cancelado'">
         <div class="evento-datos">
           <h3 class="evento-nombre">{{ evento.nombre }}</h3>
           <span class="evento-detalle">{{ evento.fecha }} · {{ evento.tipo }}</span>
         </div>
-        <span class="evento-estado">{{ evento.estado }}</span>
+        <div class="evento-acciones">
+          <span class="evento-estado">{{ evento.estado }}</span>
+          @if (puedeDarDeBaja(evento)) {
+            <button type="button" class="btn-baja" (click)="darDeBaja(evento)">DAR DE BAJA</button>
+          }
+        </div>
       </div>
     } @empty {
       <p class="mensaje">No hay eventos para mostrar.</p>
