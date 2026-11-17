@@ -14,4 +14,17 @@ export class InvitadoClient {
   crearInvitado(invitado: Invitado): Observable<Invitado> {
     return this.http.post<Invitado>(this.apiUrl, invitado);
   }
+
+  obtenerInvitados(): Observable<Invitado[]> {
+  return this.http.get<Invitado[]>(this.apiUrl);
+}
+
+  actualizarInvitado(id: string | number, datos: Partial<Invitado>): Observable<Invitado> {
+  return this.http.patch<Invitado>(`${this.apiUrl}/${id}`, datos);
+}
+
+eliminarInvitado(id: string | number): Observable<void> {
+  return this.http.delete<void>(`${this.apiUrl}/${id}`);
+}
+
 }
