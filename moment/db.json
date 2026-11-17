@@ -19,45 +19,19 @@
   "mesas": [
     {
       "numero": 1,
-      "capacidad": 4,
+      "capacidad": 1,
       "activa": true,
       "eventoId": "1",
-      "id": "egjc2j-iqWM",
-      "codigoQr": "http://localhost:4200/unirse?mesaId=egjc2j-iqWM&token=mesa-1-tjtawmk"
-    },
-    {
-      "numero": 2,
-      "capacidad": 4,
-      "activa": true,
-      "eventoId": "1",
-      "id": "BAOg8imsp_A",
-      "codigoQr": "http://localhost:4200/unirse?mesaId=BAOg8imsp_A&token=mesa-2-mosiddp"
+      "id": "OoYjjiJqtTY",
+      "codigoQr": "http://localhost:4200/unirse?mesaId=OoYjjiJqtTY&token=mesa-1-ikb56jx"
     }
   ],
   "invitados": [
     {
-      "nombre": "Francesco",
-      "apodo": "Danserman",
-      "mesaId": "mesa-1-tjtawmk",
-      "id": "1o0F-_qfjyk"
-    },
-    {
-      "nombre": "Francesco",
-      "apodo": "Tutuca",
-      "mesaId": "mesa-2-mosiddp",
-      "id": "QAXnOwp1d28"
-    },
-    {
-      "nombre": "Francesco",
-      "apodo": "fafu",
-      "mesaId": "mesa-1-tjtawmk",
-      "id": "9I9b7Rw9nDM"
-    },
-    {
-      "nombre": "Francesco",
-      "apodo": "Fefu",
-      "mesaId": "mesa-2-mosiddp",
-      "id": "dy01yVX3q4k"
+      "nombre": "Ezequiel",
+      "apodo": "LaChancha",
+      "mesaId": "mesa-1-ikb56jx",
+      "id": "JgZxpGM_XS8"
     }
   ],
   "retos": [],

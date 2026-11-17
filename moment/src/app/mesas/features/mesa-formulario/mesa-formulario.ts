@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MesaStore } from '../../data-access/mesa-store';
-import { Mesa } from '../../data-access/mesa.model'; // Asegurate de tener la ruta correcta a tu interfaz
-
+import { Mesa } from '../../data-access/mesa.model';
+import { InvitadoClient } from '../../../invitados/data-access/invitado-client';
 
 @Component({
   selector: 'app-mesa-formulario',
@@ -14,21 +14,32 @@ import { Mesa } from '../../data-access/mesa.model'; // Asegurate de tener la ru
   styleUrl: './mesa-formulario.css'
 })
 export class MesaFormulario implements OnInit {
-  private fb = inject(FormBuilder);
-  protected mesaStore = inject(MesaStore);
-  private route = inject(ActivatedRoute);
+  private readonly fb = inject(FormBuilder);
+  protected readonly mesaStore = inject(MesaStore);
+  private readonly route = inject(ActivatedRoute);
+  private readonly invitadoClient = inject(InvitadoClient);
 
   modoVista = signal<'lista' | 'formulario'>('lista');
   editandoId = signal<number | string | null>(null);
   mesaForm: FormGroup;
 
+  // SCRUM-23: Estado para control de invitados y panel de detalles por mesa
+  invitadosPorMesa = signal<{ [mesaId: string | number]: any[] }>({});
+  mesaSeleccionadaParaDetalle = signal<Mesa | null>(null);
+
   constructor() {
     this.mesaForm = this.fb.group({
-      // Validación 1: Obligatorio, mínimo 1, máximo 150 mesas
       numero: ['', [Validators.required, Validators.min(1), Validators.max(150)]],
-      // Validación lógica de salón: Obligatorio, min 1, máximo 12 personas por mesa
       capacidad: [4, [Validators.required, Validators.min(1), Validators.max(12)]],
       activa: [true, Validators.required]
+    });
+  }
+
+  ngOnInit(): void {
+    const eventoId = this.obtenerEventoId();
+    this.mesaStore.cargarMesasPorEvento(eventoId).then(() => {
+      // Cargamos los invitados una vez que las mesas están disponibles en el store
+      this.cargarInvitados();
     });
   }
 
@@ -38,9 +49,30 @@ export class MesaFormulario implements OnInit {
     return eventoId ? eventoId : 1; 
   }
 
-  ngOnInit(): void {
-    const eventoId = this.obtenerEventoId();
-    this.mesaStore.cargarMesasPorEvento(eventoId);
+  cargarInvitados(): void {
+    this.invitadoClient.obtenerInvitados().subscribe({
+      next: (invitados) => {
+        const agrupados: { [key: string]: any[] } = {};
+        const mesas = this.mesaStore.mesas();
+
+        invitados.forEach(inv => {
+          // Relacionamos el invitado con la mesa comparando el ID directo o buscando el token en el codigoQr
+          const mesaEncontrada = mesas.find(m => 
+            String(m.id) === String(inv.mesaId) || 
+            (m.codigoQr && m.codigoQr.includes(String(inv.mesaId)))
+          );
+
+          if (mesaEncontrada) {
+            const mesaIdStr = String(mesaEncontrada.id);
+            if (!agrupados[mesaIdStr]) agrupados[mesaIdStr] = [];
+            agrupados[mesaIdStr].push(inv);
+          }
+        });
+
+        this.invitadosPorMesa.set(agrupados);
+      },
+      error: (err) => console.error('Error al cargar invitados para las mesas', err)
+    });
   }
 
   irNuevo(): void {
@@ -49,7 +81,7 @@ export class MesaFormulario implements OnInit {
     this.modoVista.set('formulario');
   }
 
-  irEditar(mesa: any): void {
+  irEditar(mesa: Mesa): void {
     this.editandoId.set(mesa.id);
     this.mesaForm.setValue({
       numero: mesa.numero,
@@ -74,7 +106,6 @@ export class MesaFormulario implements OnInit {
     const numeroIngresado = Number(this.mesaForm.get('numero')?.value);
     const idActual = this.editandoId();
 
-    // Validación de número duplicado en el mismo evento (exceptuando la mesa que estamos editando)
     const mesasActuales = this.mesaStore.mesas();
     const mesaDuplicada = mesasActuales.find(m => Number(m.numero) === numeroIngresado && m.id !== idActual);
 
@@ -84,10 +115,7 @@ export class MesaFormulario implements OnInit {
     }
 
     const eventoId = this.obtenerEventoId();
-    const formValues = {
-      ...this.mesaForm.value,
-      eventoId: eventoId 
-    };
+    const formValues = { ...this.mesaForm.value, eventoId };
 
     if (idActual !== null) {
       this.mesaStore.actualizarMesa(idActual, formValues); 
@@ -104,7 +132,27 @@ export class MesaFormulario implements OnInit {
     }
   }
 
-  // SCRUM-19: Descargar QR individual de una mesa como imagen PNG
+  // --- ACCIONES SCRUM-23 (Detalles y Expulsión) ---
+
+  verDetallesMesa(mesa: Mesa): void {
+    this.mesaSeleccionadaParaDetalle.set(mesa);
+  }
+
+  cerrarDetalles(): void {
+    this.mesaSeleccionadaParaDetalle.set(null);
+  }
+
+  expulsarInvitado(invitadoId: string | number): void {
+    if (confirm('¿Estás seguro de que querés expulsar a este invitado de la mesa?')) {
+      const eventoId = this.obtenerEventoId();
+      this.mesaStore.expulsarInvitadoDeMesa(invitadoId, eventoId).then(() => {
+        this.cargarInvitados(); // Actualizamos la lista local en tiempo real
+      });
+    }
+  }
+
+  // --- SCRUM-19: Utilidades de QR ---
+
   async descargarQrIndividual(mesa: Mesa): Promise<void> {
     if (!mesa.codigoQr) return;
 
@@ -128,7 +176,6 @@ export class MesaFormulario implements OnInit {
     }
   }
 
-  // SCRUM-19: Exportar / Imprimir todos los códigos QR activos
   exportarTodosQr(): void {
     const mesasConQr = this.mesaStore.mesas().filter(m => m.codigoQr);
     
@@ -136,8 +183,6 @@ export class MesaFormulario implements OnInit {
       alert('No hay mesas con códigos QR generados para exportar.');
       return;
     }
-
-    // impresión nativa del navegador (permite imprimir en papel o guardar como PDF)
     window.print();
   }
 }
