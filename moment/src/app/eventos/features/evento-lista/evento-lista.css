@@ -118,6 +118,33 @@
   text-align: center;
 }
 
+.evento-acciones {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-baja {
+  min-height: 44px;
+  padding: 0 16px;
+  background-color: transparent;
+  color: #ff9b97;
+  border: 1px solid #ff9b97;
+  border-radius: 4px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.btn-baja:hover {
+  background-color: rgba(255, 155, 151, 0.12);
+}
+
+.evento-item.cancelado {
+  opacity: 0.55;
+}
+
 @media (min-width: 600px) {
   .lista-container {
     padding: 30px 20px;
