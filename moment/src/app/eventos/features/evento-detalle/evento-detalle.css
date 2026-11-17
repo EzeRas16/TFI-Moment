@@ -1,0 +1,108 @@
+.detalle-container {
+  min-height: calc(100vh - 70px);
+  background-color: #0b2528;
+  padding: 16px 12px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.btn-volver {
+  min-height: 44px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #9cb8ba;
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.btn-volver:hover {
+  color: #ffffff;
+}
+
+.detalle-card {
+  background-color: #0f3033;
+  border: 1px solid #1c4b4e;
+  border-radius: 8px;
+  padding: 20px 16px;
+}
+
+.detalle-card.cancelado {
+  opacity: 0.7;
+}
+
+.detalle-estado {
+  color: #dfc2ad;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 8px;
+}
+
+.detalle-titulo {
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 1.5rem;
+  margin: 0 0 12px;
+}
+
+.detalle-dato {
+  color: #9cb8ba;
+  margin: 0 0 6px;
+}
+
+.detalle-botones {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.btn-editar,
+.btn-baja {
+  min-height: 44px;
+  padding: 0 16px;
+  background-color: transparent;
+  border-radius: 4px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.btn-editar {
+  color: #dfc2ad;
+  border: 1px solid #dfc2ad;
+}
+
+.btn-baja {
+  color: #ff9b97;
+  border: 1px solid #ff9b97;
+}
+
+.mensaje {
+  color: #9cb8ba;
+  text-align: center;
+}
+
+@media (min-width: 600px) {
+  .detalle-container {
+    padding: 30px 20px;
+  }
+
+  .detalle-card {
+    padding: 28px 32px;
+  }
+
+  .detalle-titulo {
+    font-size: 1.9rem;
+  }
+
+  .detalle-botones {
+    flex-direction: row;
+    padding-bottom: 20px;
+  }
+}

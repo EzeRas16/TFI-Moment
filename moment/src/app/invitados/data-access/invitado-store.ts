@@ -5,6 +5,7 @@ import { InvitadoClient } from './invitado-client';
 @Injectable({
   providedIn: 'root'
 })
+
 export class InvitadoStore {
   private readonly invitadoClient = inject(InvitadoClient);
 
@@ -105,4 +106,5 @@ export class InvitadoStore {
       alert(mensaje);
     }
   }
+
 }

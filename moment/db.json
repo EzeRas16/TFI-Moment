@@ -34,32 +34,7 @@
       "codigoQr": "http://localhost:4200/unirse?mesaId=BAOg8imsp_A&token=mesa-2-mosiddp"
     }
   ],
-  "invitados": [
-    {
-      "nombre": "Francesco",
-      "apodo": "Danserman",
-      "mesaId": "mesa-1-tjtawmk",
-      "id": "1o0F-_qfjyk"
-    },
-    {
-      "nombre": "Francesco",
-      "apodo": "Tutuca",
-      "mesaId": "mesa-2-mosiddp",
-      "id": "QAXnOwp1d28"
-    },
-    {
-      "nombre": "Francesco",
-      "apodo": "fafu",
-      "mesaId": "mesa-1-tjtawmk",
-      "id": "9I9b7Rw9nDM"
-    },
-    {
-      "nombre": "Francesco",
-      "apodo": "Fefu",
-      "mesaId": "mesa-2-mosiddp",
-      "id": "dy01yVX3q4k"
-    }
-  ],
+  "invitados": [],
   "retos": [],
   "fotos": [],
   "albumes": [],
