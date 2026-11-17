@@ -27,4 +27,10 @@ export class EventoClient {
     actualizarEvento(id : string | number, formularioEvento : eventoFormulario) {
         return this.http.patch<Evento>(`${this.url}/${id}`, formularioEvento);
     }
+
+    darDeBajaEvento(id : string | number) { // para la baja logica
+        return this.http.patch<Evento>(`${this.url}/${id}`, { estado: 'Cancelado' });
+    }
+
+
 }

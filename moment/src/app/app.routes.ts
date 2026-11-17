@@ -33,4 +33,8 @@ export const routes: Routes = [
     loadComponent: () => import('./invitados/features/invitado-formulario/invitado-formulario').then((m) => m.InvitadoFormulario)
   }
 
+{
+  path: ROUTE_SEGMENTS.retos,
+  loadChildren: () => import('./retos/reto.routes').then((m) => m.default),
+}
 ];

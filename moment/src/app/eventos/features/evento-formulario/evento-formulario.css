@@ -1,0 +1,183 @@
+/* para celular */
+.evento-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+  background-color: #0b2528;
+  box-sizing: border-box;
+  padding: 12px;
+}
+
+.evento-card {
+  background-color: #0f3033;
+  border: 1px solid #1c4b4e;
+  padding: 24px 16px;
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  max-width: 450px;
+  box-sizing: border-box;
+}
+
+.evento-title {
+  text-align: center;
+  color: #ffffff;
+  font-size: 1.4rem;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #9cb8ba;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.form-group input,
+.form-group select {
+  min-height: 44px;
+  padding: 11px 14px;
+  background-color: #071b1d;
+  border: 1px solid #205053;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #ffffff;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.form-group input::placeholder {
+  color: #4a6c6e;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #dfc2ad;
+}
+
+.form-group input[type='date'] {
+  color-scheme: dark;
+}
+
+.form-group select option {
+  background-color: #071b1d;
+  color: #ffffff;
+}
+
+.form-group select option:disabled {
+  color: #4a6c6e;
+}
+
+/* Mensajes de validación por campo */
+.errors {
+  color: #ff9b97;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  display: block;
+}
+
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-submit,
+.btn-cancel {
+  flex: 1;
+  min-height: 44px;
+  padding: 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+}
+
+.btn-submit {
+  background-color: #dfc2ad;
+  color: #0b2528;
+  border: none;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background-color: #ebd2be;
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  background-color: transparent;
+  color: #9cb8ba;
+  border: 1px solid #205053;
+}
+
+.btn-cancel:hover {
+  background-color: rgba(28, 75, 78, 0.4);
+  border-color: #9cb8ba;
+  color: #ffffff;
+}
+
+
+@media (min-width: 600px) {
+  .evento-container {
+    padding: 20px;
+  }
+
+  .evento-card {
+    padding: 35px 40px;
+  }
+
+  .evento-title {
+    font-size: 1.7rem;
+    margin-bottom: 24px;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-group input,
+  .form-group select {
+    font-size: 0.95rem;
+  }
+}
+
+.btn-volver {
+  align-self: flex-start;
+  min-height: 44px;
+  margin-bottom: 8px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #9cb8ba;
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.btn-volver:hover {
+  color: #ffffff;
+}

@@ -1,9 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AutenticacionStateService,  } from '../../data-access/autenticacion-state.service';
 import { Router } from '@angular/router';
 import { AutenticacionService } from '../../data-access/autenticacion.service';
+import { AutenticacionStateService } from '../../data-access/autenticacion-state.service';
 
 @Component({
   selector: 'app-login',
@@ -17,15 +17,46 @@ export class LoginComponent {
   private authState = inject(AutenticacionStateService);
   private router = inject(Router);
 
-  email = signal('');
-  password = signal('');
+  protected readonly modo = signal<'login' | 'registro'>('login');
+
+  nombre = '';
+  email = '';
+  password = '';
+
+  // Signals para estados visuales
   errorMessage = signal('');
   isLoading = signal(false);
+  showPassword = signal(false);
 
   public isLoggedIn = this.authState.isLoggedIn;
 
-  onLogin() {
-    if (!this.email() || !this.password()) {
+  toggleShowPassword() {
+    this.showPassword.update(value => !value);
+  }
+
+  // Método para cambiar de pestaña y limpiar errores
+  cambiarModo(nuevoModo: 'login' | 'registro') {
+    this.modo.set(nuevoModo);
+    this.errorMessage.set('');
+    this.limpiarCampos();
+  }
+
+  limpiarCampos() {
+    this.nombre = '';
+    this.email = '';
+    this.password = '';
+  }
+
+  onSubmit() {
+    if (this.modo() === 'login') {
+      this.ejecutarLogin();
+    } else {
+      this.ejecutarRegistro();
+    }
+  }
+
+  private ejecutarLogin() {
+    if (!this.email || !this.password) {
       this.errorMessage.set('Por favor, completa todos los campos.');
       return;
     }
@@ -33,22 +64,13 @@ export class LoginComponent {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    this.authService.login(this.email(), this.password()).subscribe({
+    this.authService.login(this.email, this.password).subscribe({
       next: (usuario) => {
         this.isLoading.set(false);
-        
-        // Imprimimos el objeto completo para verificar qué propiedades trae exactamente
-        console.log('Objeto usuario recibido del servicio:', usuario);
-
         if (usuario) {
-          
-          console.log('¡Login exitoso! Bienvenido:', usuario.nombre || (usuario as any).name);
-          
           this.authState.setSession(usuario);
-
-          this.email.set('');
-          this.password.set('');
-
+          this.limpiarCampos();
+          this.router.navigate(['/eventos']);
         } else {
           this.errorMessage.set('Correo o contraseña incorrectos.');
         }
@@ -60,9 +82,35 @@ export class LoginComponent {
       }
     });
   }
-  showPassword = signal(false);
 
-  toggleShowPassword() {
-  this.showPassword.update(value => !value);
-}
+  private ejecutarRegistro() {
+    if (!this.nombre || !this.email || !this.password) {
+      this.errorMessage.set('Por favor, completa todos los campos para registrarte.');
+      return;
+    }
+
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
+    const payload = {
+      nombre: this.nombre,
+      email: this.email,
+      contrasena: this.password,
+      rol: 'usuario' 
+    };
+
+    this.authService.registrar(payload).subscribe({
+      next: (usuarioCreado) => {
+        this.isLoading.set(false);
+        this.authState.setSession(usuarioCreado);
+        this.limpiarCampos();
+        this.router.navigate(['/eventos']);
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        console.error('Error en registro:', err);
+        this.errorMessage.set('No se pudo crear el usuario. Intente con otro correo.');
+      }
+    });
+  }
 }

@@ -1,6 +1,8 @@
 ﻿import { Routes } from '@angular/router';
 
-const retoRoutes: Routes = [];
-
-export default retoRoutes;
-
+export default [
+  {
+    path: '',
+    loadComponent: () => import('./features/reto-form/reto-form').then(m => m.RetoForm)
+  }
+] as Routes;
