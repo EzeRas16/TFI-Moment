@@ -2,6 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { MesaClient } from './mesa-client';
 import { Mesa, MesaFormulario } from './mesa.model';
+import { InvitadoClient } from '../../invitados/data-access/invitado-client';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,7 @@ export class MesaStore {
   // Estado reactivo (Signals)
   readonly mesas = signal<Mesa[]>([]);
   readonly cargando = signal<boolean>(false);
+  private readonly invitadoClient = inject(InvitadoClient);
 
 async cargarMesasPorEvento(eventoId: string | number): Promise<void> {
     this.cargando.set(true);
@@ -66,4 +68,16 @@ async cargarMesasPorEvento(eventoId: string | number): Promise<void> {
       throw err;
     }
   }
+
+  // Scrum-23: Eliminar invitado por mesaId y apodo
+  async expulsarInvitadoDeMesa(invitadoId: string | number, eventoId: string | number): Promise<void> {
+  try {
+    await firstValueFrom(this.invitadoClient.eliminarInvitado(invitadoId));
+    // Recargamos las mesas para actualizar el listado visual
+    await this.cargarMesasPorEvento(eventoId);
+  } catch (err) {
+    console.error('Error al expulsar invitado', err);
+    alert('No se pudo expulsar al invitado.');
+  }
+}
 }

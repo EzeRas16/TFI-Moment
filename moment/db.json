@@ -19,19 +19,11 @@
   "mesas": [
     {
       "numero": 1,
-      "capacidad": 4,
+      "capacidad": 1,
       "activa": true,
       "eventoId": "1",
-      "id": "egjc2j-iqWM",
-      "codigoQr": "http://localhost:4200/unirse?mesaId=egjc2j-iqWM&token=mesa-1-tjtawmk"
-    },
-    {
-      "numero": 2,
-      "capacidad": 4,
-      "activa": true,
-      "eventoId": "1",
-      "id": "BAOg8imsp_A",
-      "codigoQr": "http://localhost:4200/unirse?mesaId=BAOg8imsp_A&token=mesa-2-mosiddp"
+      "id": "OoYjjiJqtTY",
+      "codigoQr": "http://localhost:4200/unirse?mesaId=OoYjjiJqtTY&token=mesa-1-ikb56jx"
     }
   ],
   "invitados": [],

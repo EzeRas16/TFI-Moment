@@ -66,6 +66,7 @@ export class InvitadoFormulario implements OnInit {
       mesaId: this.mesaToken
     };
 
+    // Delegamos toda la lógica de validación de cupos y apodos al Store
     this.store.registrarInvitado(
       nuevoInvitado,
       (creado) => {
