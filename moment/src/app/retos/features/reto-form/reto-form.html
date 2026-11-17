@@ -1,6 +1,7 @@
 <div class="reto-form-container">
-  <h2>Alta de Nuevo Reto</h2>
+  <h2>Gestión de Retos</h2>
   
+  <!-- Formulario de Alta -->
   <form (ngSubmit)="guardarReto()">
     <div class="form-group">
       <label for="descripcion">Descripción del Reto:</label>
@@ -30,4 +31,42 @@
       {{ isLoading() ? 'Guardando...' : 'GUARDAR RETO' }}
     </button>
   </form>
+
+  <hr class="divider" />
+
+  <!-- Botón Desplegable para Eliminar -->
+  <button type="button" class="btn-toggle-dropdown" (click)="toggleDropdown()">
+    {{ isDropdownOpen() ? '▲ Ocultar listado de eliminación' : '▼ Eliminar retos existentes (' + retos().length + ')' }}
+  </button>
+
+  <!-- Contenido Desplegable -->
+  @if (isDropdownOpen()) {
+    <div class="list-section">
+      @if (isLoadingList()) {
+        <p class="loading-text">Cargando retos...</p>
+      } @else if (retos().length === 0) {
+        <p class="empty-text">No hay retos registrados.</p>
+      } @else {
+        <div class="listado-retos">
+          @for (reto of retos(); track reto.id) {
+            <label class="reto-item">
+              <input 
+                type="checkbox" 
+                [checked]="seleccionados().has(reto.id)" 
+                (change)="toggleSeleccion(reto.id)" 
+              />
+              <span>{{ reto.descripcion }}</span>
+            </label>
+          }
+        </div>
+
+        <button 
+          class="btn-delete" 
+          [disabled]="seleccionados().size === 0 || isDeleting()" 
+          (click)="confirmarEliminacion()">
+          {{ isDeleting() ? 'Eliminando...' : 'Eliminar seleccionados (' + seleccionados().size + ')' }}
+        </button>
+      }
+    </div>
+  }
 </div>
