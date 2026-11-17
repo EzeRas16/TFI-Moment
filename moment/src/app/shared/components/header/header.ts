@@ -28,6 +28,5 @@ export class Header {
     this.isDropdownOpen = false;
     this.authState.logout();
     console.log('Sesión cerrada desde el header');
-    this.router.navigate(['/login']);
   }
 }

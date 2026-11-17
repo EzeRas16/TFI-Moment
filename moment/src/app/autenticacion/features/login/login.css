@@ -2,8 +2,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 70px); 
-  width: 100vw;
+  flex: 1;
+  width: 100%;
   background-color: #0b2528; 
   overflow: hidden;          
   box-sizing: border-box;
@@ -109,4 +109,24 @@
 .btn-submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.auth-tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #1c4b4e;
+}
+.tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 10px;
+  font-weight: bold;
+  color: #9cb8ba;
+  cursor: pointer;
+}
+.tab-btn.active {
+  color: #dfc2ad;
+  border-bottom: 3px solid #dfc2ad;
+  margin-bottom: -2px;
 }
