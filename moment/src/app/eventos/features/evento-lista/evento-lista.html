@@ -1,0 +1,45 @@
+<div class="lista-container">
+  <div class="lista-encabezado">
+    <h2 class="lista-titulo">{{ esAdmin() ? 'Todos los eventos' : 'Mis eventos' }}</h2>
+    @if (haySesion()) {
+      <button type="button" class="btn-nuevo" (click)="irANuevo()">NUEVO EVENTO</button>
+    }
+  </div>
+
+  @if (!haySesion()) {
+    <p class="mensaje">Iniciá sesión para ver tus eventos.</p>
+  } @else {
+    <div class="filtros">
+      <input
+        type="text"
+        placeholder="Buscar por nombre"
+        [value]="textoBusqueda()"
+        (input)="alBuscar($event)"
+      />
+      <select [value]="estadoFiltro()" (change)="alCambiarEstado($event)">
+        <option value="">Todos los estados</option>
+        @for (estado of estados; track estado) {
+          <option [value]="estado">{{ estado }}</option>
+        }
+      </select>
+      <button type="button" class="btn-limpiar" (click)="limpiarFiltros()">LIMPIAR</button>
+    </div>
+
+    @for (evento of eventosFiltrados(); track evento.id) {
+      <div class="evento-item" [class.cancelado]="evento.estado === 'Cancelado'">
+        <div class="evento-datos">
+          <h3 class="evento-nombre">{{ evento.nombre }}</h3>
+          <span class="evento-detalle">{{ evento.fecha }} · {{ evento.tipo }}</span>
+        </div>
+        <div class="evento-acciones">
+          <span class="evento-estado">{{ evento.estado }}</span>
+          @if (puedeDarDeBaja(evento)) {
+            <button type="button" class="btn-baja" (click)="darDeBaja(evento)">DAR DE BAJA</button>
+          }
+        </div>
+      </div>
+    } @empty {
+      <p class="mensaje">No hay eventos para mostrar.</p>
+    }
+  }
+</div>

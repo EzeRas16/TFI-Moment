@@ -1,13 +1,44 @@
 {
   "usuarios": [
-    { "id": 1, "nombre": "Eze Demo", "email": "eze@demo.com", "contrasena": "demo1234", "rol": "ADMIN" }
+    {
+      "id": "1",
+      "nombre": "Eze Demo",
+      "email": "eze@demo.com",
+      "contrasena": "demo1234",
+      "rol": "ADMIN"
+    },
+    {
+      "nombre": "Matias",
+      "email": "matias@gmail.com",
+      "contraseña": "1917",
+      "rol": "usuario",
+      "id": "s5Hf2-1MXzw"
+    }
   ],
   "eventos": [],
   "mesas": [],
   "invitados": [],
-  "retos": [],
+  "retos": [
+    {
+      "descripcion": "ewew",
+      "id": "royPErcHlIc"
+    },
+    {
+      "descripcion": "weew",
+      "id": "qUFG424NczM"
+    },
+    {
+      "descripcion": "ewewew",
+      "id": "tkVQW1YoUBs"
+    },
+    {
+      "descripcion": "wewewe",
+      "id": "mnyxU9uvOdI"
+    }
+  ],
   "fotos": [],
   "albumes": [],
   "encuestas": [],
-  "votos": []
+  "votos": [],
+  "$schema": "./node_modules/json-server/schema.json"
 }

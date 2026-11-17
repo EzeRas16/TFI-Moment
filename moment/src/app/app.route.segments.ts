@@ -4,4 +4,5 @@ export const ROUTE_SEGMENTS = {
   mesas: 'mesas',
   invitados: 'invitados',
   unirse: 'unirse',
+  retos: 'retos',
 } as const;

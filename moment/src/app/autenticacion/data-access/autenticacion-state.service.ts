@@ -1,25 +1,37 @@
-import { Injectable, signal, computed } from '@angular/core';
-import { Usuario } from './usuario.model';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { ROUTE_SEGMENTS } from '../../app.route.segments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AutenticacionStateService {
-  private currentUserSignal = signal<Usuario | null>(null);
+  
+  private router = inject(Router); 
+  private readonly STORAGE_KEY = 'usuario_moment';
 
-  // Señal de solo lectura para consumir en la app
-  public currentUser = this.currentUserSignal.asReadonly();
+  // Inicializamos el signal leyendo del localStorage si existe una sesión previa
+  private currentUserSignal = signal<any>(this.cargarUsuarioDeStorage());
 
-  // Computada para saber si hay sesión activa
-  public isLoggedIn = computed(() => this.currentUserSignal() !== null);
+  // Señales públicas para leer el estado en toda la app
+  readonly currentUser = this.currentUserSignal.asReadonly();
+  readonly isLoggedIn = computed(() => !!this.currentUserSignal());
 
-  // Guardar sesión al hacer login exitoso
-  setSession(usuario: Usuario) {
-    this.currentUserSignal.set(usuario);
+  private cargarUsuarioDeStorage() {
+    const storedUser = localStorage.getItem(this.STORAGE_KEY);
+    return storedUser ? JSON.parse(storedUser) : null;
   }
 
-  // Cerrar sesión
+  setSession(usuarioData: any) {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(usuarioData));
+    this.currentUserSignal.set(usuarioData);
+  }
+
+  // Método para cerrar sesión
   logout() {
+    localStorage.removeItem(this.STORAGE_KEY);
     this.currentUserSignal.set(null);
+
+    this.router.navigate(['/auth']);
   }
 }
