@@ -116,6 +116,7 @@
   margin-bottom: 20px;
   border-bottom: 2px solid #1c4b4e;
 }
+
 .tab-btn {
   flex: 1;
   background: transparent;
@@ -125,6 +126,7 @@
   color: #9cb8ba;
   cursor: pointer;
 }
+
 .tab-btn.active {
   color: #dfc2ad;
   border-bottom: 3px solid #dfc2ad;
