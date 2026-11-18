@@ -13,103 +13,101 @@ import { AutenticacionStateService } from '../../data-access/autenticacion-state
   styleUrl: './login.css'
 })
 export class LoginComponent {
-  private authService = inject(AutenticacionService);
-  private authState = inject(AutenticacionStateService);
+  private servicioAutenticacion = inject(AutenticacionService);
+  private estadoAutenticacion = inject(AutenticacionStateService);
   private router = inject(Router);
 
-  protected readonly modo = signal<'login' | 'registro'>('login');
+  protected readonly modo = signal<'iniciar' | 'registro'>('iniciar');
 
   nombre = '';
   email = '';
-  password = '';
+  contrasena = '';
 
-  // Signals para estados visuales
-  errorMessage = signal('');
-  isLoading = signal(false);
-  showPassword = signal(false);
+  mensajeError = signal('');
+  cargando = signal(false);
+  mostrarContrasena = signal(false);
 
-  public isLoggedIn = this.authState.isLoggedIn;
+  public estaAutenticado = this.estadoAutenticacion.isLoggedIn;
 
-  toggleShowPassword() {
-    this.showPassword.update(value => !value);
+  alternarMostrarContrasena() {
+    this.mostrarContrasena.update(valor => !valor);
   }
 
-  // Método para cambiar de pestaña y limpiar errores
-  cambiarModo(nuevoModo: 'login' | 'registro') {
+  cambiarModo(nuevoModo: 'iniciar' | 'registro') {
     this.modo.set(nuevoModo);
-    this.errorMessage.set('');
+    this.mensajeError.set('');
     this.limpiarCampos();
   }
 
   limpiarCampos() {
     this.nombre = '';
     this.email = '';
-    this.password = '';
+    this.contrasena = '';
   }
 
-  onSubmit() {
-    if (this.modo() === 'login') {
-      this.ejecutarLogin();
+  alEnviar() {
+    if (this.modo() === 'iniciar') {
+      this.ejecutarInicioSesion();
     } else {
       this.ejecutarRegistro();
     }
   }
 
-  private ejecutarLogin() {
-    if (!this.email || !this.password) {
-      this.errorMessage.set('Por favor, completa todos los campos.');
+  private ejecutarInicioSesion() {
+    if (!this.email || !this.contrasena) {
+      this.mensajeError.set('Por favor, completa todos los campos.');
       return;
     }
 
-    this.isLoading.set(true);
-    this.errorMessage.set('');
+    this.cargando.set(true);
+    this.mensajeError.set('');
 
-    this.authService.login(this.email, this.password).subscribe({
+    this.servicioAutenticacion.iniciarSesion(this.email, this.contrasena).subscribe({
       next: (usuario) => {
-        this.isLoading.set(false);
+        this.cargando.set(false);
         if (usuario) {
-          this.authState.setSession(usuario);
+          this.estadoAutenticacion.establecerSesion(usuario);
           this.limpiarCampos();
           this.router.navigate(['/eventos']);
         } else {
-          this.errorMessage.set('Correo o contraseña incorrectos.');
+          this.mensajeError.set('Correo o contraseña incorrectos.');
         }
       },
       error: (err) => {
-        this.isLoading.set(false);
+        this.cargando.set(false);
         console.error('Error de conexión:', err);
-        this.errorMessage.set('No se pudo conectar con el servidor.');
+        this.mensajeError.set('No se pudo conectar con el servidor.');
       }
     });
   }
 
   private ejecutarRegistro() {
-    if (!this.nombre || !this.email || !this.password) {
-      this.errorMessage.set('Por favor, completa todos los campos para registrarte.');
+    if (!this.nombre || !this.email || !this.contrasena) {
+      this.mensajeError.set('Por favor, completa todos los campos para registrarte.');
       return;
     }
 
-    this.isLoading.set(true);
-    this.errorMessage.set('');
+    this.cargando.set(true);
+    this.mensajeError.set('');
 
-    const payload = {
+    const datosRegistro = {
       nombre: this.nombre,
       email: this.email,
-      contrasena: this.password,
+      contrasena: this.contrasena,
       rol: 'usuario' 
     };
 
-    this.authService.registrar(payload).subscribe({
+    this.servicioAutenticacion.registrar(datosRegistro).subscribe({
       next: (usuarioCreado) => {
-        this.isLoading.set(false);
-        this.authState.setSession(usuarioCreado);
+        this.cargando.set(false);
+        this.estadoAutenticacion.establecerSesion(usuarioCreado);
         this.limpiarCampos();
         this.router.navigate(['/eventos']);
       },
       error: (err) => {
-        this.isLoading.set(false);
+        this.cargando.set(false);
         console.error('Error en registro:', err);
-        this.errorMessage.set('No se pudo crear el usuario. Intente con otro correo.');
+        this.mensajeError.set('No se pudo crear el usuario. Intente con otro correo.');
       }
     });
   }

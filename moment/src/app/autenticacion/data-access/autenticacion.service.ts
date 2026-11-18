@@ -10,21 +10,21 @@ export class AutenticacionService {
   private http = inject(HttpClient);
   private url = 'http://localhost:3000/usuarios';
 
-  login(email: string, contrasena: string): Observable<Usuario | null> {
-    const headers = new HttpHeaders({
+  iniciarSesion(email: string, contrasena: string): Observable<Usuario | null> {
+    const cabeceras = new HttpHeaders({
       'Cache-Control': 'no-cache, no-store, must-revalidate',
       'Pragma': 'no-cache',
       'Expires': '0'
     });
 
-    return this.http.get<Usuario[]>(this.url, { headers }).pipe(
+    return this.http.get<Usuario[]>(this.url, { headers: cabeceras }).pipe(
       map((usuarios) => {
           const usuarioEncontrado = usuarios.find(u => {
-          const emailMatch = u.email?.trim().toLowerCase() === email.trim().toLowerCase();
-          const passEnDb = u.contrasena || (u as any).contraseña || (u as any).password;
-          const passMatch = String(passEnDb).trim() === String(contrasena).trim();
+          const coincideCorreo = u.email?.trim().toLowerCase() === email.trim().toLowerCase();
+          const contrasenaEnDb = u.contrasena || (u as any).contraseña || (u as any).password;
+          const coincideContrasena = String(contrasenaEnDb).trim() === String(contrasena).trim();
 
-          return emailMatch && passMatch;
+          return coincideCorreo && coincideContrasena;
         });
 
         console.log('Usuario encontrado:', usuarioEncontrado);
@@ -32,11 +32,12 @@ export class AutenticacionService {
       })
     );
   }
+
   registrar(nuevoUsuario: Omit<Usuario, 'id'>): Observable<Usuario> {
-    const headers = new HttpHeaders({
+    const cabeceras = new HttpHeaders({
       'Cache-Control': 'no-cache, no-store, must-revalidate'
     });
     console.log('Registrando usuario:', nuevoUsuario);
-    return this.http.post<Usuario>(this.url, nuevoUsuario, { headers });
+    return this.http.post<Usuario>(this.url, nuevoUsuario, { headers: cabeceras });
   }
 }

@@ -13,27 +13,74 @@
       "contraseña": "1917",
       "rol": "usuario",
       "id": "s5Hf2-1MXzw"
+    },
+    {
+      "nombre": "fran",
+      "email": "fran@gmail.com",
+      "contrasena": "12345",
+      "rol": "usuario",
+      "id": "QJ-tHi95UAQ"
     }
   ],
-  "eventos": [],
-  "mesas": [],
-  "invitados": [],
+  "eventos": [
+    {
+      "nombre": "hola",
+      "fecha": "2026-11-19",
+      "tipo": "Casamiento",
+      "usuarioId": "QJ-tHi95UAQ",
+      "estado": "Cancelado",
+      "id": "OwrVRC-4_Co"
+    },
+    {
+      "nombre": "hola2",
+      "fecha": "2026-11-20",
+      "tipo": "Casamiento",
+      "usuarioId": "QJ-tHi95UAQ",
+      "estado": "Pendiente",
+      "id": "OGlOgZgMMjA"
+    },
+    {
+      "nombre": "hola",
+      "fecha": "2026-11-25",
+      "tipo": "Casamiento",
+      "usuarioId": "s5Hf2-1MXzw",
+      "estado": "Pendiente",
+      "id": "lTHHfffP_0A"
+    }
+  ],
+  "mesas": [
+    {
+      "numero": 1,
+      "capacidad": 4,
+      "activa": true,
+      "eventoId": "1",
+      "id": "O-kQ0EzZWf4",
+      "codigoQr": "http://localhost:4200/unirse?mesaId=O-kQ0EzZWf4&token=mesa-1-rshex6z"
+    },
+    {
+      "numero": 2,
+      "capacidad": 4,
+      "activa": false,
+      "eventoId": "1",
+      "id": "HwHkC3d6Vpo"
+    }
+  ],
+  "invitados": [
+    {
+      "nombre": "Matias",
+      "apodo": "Matute",
+      "mesaId": "mesa-1-rshex6z",
+      "id": "KsgdnZ2fRxE"
+    }
+  ],
   "retos": [
-    {
-      "descripcion": "ewew",
-      "id": "royPErcHlIc"
-    },
-    {
-      "descripcion": "weew",
-      "id": "qUFG424NczM"
-    },
     {
       "descripcion": "ewewew",
       "id": "tkVQW1YoUBs"
     },
     {
-      "descripcion": "wewewe",
-      "id": "mnyxU9uvOdI"
+      "descripcion": "fgfgfg",
+      "id": "kl3j2Xz75V4"
     }
   ],
   "fotos": [],

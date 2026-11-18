@@ -11,22 +11,21 @@ import { AutenticacionStateService } from '../../../autenticacion/data-access/au
   styleUrl: './header.css'
 })
 export class Header {
-  private authState = inject(AutenticacionStateService);
+  private estadoAutenticacion = inject(AutenticacionStateService);
   private router = inject(Router);
 
-  isDropdownOpen = false;
+  menuDesplegableAbierto = false;
 
-  // Señales del estado de sesión
-  public isLoggedIn = this.authState.isLoggedIn;
-  public currentUser = this.authState.currentUser;
+  public estaAutenticado = this.estadoAutenticacion.isLoggedIn;
+  public usuarioActual = this.estadoAutenticacion.currentUser;
 
-  toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen;
+  alternarDesplegable() {
+    this.menuDesplegableAbierto = !this.menuDesplegableAbierto;
   }
 
-  onCerrarSesion() {
-    this.isDropdownOpen = false;
-    this.authState.logout();
+  alCerrarSesion() {
+    this.menuDesplegableAbierto = false;
+    this.estadoAutenticacion.cerrarSesion();
     console.log('Sesión cerrada desde el header');
   }
 }

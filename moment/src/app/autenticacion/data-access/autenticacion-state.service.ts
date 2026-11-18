@@ -8,29 +8,26 @@ import { ROUTE_SEGMENTS } from '../../app.route.segments';
 export class AutenticacionStateService {
   
   private router = inject(Router); 
-  private readonly STORAGE_KEY = 'usuario_moment';
+  private readonly CLAVE_STORAGE = 'usuario_moment';
 
-  // Inicializamos el signal leyendo del localStorage si existe una sesión previa
-  private currentUserSignal = signal<any>(this.cargarUsuarioDeStorage());
+  private usuarioActualSignal = signal<any>(this.cargarUsuarioDeLocalStorage());
 
-  // Señales públicas para leer el estado en toda la app
-  readonly currentUser = this.currentUserSignal.asReadonly();
-  readonly isLoggedIn = computed(() => !!this.currentUserSignal());
+  readonly currentUser = this.usuarioActualSignal.asReadonly();
+  readonly isLoggedIn = computed(() => !!this.usuarioActualSignal());
 
-  private cargarUsuarioDeStorage() {
-    const storedUser = localStorage.getItem(this.STORAGE_KEY);
-    return storedUser ? JSON.parse(storedUser) : null;
+  private cargarUsuarioDeLocalStorage() {
+    const usuarioAlmacenado = localStorage.getItem(this.CLAVE_STORAGE);
+    return usuarioAlmacenado ? JSON.parse(usuarioAlmacenado) : null;
   }
 
-  setSession(usuarioData: any) {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(usuarioData));
-    this.currentUserSignal.set(usuarioData);
+  establecerSesion(datosUsuario: any) {
+    localStorage.setItem(this.CLAVE_STORAGE, JSON.stringify(datosUsuario));
+    this.usuarioActualSignal.set(datosUsuario);
   }
 
-  // Método para cerrar sesión
-  logout() {
-    localStorage.removeItem(this.STORAGE_KEY);
-    this.currentUserSignal.set(null);
+  cerrarSesion() {
+    localStorage.removeItem(this.CLAVE_STORAGE);
+    this.usuarioActualSignal.set(null);
 
     this.router.navigate(['/auth']);
   }

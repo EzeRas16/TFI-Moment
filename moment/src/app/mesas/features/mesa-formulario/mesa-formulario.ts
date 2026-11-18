@@ -185,4 +185,10 @@ export class MesaFormulario implements OnInit {
     }
     window.print();
   }
+  
+  cancelar() {
+    this.modoVista.set('lista');
+    this.mesaForm.reset();
+    this.editandoId.set(null);
+  }
 }

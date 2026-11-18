@@ -66,7 +66,7 @@
         }
       </div>
 
-      <!-- PANEL DE DETALLE / EXPULSIÓN DE INVITADOS (Se abre al hacer clic en una mesa) -->
+      <!-- PANEL DE DETALLE / EXPULSIÓN DE INVITADOS -->
       @if (mesaSeleccionadaParaDetalle(); as mesaDetalle) {
         <div class="card shadow-lg mt-5 p-4 border-info">
           <div class="d-flex justify-content-between align-items-center mb-3">
@@ -114,4 +114,31 @@
           <label for="numero" class="form-label">Número de Mesa *</label>
           <input type="number" id="numero" class="form-control" formControlName="numero"
             [ngClass]="{'is-invalid': mesaForm.get('numero')?.invalid && mesaForm.get('numero')?.touched}">
-          @if (mesaForm.get('numero')?.hasError('required
+          
+          @if (mesaForm.get('numero')?.hasError('required') && mesaForm.get('numero')?.touched) {
+            <div class="invalid-feedback">
+              El número de mesa es obligatorio.
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label for="capacidad" class="form-label">Capacidad *</label>
+          <input type="number" id="capacidad" class="form-control" formControlName="capacidad">
+        </div>
+
+        <div class="mb-3 form-check">
+          <input type="checkbox" id="activa" class="form-check-input" formControlName="activa">
+          <label for="activa" class="form-check-label">Mesa Activa</label>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-success w-50" [disabled]="mesaForm.invalid">Guardar</button>
+          <button type="button" class="btn btn-secondary w-50" (click)="cancelar()">Cancelar</button>
+        </div>
+
+      </form>
+    </div>
+  }
+
+</div>

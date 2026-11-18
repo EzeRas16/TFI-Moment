@@ -9,24 +9,24 @@
   </nav>
 
   
-  @if (isLoggedIn()) {
+  @if (estaAutenticado()) {
     <div class="user-menu-container">
-      <button class="user-icon-btn" (click)="toggleDropdown()" aria-label="Menú de usuario">
+      <button class="user-icon-btn" (click)="alternarDesplegable()" aria-label="Menú de usuario">
         
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
           <circle cx="12" cy="7" r="4"></circle>
         </svg>
         
-        @if (currentUser(); as user) {
-          <span class="user-name">{{ user.nombre }}</span>
+        @if (usuarioActual(); as usuario) {
+          <span class="user-name">{{ usuario.nombre }}</span>
         }
       </button>
 
       
-      @if (isDropdownOpen) {
+      @if (menuDesplegableAbierto) {
         <div class="dropdown-menu">
-          <button class="dropdown-item logout-btn" (click)="onCerrarSesion()">
+          <button class="dropdown-item logout-btn" (click)="alCerrarSesion()">
             Cerrar sesión
           </button>
         </div>

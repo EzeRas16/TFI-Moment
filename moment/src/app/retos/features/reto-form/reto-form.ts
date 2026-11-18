@@ -13,89 +13,89 @@ import { forkJoin } from 'rxjs';
   styleUrl: './reto-form.css'
 })
 export class RetoForm implements OnInit {
-  private retoService = inject(RetoService);
+  private servicioReto = inject(RetoService);
 
   descripcion = '';
-  isLoading = signal(false);
-  errorMessage = signal('');
-  successMessage = signal('');
+  cargando = signal(false);
+  mensajeError = signal('');
+  mensajeExito = signal('');
 
   retos = signal<Reto[]>([]);
   seleccionados = signal<Set<number | string>>(new Set());
-  isLoadingList = signal(false);
-  isDeleting = signal(false);
-  isDropdownOpen = signal(false); 
+  cargandoLista = signal(false);
+  eliminando = signal(false);
+  desplegableAbierto = signal(false); 
 
   ngOnInit() {
     this.cargarRetos();
   }
 
   cargarRetos() {
-    this.isLoadingList.set(true);
-    this.retoService.obtenerRetos().subscribe({
+    this.cargandoLista.set(true);
+    this.servicioReto.obtenerRetos().subscribe({
       next: (data) => {
         this.retos.set(data);
-        this.isLoadingList.set(false);
+        this.cargandoLista.set(false);
       },
-      error: () => this.isLoadingList.set(false)
+      error: () => this.cargandoLista.set(false)
     });
   }
 
-  toggleDropdown() {
-    this.isDropdownOpen.update(val => !val);
+  alternarDesplegable() {
+    this.desplegableAbierto.update(valor => !valor);
   }
 
   guardarReto() {
     if (!this.descripcion.trim()) {
-      this.errorMessage.set('Por favor, ingresa una descripción para el reto.');
+      this.mensajeError.set('Por favor, ingresa una descripción para el reto.');
       return;
     }
 
-    this.isLoading.set(true);
-    this.errorMessage.set('');
-    this.successMessage.set('');
+    this.cargando.set(true);
+    this.mensajeError.set('');
+    this.mensajeExito.set('');
 
-    this.retoService.crearReto({ descripcion: this.descripcion }).subscribe({
+    this.servicioReto.crearReto({ descripcion: this.descripcion }).subscribe({
       next: () => {
-        this.isLoading.set(false);
-        this.successMessage.set('¡Reto guardado con éxito!');
+        this.cargando.set(false);
+        this.mensajeExito.set('¡Reto guardado con exito!');
         this.descripcion = ''; 
         this.cargarRetos(); 
       },
       error: (err) => {
-        this.isLoading.set(false);
+        this.cargando.set(false);
         console.error('Error al crear el reto:', err);
-        this.errorMessage.set('No se pudo guardar el reto.');
+        this.mensajeError.set('No se pudo guardar el reto.');
       }
     });
   }
 
-  toggleSeleccion(id: number | string) {
-    const current = new Set(this.seleccionados());
-    if (current.has(id)) {
-      current.delete(id);
+  alternarSeleccion(id: number | string) {
+    const actual = new Set(this.seleccionados());
+    if (actual.has(id)) {
+      actual.delete(id);
     } else {
-      current.add(id);
+      actual.add(id);
     }
-    this.seleccionados.set(current);
+    this.seleccionados.set(actual);
   }
 
   confirmarEliminacion() {
     if (this.seleccionados().size === 0) return;
 
     if (confirm(`¿Estás seguro de eliminar los ${this.seleccionados().size} retos seleccionados?`)) {
-      this.isDeleting.set(true);
+      this.eliminando.set(true);
       
-      const peticiones = Array.from(this.seleccionados()).map(id => this.retoService.eliminarReto(id));
+      const peticiones = Array.from(this.seleccionados()).map(id => this.servicioReto.eliminarReto(id));
 
       forkJoin(peticiones).subscribe({
         next: () => {
-          this.isDeleting.set(false);
+          this.eliminando.set(false);
           this.seleccionados.set(new Set());
           this.cargarRetos(); 
         },
         error: (err) => {
-          this.isDeleting.set(false);
+          this.eliminando.set(false);
           console.error('Error al eliminar retos:', err);
         }
       });
