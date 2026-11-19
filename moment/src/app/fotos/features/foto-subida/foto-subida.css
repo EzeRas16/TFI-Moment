@@ -1,0 +1,57 @@
+.subida {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.boton-subir {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 18px;
+  background: #dfc2ad;
+  color: #0b2528;
+  border-radius: 4px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.boton-subir:hover {
+  background: #ebd2be;
+}
+
+.boton-subir.deshabilitado {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ayuda {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #9cb8ba;
+}
+
+.error {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #ff9b97;
+}
+
+.vista-previa {
+  width: 100%;
+  max-width: 320px;
+  border: 1px solid #1c4b4e;
+  border-radius: 8px;
+}
+
+@media (min-width: 600px) {
+  .boton-subir {
+    width: auto;
+    min-width: 220px;
+  }
+}
