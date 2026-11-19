@@ -9,7 +9,7 @@ import { EventoFormulario } from '../evento-formulario/evento-formulario';
 import { RetoForm } from '../../../retos/features/reto-form/reto-form';
 
 @Component({
-  imports: [EventoFormulario,RetoForm],
+  imports: [EventoFormulario, RetoForm],
   selector: 'app-evento-detalle',
   styleUrl: './evento-detalle.css',
   templateUrl: './evento-detalle.html',
@@ -71,8 +71,12 @@ export class EventoDetalle implements OnInit {
   }
 
   irAGestionRetos(eventoId: string | number) {
-  this.router.navigate(['/', ROUTE_SEGMENTS.eventos, eventoId, ROUTE_SEGMENTS.retos]);
-}
+    this.router.navigate(['/', ROUTE_SEGMENTS.eventos, eventoId, ROUTE_SEGMENTS.retos]);
+  }
+
+  irAEncuestas(eventoId: string | number) {
+    this.router.navigate(['/', ROUTE_SEGMENTS.eventos, eventoId, ROUTE_SEGMENTS.encuestas]);
+  }
 
   irALista() {
     this.router.navigate(['/', ROUTE_SEGMENTS.eventos]);

@@ -1,0 +1,268 @@
+.encuesta-page {
+  min-height: calc(100vh - 70px);
+  background-color: #0b2528;
+  color: #ffffff;
+  padding: 16px 12px 32px;
+  max-width: 720px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.encuesta-header {
+  margin-bottom: 18px;
+}
+
+.btn-volver {
+  min-height: 44px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #9cb8ba;
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.btn-volver:hover {
+  color: #ffffff;
+}
+
+.encuesta-titulo {
+  margin: 4px 0 6px;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  color: #dfc2ad;
+}
+
+.encuesta-subtitulo {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #9cb8ba;
+}
+
+.encuesta-card {
+  background-color: #0f3033;
+  border: 1px solid #1c4b4e;
+  border-radius: 8px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #dfc2ad;
+  letter-spacing: 0.5px;
+}
+
+.campo-input {
+  min-height: 44px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #0b2528;
+  border: 1px solid #265c60;
+  border-radius: 6px;
+  padding: 0 12px;
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.campo-input:focus {
+  outline: none;
+  border-color: #dfc2ad;
+}
+
+.opciones-bloque {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.opciones-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.opciones-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.opcion-fila {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-quitar {
+  min-width: 44px;
+  min-height: 44px;
+  background-color: transparent;
+  border: 1px solid #ff9b97;
+  color: #ff9b97;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-quitar:hover {
+  background-color: rgba(255, 155, 151, 0.14);
+}
+
+.campo-error {
+  color: #ff9b97;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.alerta-error {
+  background-color: rgba(255, 155, 151, 0.12);
+  border: 1px solid #ff9b97;
+  color: #ff9b97;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.alerta-exito {
+  background-color: rgba(223, 194, 173, 0.14);
+  border: 1px solid #dfc2ad;
+  color: #dfc2ad;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.acciones-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.btn-primario {
+  min-height: 44px;
+  padding: 0 18px;
+  background-color: #dfc2ad;
+  color: #0b2528;
+  border: 1px solid #dfc2ad;
+  border-radius: 6px;
+  font-weight: bold;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+}
+
+.btn-primario:hover {
+  background-color: #ebd2be;
+}
+
+.btn-secundario {
+  min-height: 44px;
+  padding: 0 14px;
+  background-color: transparent;
+  color: #dfc2ad;
+  border: 1px solid #dfc2ad;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.8rem;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+}
+
+.btn-secundario:hover {
+  background-color: rgba(223, 194, 173, 0.12);
+}
+
+.listado-section {
+  margin-top: 28px;
+}
+
+.listado-titulo {
+  font-size: 1rem;
+  color: #ffffff;
+  letter-spacing: 0.6px;
+  margin: 0 0 12px;
+}
+
+.texto-muted {
+  color: #9cb8ba;
+  font-size: 0.9rem;
+}
+
+.encuestas-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.encuesta-item {
+  background-color: #0f3033;
+  border: 1px solid #1c4b4e;
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.encuesta-item-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.encuesta-pregunta {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.badge-estado {
+  font-size: 0.72rem;
+  font-weight: bold;
+  color: #dfc2ad;
+  border: 1px solid #dfc2ad;
+  border-radius: 4px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+
+.opciones-preview {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: #9cb8ba;
+  font-size: 0.9rem;
+}
+
+.opciones-preview li {
+  margin-bottom: 4px;
+}
+
+@media (min-width: 600px) {
+  .encuesta-page {
+    padding: 24px 20px 40px;
+  }
+
+  .encuesta-card {
+    padding: 24px;
+  }
+
+  .acciones-form {
+    flex-direction: row;
+  }
+}
