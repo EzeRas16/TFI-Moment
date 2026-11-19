@@ -6,9 +6,10 @@ import { AutenticacionStateService } from '../../../autenticacion/data-access/au
 import { EventoClient } from '../../data-access/evento-client';
 import { Evento } from '../../data-access/evento.model';
 import { EventoFormulario } from '../evento-formulario/evento-formulario';
+import { RetoForm } from '../../../retos/features/reto-form/reto-form';
 
 @Component({
-  imports: [EventoFormulario],
+  imports: [EventoFormulario,RetoForm],
   selector: 'app-evento-detalle',
   styleUrl: './evento-detalle.css',
   templateUrl: './evento-detalle.html',
@@ -69,7 +70,15 @@ export class EventoDetalle implements OnInit {
     this.editando.set(false);
   }
 
+  irAGestionRetos(eventoId: string | number) {
+  this.router.navigate(['/', ROUTE_SEGMENTS.eventos, eventoId, ROUTE_SEGMENTS.retos]);
+}
+
   irALista() {
     this.router.navigate(['/', ROUTE_SEGMENTS.eventos]);
+  }
+
+  irAMesas(eventoId: string | number) {
+    this.router.navigate(['/', ROUTE_SEGMENTS.eventos, eventoId, ROUTE_SEGMENTS.mesas]);
   }
 }

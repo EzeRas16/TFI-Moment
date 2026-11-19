@@ -12,8 +12,14 @@
 
       @if (puedeModificar()) {
         <div class="detalle-botones">
+          <button type="button" class="btn-mesas" (click)="irAMesas(e.id)">
+            GESTIONAR MESAS
+          </button>
           <button type="button" class="btn-editar" (click)="editando.update((v) => !v)">
             {{ editando() ? 'CERRAR EDICIÓN' : 'EDITAR EVENTO' }}
+          </button>
+          <button type="button" class="btn-retos" (click)="irAGestionRetos(e.id)">
+            GESTIONAR RETOS
           </button>
           <button type="button" class="btn-baja" (click)="darDeBaja()">DAR DE BAJA</button>
         </div>
