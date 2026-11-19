@@ -18,6 +18,9 @@
           <button type="button" class="btn-editar" (click)="editando.update((v) => !v)">
             {{ editando() ? 'CERRAR EDICIÓN' : 'EDITAR EVENTO' }}
           </button>
+          <button type="button" class="btn-retos" (click)="irAGestionRetos(e.id)">
+            GESTIONAR RETOS
+          </button>
           <button type="button" class="btn-baja" (click)="darDeBaja()">DAR DE BAJA</button>
         </div>
       }

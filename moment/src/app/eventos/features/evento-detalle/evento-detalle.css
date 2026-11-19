@@ -63,6 +63,7 @@
 }
 
 .btn-editar,
+.btn-retos,
 .btn-baja {
   min-height: 44px;
   padding: 0 16px;
@@ -76,6 +77,15 @@
 .btn-editar {
   color: #dfc2ad;
   border: 1px solid #dfc2ad;
+}
+
+.btn-retos {
+  color: #d4b28c;
+  border: 1px solid #d4b28c;
+}
+
+.btn-retos:hover {
+  background-color: rgba(212, 178, 140, 0.12);
 }
 
 .btn-baja {

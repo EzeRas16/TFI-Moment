@@ -34,6 +34,11 @@ export const routes: Routes = [
   },
 
   {
+    path: ROUTE_SEGMENTS.eventos + '/:eventoId/' + ROUTE_SEGMENTS.retos,
+    loadChildren: () => import('./retos/reto.routes').then((m) => m.default),
+  },
+
+  {
     path: ROUTE_SEGMENTS.retos,
     loadChildren: () => import('./retos/reto.routes').then((m) => m.default),
   }
