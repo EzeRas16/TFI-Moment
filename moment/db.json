@@ -14,6 +14,14 @@
       "nombre": "Casamiento de Prueba",
       "descripcion": "Evento de testeo para gestión de mesas",
       "fecha": "2026-12-01"
+    },
+    {
+      "nombre": "GoldHen",
+      "fecha": "2026-11-21",
+      "tipo": "Casamiento",
+      "usuarioId": "1",
+      "estado": "Pendiente",
+      "id": "g71bXVlKg00"
     }
   ],
   "mesas": [
@@ -24,9 +32,36 @@
       "eventoId": "1",
       "id": "OoYjjiJqtTY",
       "codigoQr": "http://localhost:4200/unirse?mesaId=OoYjjiJqtTY&token=mesa-1-ikb56jx"
+    },
+    {
+      "numero": 2,
+      "capacidad": 4,
+      "activa": true,
+      "eventoId": "1",
+      "id": "dk3pA0ahLq0",
+      "codigoQr": "http://localhost:4200/unirse?mesaId=dk3pA0ahLq0&token=mesa-2-y3eqte2"
     }
   ],
-  "invitados": [],
+  "invitados": [
+    {
+      "nombre": "Ezequiel",
+      "apodo": "LaChancha",
+      "mesaId": "mesa-1-ikb56jx",
+      "id": "78DyQiHr--g"
+    },
+    {
+      "nombre": "Francesco",
+      "apodo": "Danserman",
+      "mesaId": "mesa-2-y3eqte2",
+      "id": "K-m6A5Z6c30"
+    },
+    {
+      "nombre": "Matias",
+      "apodo": "Matiu",
+      "mesaId": "mesa-2-y3eqte2",
+      "id": "_7h0iOcNqHY"
+    }
+  ],
   "retos": [],
   "fotos": [],
   "albumes": [],
