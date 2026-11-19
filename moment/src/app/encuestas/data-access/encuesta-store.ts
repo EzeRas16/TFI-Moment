@@ -66,6 +66,48 @@ export class EncuestaStore {
     }
   }
 
+  async actualizarEncuesta(
+    encuestaOriginal: Encuesta,
+    pregunta: string,
+    textosOpciones: string[],
+  ): Promise<boolean> {
+    if (!encuestaOriginal.id) return false;
+    this._error.set(null);
+
+    const opcionesAnteriores = encuestaOriginal.opciones ?? [];
+
+    const opcionesActualizadas: OpcionEncuesta[] = textosOpciones
+      .map((texto, i) => {
+        const limpia = texto.trim();
+        const previa = opcionesAnteriores[i];
+        return {
+          id: previa?.id ?? `op-${Date.now()}-${i + 1}`,
+          texto: limpia,
+          votos: previa?.votos ?? 0,
+        };
+      })
+      .filter((op) => op.texto.length > 0);
+
+    const encuestaEditada: Encuesta = {
+      ...encuestaOriginal,
+      pregunta: pregunta.trim(),
+      opciones: opcionesActualizadas,
+    };
+
+    try {
+      const guardada = await firstValueFrom(
+        this.client.actualizarEncuesta(encuestaOriginal.id, encuestaEditada),
+      );
+      this._encuestas.update((actuales) =>
+        actuales.map((enc) => (enc.id === encuestaOriginal.id ? guardada : enc)),
+      );
+      return true;
+    } catch {
+      this._error.set('No se pudo modificar la encuesta. Revisá que json-server esté corriendo.');
+      return false;
+    }
+  }
+
   async eliminarEncuesta(id: string): Promise<boolean> {
     this._error.set(null);
     this._eliminandoId.set(id);

@@ -3,9 +3,15 @@
     <button type="button" class="btn-volver" (click)="volverAlEvento()">
       ← VOLVER AL EVENTO
     </button>
-    <h1 class="encuesta-titulo">NUEVA ENCUESTA / PREGUNTA</h1>
+    <h1 class="encuesta-titulo">
+      {{ editandoEncuesta() ? 'MODIFICAR ENCUESTA / PREGUNTA' : 'NUEVA ENCUESTA / PREGUNTA' }}
+    </h1>
     <p class="encuesta-subtitulo">
-      Creá una pregunta de opción múltiple para que participen los invitados.
+      {{
+        editandoEncuesta()
+          ? 'Editá la pregunta o corregí las opciones antes de que voten los invitados.'
+          : 'Creá una pregunta de opción múltiple para que participen los invitados.'
+      }}
     </p>
   </div>
 
@@ -80,8 +86,16 @@
     }
 
     <div class="acciones-form">
-      <button type="submit" class="btn-primario">GUARDAR ENCUESTA</button>
-      <button type="button" class="btn-secundario" (click)="resetearFormulario()">LIMPIAR</button>
+      <button type="submit" class="btn-primario">
+        {{ editandoEncuesta() ? 'GUARDAR CAMBIOS' : 'GUARDAR ENCUESTA' }}
+      </button>
+      @if (editandoEncuesta()) {
+        <button type="button" class="btn-secundario" (click)="cancelarEdicion()">
+          CANCELAR EDICIÓN
+        </button>
+      } @else {
+        <button type="button" class="btn-secundario" (click)="resetearFormulario()">LIMPIAR</button>
+      }
     </div>
   </form>
 
@@ -100,6 +114,13 @@
               <h3 class="encuesta-pregunta">{{ enc.pregunta }}</h3>
               <div class="encuesta-acciones">
                 <span class="badge-estado">{{ enc.activa ? 'ACTIVA' : 'CERRADA' }}</span>
+                <button
+                  type="button"
+                  class="btn-editar-item"
+                  (click)="prepararEdicion(enc)"
+                >
+                  EDITAR
+                </button>
                 @if (enc.id) {
                   <button
                     type="button"
@@ -122,6 +143,4 @@
       </div>
     }
   </section>
-
-  
 </section>

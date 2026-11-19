@@ -27,6 +27,7 @@ export class EncuestaFormulario implements OnInit {
   protected readonly encuestaStore = inject(EncuestaStore);
 
   protected readonly eventoId = signal<string | number>(1);
+  protected readonly editandoEncuesta = signal<Encuesta | null>(null);
   protected readonly mensajeExito = signal<string | null>(null);
   protected readonly errorOpciones = signal<string | null>(null);
 
@@ -79,6 +80,30 @@ export class EncuestaFormulario implements OnInit {
     this.errorOpciones.set(null);
   }
 
+  prepararEdicion(encuesta: Encuesta): void {
+    this.mensajeExito.set(null);
+    this.errorOpciones.set(null);
+    this.editandoEncuesta.set(encuesta);
+
+    this.formulario.controls.pregunta.setValue(encuesta.pregunta);
+    this.formulario.controls.pregunta.markAsPristine();
+    this.formulario.controls.pregunta.markAsUntouched();
+
+    this.opcionesArray.clear();
+    const opcionesBase = encuesta.opciones.length >= 2 ? encuesta.opciones : [];
+    for (const op of opcionesBase) {
+      this.agregarOpcion(op.texto);
+    }
+    while (this.opcionesArray.length < 2) {
+      this.agregarOpcion('');
+    }
+  }
+
+  cancelarEdicion(): void {
+    this.editandoEncuesta.set(null);
+    this.resetearFormulario();
+  }
+
   resetearFormulario(): void {
     this.formulario.controls.pregunta.setValue('');
     this.formulario.controls.pregunta.markAsUntouched();
@@ -113,6 +138,22 @@ export class EncuestaFormulario implements OnInit {
       return;
     }
 
+    const enEdicion = this.editandoEncuesta();
+
+    if (enEdicion) {
+      const ok = await this.encuestaStore.actualizarEncuesta(
+        enEdicion,
+        this.formulario.controls.pregunta.value,
+        textos,
+      );
+      if (ok) {
+        this.editandoEncuesta.set(null);
+        this.resetearFormulario();
+        this.mensajeExito.set('Encuesta modificada correctamente.');
+      }
+      return;
+    }
+
     const ok = await this.encuestaStore.crearEncuesta(
       this.eventoId(),
       this.formulario.controls.pregunta.value,
@@ -136,6 +177,9 @@ export class EncuestaFormulario implements OnInit {
     this.mensajeExito.set(null);
     const ok = await this.encuestaStore.eliminarEncuesta(encuesta.id);
     if (ok) {
+      if (this.editandoEncuesta()?.id === encuesta.id) {
+        this.cancelarEdicion();
+      }
       this.mensajeExito.set('Encuesta eliminada correctamente.');
     }
   }

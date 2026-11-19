@@ -18,6 +18,10 @@ export class EncuestaClient {
     return this.http.post<Encuesta>(this.url, encuesta);
   }
 
+  actualizarEncuesta(id: string, encuesta: Encuesta): Observable<Encuesta> {
+    return this.http.put<Encuesta>(`${this.url}/${id}`, encuesta);
+  }
+
   eliminarEncuesta(id: string): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`);
   }
