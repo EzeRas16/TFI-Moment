@@ -1,0 +1,38 @@
+<div class="reto-detalle-contenedor">
+  <button type="button" class="btn-volver" (click)="volver()">← Volver a retos</button>
+
+  @if (cargando()) {
+    <p class="estado-texto">Cargando reto...</p>
+  } @else if (error()) {
+    <p class="error-texto" role="alert">{{ error() }}</p>
+  } @else if (reto(); as r) {
+    <div class="reto-tarjeta">
+      <span class="reto-etiqueta">Reto fotográfico</span>
+      <h2 class="reto-titulo">{{ r.descripcion }}</h2>
+
+      @if (invitado(); as i) {
+        @if (foto(); as f) {
+          <div class="reto-cumplido">
+            <span class="insignia-cumplido">✓ Reto cumplido</span>
+            <img
+              class="foto-propia"
+              [src]="f.urlCloudinary"
+              [alt]="'Tu foto del reto: ' + r.descripcion"
+            />
+          </div>
+        } @else {
+          <app-foto-subida
+            [eventoId]="r.eventoId ?? null"
+            [retoId]="r.id"
+            [invitadoId]="i.id"
+            (subida)="foto.set($event)"
+          />
+        }
+      } @else {
+        <p class="error-texto" role="alert">
+          Necesitás ingresar mediante el QR de tu mesa para subir una foto.
+        </p>
+      }
+    </div>
+  }
+</div>
