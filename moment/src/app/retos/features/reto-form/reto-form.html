@@ -33,19 +33,44 @@
 
   <hr class="divider" />
 
+  <button type="button" class="btn-toggle-lista" (click)="alternarDesplegableLista()">
+    {{ desplegableListaAbierto() ? '▲ Ocultar lista de retos' : '▼ Ver lista de retos (' + retosVisibles().length + ')' }}
+  </button>
+
+  @if (desplegableListaAbierto()) {
+    <div class="list-section">
+      @if (cargandoLista()) {
+        <p class="loading-text">Cargando retos...</p>
+      } @else if (retosVisibles().length === 0) {
+        <p class="empty-text">No hay retos cargados todavía.</p>
+      } @else {
+        <ul class="lista-visible">
+          @for (reto of retosVisibles(); track reto.id) {
+            <li class="reto-visible-item">
+              <span class="reto-numero">#{{ $index + 1 }}</span>
+              <span class="reto-texto">{{ reto.descripcion }}</span>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  }
+
+  <hr class="divider" />
+
   <button type="button" class="btn-toggle-dropdown" (click)="alternarDesplegable()">
-    {{ desplegableAbierto() ? '▲ Ocultar listado de eliminación' : '▼ Eliminar retos existentes (' + retos().length + ')' }}
+    {{ desplegableAbierto() ? 'Ocultar listado de eliminación' : '▼ Eliminar retos existentes (' + retosVisibles().length + ')' }}
   </button>
 
   @if (desplegableAbierto()) {
     <div class="list-section">
       @if (cargandoLista()) {
         <p class="loading-text">Cargando retos...</p>
-      } @else if (retos().length === 0) {
+      } @else if (retosVisibles().length === 0) {
         <p class="empty-text">No hay retos registrados.</p>
       } @else {
         <div class="listado-retos">
-          @for (reto of retos(); track reto.id) {
+          @for (reto of retosVisibles(); track reto.id) {
             <label class="reto-item">
               <input 
                 type="checkbox" 
