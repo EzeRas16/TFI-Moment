@@ -63,6 +63,14 @@
       "activa": false,
       "eventoId": "1",
       "id": "HwHkC3d6Vpo"
+    },
+    {
+      "numero": 1,
+      "capacidad": 5,
+      "activa": true,
+      "eventoId": "lTHHfffP_0A",
+      "id": "hbXai5fwWQc",
+      "codigoQr": "http://localhost:4200/unirse?mesaId=hbXai5fwWQc&token=mesa-1-mf0ea98"
     }
   ],
   "invitados": [
@@ -71,6 +79,30 @@
       "apodo": "Matute",
       "mesaId": "mesa-1-rshex6z",
       "id": "KsgdnZ2fRxE"
+    },
+    {
+      "nombre": "Juan",
+      "apodo": "Juancito",
+      "mesaId": "mesa-1-mf0ea98",
+      "id": "cAfKh6_a64s"
+    },
+    {
+      "nombre": "Juan",
+      "apodo": "Juancito2",
+      "mesaId": "mesa-1-mf0ea98",
+      "id": "Eq1JA-0BC5Y"
+    },
+    {
+      "nombre": "Fran",
+      "apodo": "Franchesco",
+      "mesaId": "mesa-1-mf0ea98",
+      "id": "6i1OhPsvrZM"
+    },
+    {
+      "nombre": "Pedro",
+      "apodo": "Pedrin",
+      "mesaId": "mesa-1-mf0ea98",
+      "id": "FywtJAYDgiU"
     }
   ],
   "retos": [
@@ -87,6 +119,16 @@
       "descripcion": "matias",
       "eventoId": "lTHHfffP_0A",
       "id": "JHEALJUMxMw"
+    },
+    {
+      "descripcion": "hoal",
+      "eventoId": "lTHHfffP_0A",
+      "id": "cqIMfQMpLNA"
+    },
+    {
+      "descripcion": "hola",
+      "eventoId": "lTHHfffP_0A",
+      "id": "EiO4paWRq_w"
     }
   ],
   "fotos": [],

@@ -78,14 +78,25 @@
             </form>
           }
 
-          <!-- SUB-ESTADO B1: Vista normal de bienvenida -->
+            <!-- SUB-ESTADO B1: Vista normal de bienvenida -->
           @else {
             <h3 class="invitado-apodo">"{{ invitado.apodo }}"</h3>
             <p class="invitado-nombre">{{ invitado.nombre }}</p>
 
             <div class="acciones-stack">
-              <button type="button" class="btn-acento btn-ancho" disabled>
-                Esperando inicio de retos...
+              <button
+                type="button"
+                class="btn-acento btn-ancho"
+                [disabled]="cargandoRetos()"
+                (click)="irARetos()"
+              >
+                {{
+                  cargandoRetos()
+                    ? 'Buscando retos...'
+                    : mostrarRetos()
+                      ? 'Ocultar retos'
+                      : 'Ver retos'
+                }}
               </button>
               <button
                 type="button"
@@ -95,6 +106,10 @@
                 Editar mi perfil
               </button>
             </div>
+
+            @if (mostrarRetos()) {
+              <app-reto-invitado-lista [eventoId]="eventoIdRetos()" />
+            }
 
             @if (invitado.mesaId) {
               <app-votar-encuesta [mesaId]="invitado.mesaId" />
@@ -110,7 +125,7 @@
               ¿No sos {{ invitado.apodo }}? Registrar otra persona
             </button>
           }
-        </div>
+          </div>
       </div>
     }
 
