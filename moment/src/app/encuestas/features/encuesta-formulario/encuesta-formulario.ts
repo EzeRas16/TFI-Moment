@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTE_SEGMENTS } from '../../../app.route.segments';
+import { Encuesta } from '../../data-access/encuesta.model';
 import { EncuestaStore } from '../../data-access/encuesta-store';
 
 @Component({
@@ -121,6 +122,21 @@ export class EncuestaFormulario implements OnInit {
     if (ok) {
       this.resetearFormulario();
       this.mensajeExito.set('Encuesta creada correctamente.');
+    }
+  }
+
+  async eliminar(encuesta: Encuesta): Promise<void> {
+    if (!encuesta.id) return;
+
+    const confirmacion = confirm(
+      `¿Querés eliminar la encuesta "${encuesta.pregunta}"? Se quitará del evento.`,
+    );
+    if (!confirmacion) return;
+
+    this.mensajeExito.set(null);
+    const ok = await this.encuestaStore.eliminarEncuesta(encuesta.id);
+    if (ok) {
+      this.mensajeExito.set('Encuesta eliminada correctamente.');
     }
   }
 

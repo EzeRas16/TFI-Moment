@@ -17,4 +17,8 @@ export class EncuestaClient {
   crearEncuesta(encuesta: Encuesta): Observable<Encuesta> {
     return this.http.post<Encuesta>(this.url, encuesta);
   }
+
+  eliminarEncuesta(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${id}`);
+  }
 }
