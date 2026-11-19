@@ -1,0 +1,146 @@
+<section class="encuesta-page">
+  <div class="encuesta-header">
+    <button type="button" class="btn-volver" (click)="volverAlEvento()">
+      ← VOLVER AL EVENTO
+    </button>
+    <h1 class="encuesta-titulo">
+      {{ editandoEncuesta() ? 'MODIFICAR ENCUESTA / PREGUNTA' : 'NUEVA ENCUESTA / PREGUNTA' }}
+    </h1>
+    <p class="encuesta-subtitulo">
+      {{
+        editandoEncuesta()
+          ? 'Editá la pregunta o corregí las opciones antes de que voten los invitados.'
+          : 'Creá una pregunta de opción múltiple para que participen los invitados.'
+      }}
+    </p>
+  </div>
+
+  <form class="encuesta-card" [formGroup]="formulario" (ngSubmit)="guardar()">
+    <div class="campo">
+      <label for="pregunta" class="campo-label">Pregunta o consigna</label>
+      <input
+        id="pregunta"
+        type="text"
+        class="campo-input"
+        formControlName="pregunta"
+        placeholder="Ej. ¿Qué tema no puede faltar en la pista?"
+      />
+      @if (formulario.controls.pregunta.touched && formulario.controls.pregunta.invalid) {
+        <span class="campo-error">
+          @if (formulario.controls.pregunta.errors?.['required']) {
+            La pregunta es obligatoria.
+          } @else {
+            Ingresá al menos 3 caracteres.
+          }
+        </span>
+      }
+    </div>
+
+    <div class="opciones-bloque">
+      <div class="opciones-top">
+        <span class="campo-label">Opciones de respuesta (mín. 2)</span>
+        @if (opcionesArray.length < 8) {
+          <button type="button" class="btn-secundario" (click)="agregarOpcion()">
+            + AGREGAR OPCIÓN
+          </button>
+        }
+      </div>
+
+      <div class="opciones-lista" formArrayName="opciones">
+        @for (controlOpcion of opcionesArray.controls; track $index) {
+          <div class="opcion-fila">
+            <input
+              type="text"
+              class="campo-input"
+              [formControl]="controlOpcion"
+              [placeholder]="'Opción ' + ($index + 1)"
+            />
+            @if (opcionesArray.length > 2) {
+              <button
+                type="button"
+                class="btn-quitar"
+                (click)="quitarOpcion($index)"
+                aria-label="Quitar opción"
+              >
+                ✕
+              </button>
+            }
+          </div>
+          @if (controlOpcion.touched && controlOpcion.invalid) {
+            <span class="campo-error">Completá el texto de la opción {{ $index + 1 }}.</span>
+          }
+        }
+      </div>
+
+      @if (errorOpciones()) {
+        <p class="campo-error">{{ errorOpciones() }}</p>
+      }
+    </div>
+
+    @if (encuestaStore.error()) {
+      <p class="alerta-error">{{ encuestaStore.error() }}</p>
+    }
+
+    @if (mensajeExito()) {
+      <p class="alerta-exito">{{ mensajeExito() }}</p>
+    }
+
+    <div class="acciones-form">
+      <button type="submit" class="btn-primario">
+        {{ editandoEncuesta() ? 'GUARDAR CAMBIOS' : 'GUARDAR ENCUESTA' }}
+      </button>
+      @if (editandoEncuesta()) {
+        <button type="button" class="btn-secundario" (click)="cancelarEdicion()">
+          CANCELAR EDICIÓN
+        </button>
+      } @else {
+        <button type="button" class="btn-secundario" (click)="resetearFormulario()">LIMPIAR</button>
+      }
+    </div>
+  </form>
+
+  <section class="listado-section">
+    <h2 class="listado-titulo">ENCUESTAS DEL EVENTO ({{ encuestaStore.encuestas().length }})</h2>
+
+    @if (encuestaStore.cargando()) {
+      <p class="texto-muted">Cargando encuestas...</p>
+    } @else if (encuestaStore.encuestas().length === 0) {
+      <p class="texto-muted">Todavía no hay encuestas cargadas para este evento.</p>
+    } @else {
+      <div class="encuestas-grid">
+        @for (enc of encuestaStore.encuestas(); track enc.id ?? enc.pregunta) {
+          <article class="encuesta-item">
+            <div class="encuesta-item-top">
+              <h3 class="encuesta-pregunta">{{ enc.pregunta }}</h3>
+              <div class="encuesta-acciones">
+                <span class="badge-estado">{{ enc.activa ? 'ACTIVA' : 'CERRADA' }}</span>
+                <button
+                  type="button"
+                  class="btn-editar-item"
+                  (click)="prepararEdicion(enc)"
+                >
+                  EDITAR
+                </button>
+                @if (enc.id) {
+                  <button
+                    type="button"
+                    class="btn-eliminar"
+                    [disabled]="encuestaStore.eliminandoId() === enc.id"
+                    (click)="eliminar(enc)"
+                  >
+                    {{ encuestaStore.eliminandoId() === enc.id ? 'ELIMINANDO...' : 'ELIMINAR' }}
+                  </button>
+                }
+              </div>
+            </div>
+            <ul class="opciones-preview">
+              @for (op of enc.opciones; track op.id) {
+                <li>{{ op.texto }}</li>
+              }
+            </ul>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</section>

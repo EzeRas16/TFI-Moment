@@ -1,0 +1,37 @@
+<div class="reto-invitado-container">
+  <h2>Retos del evento</h2>
+
+  <button
+    type="button"
+    class="btn-toggle-lista"
+    (click)="alternarDesplegableLista()"
+  >
+    {{
+      desplegableListaAbierto()
+        ? '▲ Ocultar lista de retos'
+        : '▼ Ver lista de retos (' + retosVisibles().length + ')'
+    }}
+  </button>
+
+  @if (desplegableListaAbierto()) {
+    <div class="list-section">
+      @if (cargandoLista()) {
+        <p class="loading-text">Cargando retos...</p>
+      } @else if (retosVisibles().length === 0) {
+        <p class="empty-text">No hay retos cargados todavía.</p>
+      } @else {
+        <ul class="lista-visible">
+          @for (reto of retosVisibles(); track reto.id) {
+            <li
+              class="reto-visible-item reto-clickeable"
+              (click)="irADetalleReto(reto)"
+            >
+              <span class="reto-numero">#{{ $index + 1 }}</span>
+              <span class="reto-texto">{{ reto.descripcion }}</span>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  }
+</div>

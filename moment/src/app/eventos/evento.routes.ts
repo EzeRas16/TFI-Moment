@@ -1,4 +1,5 @@
 ﻿import { Routes } from '@angular/router';
+import { RetoInvitadoLista } from '../retos/features/reto-invitado-lista/reto-invitado-lista';
 
 const eventoRoutes: Routes = [
   {
@@ -17,6 +18,10 @@ const eventoRoutes: Routes = [
   path: ':id',
   loadComponent: () =>
     import('./features/evento-detalle/evento-detalle').then((m) => m.EventoDetalle),
+},
+{
+  path: 'eventos/:eventoId/retos/lista',
+  component: RetoInvitadoLista
 },
 ];
 

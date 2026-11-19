@@ -113,6 +113,7 @@
 
   .detalle-botones {
     flex-direction: row;
+    flex-wrap: wrap;
     padding-bottom: 20px;
   }
 }
@@ -132,4 +133,20 @@
 .btn-mesas:hover {
   background-color: #ebd2be;
   border-color: #ebd2be;
+}
+
+.btn-encuestas {
+  min-height: 44px;
+  padding: 0 16px;
+  background-color: transparent;
+  color: #dfc2ad;
+  border: 1px dashed #dfc2ad;
+  border-radius: 4px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.btn-encuestas:hover {
+  background-color: rgba(223, 194, 173, 0.14);
 }
