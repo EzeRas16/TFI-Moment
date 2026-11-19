@@ -1,0 +1,123 @@
+{
+  "usuarios": [
+    {
+      "id": "1",
+      "nombre": "Eze Demo",
+      "email": "eze@demo.com",
+      "contrasena": "demo1234",
+      "rol": "ADMIN"
+    }
+  ],
+  "eventos": [
+    {
+      "id": "1",
+      "nombre": "Casamiento de Prueba",
+      "descripcion": "Evento de testeo para gestión de mesas",
+      "fecha": "2026-12-01"
+    },
+    {
+      "nombre": "GoldHen",
+      "fecha": "2026-11-21",
+      "tipo": "Casamiento",
+      "usuarioId": "1",
+      "estado": "Pendiente",
+      "id": "g71bXVlKg00"
+    },
+    {
+      "nombre": "MilagrosaLechosa",
+      "fecha": "2026-11-27",
+      "tipo": "Casamiento",
+      "usuarioId": "1",
+      "estado": "Cancelado",
+      "id": "XSSXk__2gjw"
+    }
+  ],
+  "mesas": [
+    {
+      "numero": 1,
+      "capacidad": 4,
+      "activa": true,
+      "eventoId": "g71bXVlKg00",
+      "id": "h6-3bgTMkyc",
+      "codigoQr": "http://localhost:4200/unirse?mesaId=h6-3bgTMkyc&token=mesa-1-2bczgri"
+    }
+  ],
+  "invitados": [
+    {
+      "nombre": "Francesco",
+      "apodo": "Danserman",
+      "mesaId": "mesa-1-2bczgri",
+      "id": "zhDMw_RZfWg"
+    }
+  ],
+  "retos": [],
+  "fotos": [],
+  "albumes": [],
+  "encuestas": [
+    {
+      "eventoId": "g71bXVlKg00",
+      "pregunta": "Que musica desean como siguiente?",
+      "opciones": [
+        {
+          "id": "op-1795073205927-1",
+          "texto": "Daddy yanquee",
+          "votos": 1
+        },
+        {
+          "id": "op-1795073205927-2",
+          "texto": "Enfrentando el Sol",
+          "votos": 0
+        },
+        {
+          "id": "op-1795073205927-3",
+          "texto": "Tren hacia la cielo",
+          "votos": 0
+        }
+      ],
+      "activa": true,
+      "creadaEn": "2026-11-19T07:26:45.927Z",
+      "id": "rxb_bRfvBwE"
+    },
+    {
+      "eventoId": "g71bXVlKg00",
+      "pregunta": "Te gusta el morron?",
+      "opciones": [
+        {
+          "id": "op-1795114875054-1",
+          "texto": "Seee",
+          "votos": 0
+        },
+        {
+          "id": "op-1795114875054-2",
+          "texto": "Nooo",
+          "votos": 1
+        },
+        {
+          "id": "op-1795114875054-3",
+          "texto": "Cocinado nomas",
+          "votos": 0
+        }
+      ],
+      "activa": true,
+      "creadaEn": "2026-11-19T19:01:15.055Z",
+      "id": "Dl2iR6rwh7I"
+    }
+  ],
+  "votos": [
+    {
+      "mesaId": "mesa-1-2bczgri",
+      "encuestaId": "rxb_bRfvBwE",
+      "opcionId": "op-1795073205927-1",
+      "creadoEn": "2026-11-19T17:41:01.888Z",
+      "id": "wBSOrrmsrWY"
+    },
+    {
+      "mesaId": "mesa-1-2bczgri",
+      "encuestaId": "Dl2iR6rwh7I",
+      "opcionId": "op-1795114875054-2",
+      "creadoEn": "2026-11-19T19:02:00.951Z",
+      "id": "j22URRM4-os"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
