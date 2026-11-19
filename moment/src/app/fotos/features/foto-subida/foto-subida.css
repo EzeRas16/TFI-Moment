@@ -5,29 +5,68 @@
   gap: 10px;
 }
 
-.boton-subir {
+/* Base compartida por los dos botones */
+.boton-subir,
+.boton-reintentar {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
   width: 100%;
   min-height: 44px;
   padding: 12px 18px;
-  background: #dfc2ad;
-  color: #0b2528;
+  border: 2px solid #dfc2ad;
   border-radius: 4px;
+  font: inherit;
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
   cursor: pointer;
 }
 
-.boton-subir:hover {
-  background: #ebd2be;
+/* Acción principal: relleno */
+.boton-subir {
+  position: relative;
+  background: #dfc2ad;
+  color: #0b2528;
 }
 
-.boton-subir.deshabilitado {
+.boton-subir:hover {
+  background: #ebd2be;
+  border-color: #ebd2be;
+}
+
+/* Acción secundaria: solo contorno */
+.boton-reintentar {
+  background: transparent;
+  color: #dfc2ad;
+}
+
+.boton-reintentar:hover {
+  background: rgba(223, 194, 173, 0.15);
+}
+
+/* Estado deshabilitado (sin efecto al pasar el mouse) */
+.boton-subir.deshabilitado,
+.boton-reintentar:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.boton-subir.deshabilitado:hover {
+  background: #dfc2ad;
+  border-color: #dfc2ad;
+}
+
+.boton-reintentar:disabled:hover {
+  background: transparent;
+}
+
+/* Foco visible para quien navega con teclado */
+.boton-subir:focus-within,
+.boton-reintentar:focus-visible {
+  outline: 3px solid #9cb8ba;
+  outline-offset: 2px;
 }
 
 .ayuda {
@@ -40,17 +79,30 @@
   margin: 0;
   font-size: 0.9rem;
   color: #ff9b97;
+  text-align: center;
 }
 
 .vista-previa {
+  display: block;
   width: 100%;
   max-width: 320px;
+  height: auto;
   border: 1px solid #1c4b4e;
   border-radius: 8px;
 }
 
+.campo-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
 @media (min-width: 600px) {
-  .boton-subir {
+  .boton-subir,
+  .boton-reintentar {
     width: auto;
     min-width: 220px;
   }

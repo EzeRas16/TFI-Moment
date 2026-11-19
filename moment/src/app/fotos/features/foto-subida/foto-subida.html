@@ -1,18 +1,31 @@
 <div class="subida">
-  <label class="boton-subir" [class.deshabilitado]="subiendo()">
-    {{ subiendo() ? 'Subiendo...' : 'Subir foto' }}
-    <input
-      type="file"
-      accept="image/jpeg,image/png"
-      [disabled]="subiendo()"
-      (change)="alElegirArchivo($event)"
-      hidden
-    />
-  </label>
-  <p class="ayuda">JPG o PNG, hasta {{ maximoMb }} MB.</p>
+  @if (!pendiente()) {
+    <label class="boton-subir" [class.deshabilitado]="subiendo()">
+      {{ subiendo() ? 'Subiendo...' : 'Subir foto' }}
+      <input
+        type="file"
+        accept="image/jpeg,image/png"
+        class="campo-oculto"
+        [disabled]="subiendo()"
+        (change)="alElegirArchivo($event)"
+      />
+    </label>
+    <p class="ayuda">JPG o PNG, hasta {{ maximoMb }} MB.</p>
+  }
 
   @if (error()) {
     <p class="error" role="alert">{{ error() }}</p>
+  }
+
+  @if (pendiente()) {
+    <button
+      type="button"
+      class="boton-reintentar"
+      (click)="reintentarGuardado()"
+      [disabled]="subiendo()"
+    >
+      {{ subiendo() ? 'Guardando...' : 'Reintentar guardado' }}
+    </button>
   }
 
   @if (vistaPrevia(); as url) {
