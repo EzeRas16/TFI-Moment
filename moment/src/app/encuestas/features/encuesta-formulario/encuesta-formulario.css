@@ -266,3 +266,32 @@
     flex-direction: row;
   }
 }
+
+.encuesta-acciones {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.btn-eliminar {
+  min-height: 36px;
+  padding: 0 12px;
+  background-color: transparent;
+  color: #ff9b97;
+  border: 1px solid #ff9b97;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.6px;
+  cursor: pointer;
+}
+
+.btn-eliminar:hover:not(:disabled) {
+  background-color: rgba(255, 155, 151, 0.14);
+}
+
+.btn-eliminar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

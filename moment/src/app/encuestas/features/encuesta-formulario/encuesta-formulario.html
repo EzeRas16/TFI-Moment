@@ -98,7 +98,19 @@
           <article class="encuesta-item">
             <div class="encuesta-item-top">
               <h3 class="encuesta-pregunta">{{ enc.pregunta }}</h3>
-              <span class="badge-estado">{{ enc.activa ? 'ACTIVA' : 'CERRADA' }}</span>
+              <div class="encuesta-acciones">
+                <span class="badge-estado">{{ enc.activa ? 'ACTIVA' : 'CERRADA' }}</span>
+                @if (enc.id) {
+                  <button
+                    type="button"
+                    class="btn-eliminar"
+                    [disabled]="encuestaStore.eliminandoId() === enc.id"
+                    (click)="eliminar(enc)"
+                  >
+                    {{ encuestaStore.eliminandoId() === enc.id ? 'ELIMINANDO...' : 'ELIMINAR' }}
+                  </button>
+                }
+              </div>
             </div>
             <ul class="opciones-preview">
               @for (op of enc.opciones; track op.id) {
@@ -110,4 +122,6 @@
       </div>
     }
   </section>
+
+  
 </section>

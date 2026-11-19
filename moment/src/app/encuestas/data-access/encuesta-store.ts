@@ -11,10 +11,12 @@ export class EncuestaStore {
 
   private readonly _encuestas = signal<Encuesta[]>([]);
   private readonly _cargando = signal(false);
+  private readonly _eliminandoId = signal<string | null>(null);
   private readonly _error = signal<string | null>(null);
 
   readonly encuestas = this._encuestas.asReadonly();
   readonly cargando = this._cargando.asReadonly();
+  readonly eliminandoId = this._eliminandoId.asReadonly();
   readonly error = this._error.asReadonly();
 
   async cargarPorEvento(eventoId: string | number): Promise<void> {
@@ -61,6 +63,22 @@ export class EncuestaStore {
     } catch {
       this._error.set('No se pudo crear la encuesta. Revisá que json-server esté corriendo.');
       return false;
+    }
+  }
+
+  async eliminarEncuesta(id: string): Promise<boolean> {
+    this._error.set(null);
+    this._eliminandoId.set(id);
+
+    try {
+      await firstValueFrom(this.client.eliminarEncuesta(id));
+      this._encuestas.update((actuales) => actuales.filter((enc) => enc.id !== id));
+      return true;
+    } catch {
+      this._error.set('No se pudo eliminar la encuesta. Revisá que json-server esté corriendo.');
+      return false;
+    } finally {
+      this._eliminandoId.set(null);
     }
   }
 }
