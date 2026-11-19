@@ -1,0 +1,103 @@
+.reto-detalle-contenedor {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 480px;
+  margin: 24px auto;
+  padding: 0 16px;
+  color: #ffffff;
+}
+
+.btn-volver {
+  align-self: flex-start;
+  min-height: 40px;
+  padding: 8px 14px;
+  background: transparent;
+  border: 2px solid #dfc2ad;
+  border-radius: 4px;
+  color: #dfc2ad;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.btn-volver:hover {
+  background: rgba(223, 194, 173, 0.15);
+}
+
+.btn-volver:focus-visible {
+  outline: 3px solid #9cb8ba;
+  outline-offset: 2px;
+}
+
+.reto-tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #0b2528;
+  border: 1px solid #1c4b4e;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.reto-etiqueta {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #dfc2ad;
+}
+
+.reto-titulo {
+  margin: 0 0 6px;
+  font-size: 1.25rem;
+  line-height: 1.35;
+  color: #ffffff;
+}
+
+.reto-cumplido {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.insignia-cumplido {
+  align-self: flex-start;
+  padding: 6px 12px;
+  background: rgba(156, 184, 186, 0.14);
+  border: 1px solid #9cb8ba;
+  border-radius: 4px;
+  color: #9cb8ba;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.foto-propia {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 360px;
+  object-fit: cover;
+  border: 1px solid #1c4b4e;
+  border-radius: 8px;
+}
+
+.estado-texto {
+  margin: 16px 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #9cb8ba;
+}
+
+.error-texto {
+  margin: 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #ff9b97;
+}

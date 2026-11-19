@@ -4,10 +4,46 @@
   padding: 0;
 }
 
-.reto-invitado-container h2 {
+.reto-invitado-titulo {
+  margin: 0 0 0.75rem;
   text-align: center;
-  margin-bottom: 0.75rem;
-  font-size: 1.15rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #dfc2ad;
+}
+
+.btn-toggle-lista {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  background: rgba(223, 194, 173, 0.08);
+  border: 1px solid #dfc2ad;
+  border-radius: 6px;
+  color: #dfc2ad;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-toggle-lista:hover {
+  background: rgba(223, 194, 173, 0.18);
+}
+
+.btn-toggle-lista:focus-visible {
+  outline: 3px solid #9cb8ba;
+  outline-offset: 2px;
+}
+
+.toggle-flecha {
+  font-size: 0.75rem;
 }
 
 .lista-visible {
@@ -19,32 +55,66 @@
   gap: 0.6rem;
 }
 
-.reto-visible-item {
+.reto-item-btn {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  background: #0b2528;
+  border: 1px solid #1c4b4e;
+  border-radius: 8px;
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.95rem;
   text-align: left;
   cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.1s ease;
 }
 
-.reto-clickeable:hover {
-  opacity: 0.88;
+.reto-item-btn:hover {
+  background: #103236;
+  border-color: #dfc2ad;
+  transform: translateY(-1px);
 }
 
-.btn-toggle-lista {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 6px;
-  color: inherit;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+.reto-item-btn:focus-visible {
+  outline: 3px solid #9cb8ba;
+  outline-offset: 2px;
 }
 
-.btn-toggle-lista:hover {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 255, 255, 0.35);
+.reto-numero {
+  flex-shrink: 0;
+  padding: 3px 8px;
+  background: rgba(223, 194, 173, 0.14);
+  border: 1px solid rgba(223, 194, 173, 0.4);
+  border-radius: 4px;
+  color: #dfc2ad;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.reto-texto {
+  flex: 1;
+  line-height: 1.35;
+}
+
+.reto-flecha {
+  flex-shrink: 0;
+  color: #9cb8ba;
+  font-weight: 700;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.reto-item-btn:hover .reto-flecha {
+  color: #dfc2ad;
+  transform: translateX(3px);
+}
+
+.estado-texto {
+  margin: 0.9rem 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #9cb8ba;
 }

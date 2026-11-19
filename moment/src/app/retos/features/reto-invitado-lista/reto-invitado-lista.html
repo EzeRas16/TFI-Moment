@@ -1,33 +1,42 @@
 <div class="reto-invitado-container">
-  <h2>Retos del evento</h2>
+  <h2 class="reto-invitado-titulo">Retos del evento</h2>
 
   <button
     type="button"
     class="btn-toggle-lista"
     (click)="alternarDesplegableLista()"
   >
-    {{
-      desplegableListaAbierto()
-        ? '▲ Ocultar lista de retos'
-        : '▼ Ver lista de retos (' + retosVisibles().length + ')'
-    }}
+    <span>
+      {{
+        desplegableListaAbierto()
+          ? 'Ocultar lista de retos'
+          : 'Ver lista de retos (' + retosVisibles().length + ')'
+      }}
+    </span>
+    <span class="toggle-flecha" aria-hidden="true">
+      {{ desplegableListaAbierto() ? '▲' : '▼' }}
+    </span>
   </button>
 
   @if (desplegableListaAbierto()) {
     <div class="list-section">
       @if (cargandoLista()) {
-        <p class="loading-text">Cargando retos...</p>
+        <p class="estado-texto">Cargando retos...</p>
       } @else if (retosVisibles().length === 0) {
-        <p class="empty-text">No hay retos cargados todavía.</p>
+        <p class="estado-texto">No hay retos cargados todavía.</p>
       } @else {
         <ul class="lista-visible">
           @for (reto of retosVisibles(); track reto.id) {
-            <li
-              class="reto-visible-item reto-clickeable"
-              (click)="irADetalleReto(reto)"
-            >
-              <span class="reto-numero">#{{ $index + 1 }}</span>
-              <span class="reto-texto">{{ reto.descripcion }}</span>
+            <li>
+              <button
+                type="button"
+                class="reto-item-btn"
+                (click)="irADetalleReto(reto)"
+              >
+                <span class="reto-numero">#{{ $index + 1 }}</span>
+                <span class="reto-texto">{{ reto.descripcion }}</span>
+                <span class="reto-flecha" aria-hidden="true">→</span>
+              </button>
             </li>
           }
         </ul>
