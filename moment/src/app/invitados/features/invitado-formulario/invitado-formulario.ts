@@ -3,11 +3,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute } from '@angular/router';
 import { InvitadoStore } from '../../data-access/invitado-store';
 import { Invitado } from '../../data-access/invitado.model';
+import { VotarEncuesta } from '../../../votos/features/voto-formulario/voto-encuesta';
+
 
 @Component({
   selector: 'app-invitado-formulario',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, VotarEncuesta],
   templateUrl: './invitado-formulario.html',
   styleUrl: './invitado-formulario.css'
 })
@@ -34,18 +36,28 @@ export class InvitadoFormulario implements OnInit {
   mesaToken: string = '';
 
   ngOnInit(): void {
-    const tokenParam = this.route.snapshot.paramMap.get('token');
-    const tokenQuery = this.route.snapshot.queryParamMap.get('token');
-    this.mesaToken = tokenParam || tokenQuery || '';
+  const tokenParam = this.route.snapshot.paramMap.get('token');
+  const tokenQuery = this.route.snapshot.queryParamMap.get('token');
+  this.mesaToken = tokenParam || tokenQuery || '';
 
-    const guardado = localStorage.getItem('invitado_actual');
-    if (guardado) {
-      const invitadoParsed: Invitado = JSON.parse(guardado);
-      if (invitadoParsed.mesaId === this.mesaToken) {
-        this.invitadoActual.set(invitadoParsed);
-      }
+  const guardado = localStorage.getItem('invitado_actual');
+  if (!guardado) return;
+
+  try {
+    const invitadoParsed: Invitado = JSON.parse(guardado);
+
+    const mismaMesa =
+      this.mesaToken
+        ? String(invitadoParsed.mesaId) === String(this.mesaToken)
+        : Boolean(invitadoParsed.mesaId);
+
+    if (mismaMesa) {
+      this.invitadoActual.set(invitadoParsed);
     }
+  } catch {
+    localStorage.removeItem('invitado_actual');
   }
+}
 
   onSubmit(): void {
     this.errorMensaje.set(null);

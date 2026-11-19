@@ -96,6 +96,10 @@
               </button>
             </div>
 
+            @if (invitado.mesaId) {
+              <app-votar-encuesta [mesaId]="invitado.mesaId" />
+            }
+
             <hr class="divisor-sutil" />
 
             <button
