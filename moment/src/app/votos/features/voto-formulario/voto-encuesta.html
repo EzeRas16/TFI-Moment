@@ -1,0 +1,50 @@
+<div class="votos-seccion">
+  <h4 class="votos-titulo">Encuestas activas</h4>
+
+  @if (store.error()) {
+    <div class="voto-error" role="alert">{{ store.error() }}</div>
+  }
+
+  @if (mensajeExito()) {
+    <div class="voto-exito">{{ mensajeExito() }}</div>
+  }
+
+  @if (store.cargando()) {
+    <p class="voto-muted">Cargando encuestas...</p>
+  } @else if (store.encuestasActivas().length === 0) {
+    <p class="voto-muted">No hay encuestas activas en este momento.</p>
+  } @else {
+    <div class="votos-lista">
+      @for (encuesta of store.encuestasActivas(); track encuesta.id ?? encuesta.pregunta) {
+        @let opcionElegida = store.opcionVotadaPorMesa(encuesta.id);
+        @let yaVoto = !!opcionElegida;
+        @let votandoEsta = !!encuesta.id && store.votandoEncuestaId() === encuesta.id;
+
+        <div class="voto-tarjeta">
+          <p class="voto-pregunta">{{ encuesta.pregunta }}</p>
+
+          <div class="voto-opciones">
+            @for (opcion of encuesta.opciones; track opcion.id) {
+              @let esElegida = opcionElegida === opcion.id;
+              <button
+                type="button"
+                class="btn-voto-opcion"
+                [class.elegida]="esElegida"
+                [disabled]="yaVoto || votandoEsta || !encuesta.id"
+                (click)="onVotar(encuesta, opcion.id)"
+              >
+                <span>
+                  {{ opcion.texto }}
+                  @if (esElegida) {
+                    <strong> (Votado)</strong>
+                  }
+                </span>
+                <span>{{ opcion.votos ?? 0 }}</span>
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

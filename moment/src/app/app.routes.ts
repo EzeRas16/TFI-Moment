@@ -50,6 +50,5 @@ export const routes: Routes = [
     path: ROUTE_SEGMENTS.eventos + '/:eventoId/' + ROUTE_SEGMENTS.encuestas,
     loadChildren: () => import('./encuestas/encuesta.routes').then((m) => m.default),
   },
-
   
 ];
