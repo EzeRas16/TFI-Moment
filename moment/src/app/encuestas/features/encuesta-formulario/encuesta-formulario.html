@@ -1,8 +1,15 @@
 <section class="encuesta-page">
-  <div class="encuesta-header">
-    <button type="button" class="btn-volver" (click)="volverAlEvento()">
-      ← VOLVER AL EVENTO
-    </button>
+<div class="encuesta-header">
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px;">
+      <button type="button" class="btn-volver" (click)="volverAlEvento()">
+        ← VOLVER AL EVENTO
+      </button>
+
+      <button type="button" class="btn-secundario" (click)="irAResultadosEncuestas()">
+        VER RESULTADOS EN TIEMPO REAL
+      </button>
+    </div>
+
     <h1 class="encuesta-titulo">
       {{ editandoEncuesta() ? 'MODIFICAR ENCUESTA / PREGUNTA' : 'NUEVA ENCUESTA / PREGUNTA' }}
     </h1>

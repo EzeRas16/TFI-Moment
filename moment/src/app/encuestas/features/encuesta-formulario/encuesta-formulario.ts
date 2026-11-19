@@ -184,6 +184,16 @@ export class EncuestaFormulario implements OnInit {
     }
   }
 
+  irAResultadosEncuestas(): void {
+    this.router.navigate([
+      '/',
+      ROUTE_SEGMENTS.eventos,
+      this.eventoId(),
+      ROUTE_SEGMENTS.encuestas,
+      'resultados',
+    ]);
+  }
+
   volverAlEvento(): void {
     this.router.navigate(['/', ROUTE_SEGMENTS.eventos, this.eventoId()]);
   }

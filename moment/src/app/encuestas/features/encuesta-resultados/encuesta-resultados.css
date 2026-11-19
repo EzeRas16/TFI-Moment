@@ -1,0 +1,259 @@
+.resultados-page {
+  min-height: calc(100vh - 70px);
+  background-color: #0b2528;
+  color: #ffffff;
+  padding: 16px 12px 32px;
+  max-width: 820px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.resultados-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.btn-volver {
+  min-height: 44px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #9cb8ba;
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.btn-volver:hover {
+  color: #ffffff;
+}
+
+.btn-secundario {
+  min-height: 38px;
+  padding: 8px 14px;
+  background-color: transparent;
+  border: 1px solid #dfc2ad;
+  border-radius: 6px;
+  color: #dfc2ad;
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+}
+
+.btn-secundario:hover {
+  background-color: rgba(223, 194, 173, 0.14);
+}
+
+.resultados-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.resultados-titulo {
+  margin: 0 0 6px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  color: #dfc2ad;
+}
+
+.resultados-subtitulo {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #9cb8ba;
+}
+
+.en-vivo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid #dfc2ad;
+  color: #dfc2ad;
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.punto-vivo {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #dfc2ad;
+  animation: pulso 1.4s infinite ease-in-out;
+}
+
+@keyframes pulso {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+
+.alerta-error {
+  background-color: rgba(255, 155, 151, 0.12);
+  border: 1px solid #ff9b97;
+  color: #ff9b97;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin: 0 0 14px;
+}
+
+.estado-card,
+.resultado-card {
+  background-color: #0f3033;
+  border: 1px solid #1c4b4e;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.texto-muted {
+  color: #9cb8ba;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.resultados-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.resultado-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.resultado-pregunta {
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.badge-estado {
+  font-size: 0.72rem;
+  font-weight: bold;
+  color: #dfc2ad;
+  border: 1px solid #dfc2ad;
+  border-radius: 4px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+
+.badge-estado.cerrada {
+  color: #9cb8ba;
+  border-color: #9cb8ba;
+}
+
+.ganador-banner {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background-color: rgba(223, 194, 173, 0.14);
+  border: 1px solid #dfc2ad;
+  color: #dfc2ad;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.ganador-banner.sin-votos {
+  background-color: rgba(156, 184, 186, 0.08);
+  border-color: #265c60;
+  color: #9cb8ba;
+  font-weight: normal;
+}
+
+.opciones-resultados {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.opcion-resultado-item {
+  padding: 10px 12px;
+  border-radius: 6px;
+  background-color: #0b2528;
+  border: 1px solid #1c4b4e;
+}
+
+.opcion-resultado-item.ganadora {
+  border-color: #dfc2ad;
+}
+
+.opcion-resultado-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 0.92rem;
+}
+
+.tag-ganadora {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 0.72rem;
+  color: #dfc2ad;
+  font-weight: bold;
+}
+
+.opcion-metricas {
+  color: #9cb8ba;
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
+.barra-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background-color: #163d40;
+  overflow: hidden;
+}
+
+.barra-fill {
+  height: 100%;
+  border-radius: 999px;
+  background-color: #4f8a8e;
+  transition: width 0.35s ease;
+}
+
+.opcion-resultado-item.ganadora .barra-fill {
+  background-color: #dfc2ad;
+}
+
+.resultado-footer {
+  margin: 12px 0 0;
+  font-size: 0.82rem;
+  color: #9cb8ba;
+}
+
+@media (min-width: 600px) {
+  .resultados-page {
+    padding: 24px 20px 40px;
+  }
+
+  .resultado-card {
+    padding: 20px;
+  }
+}
