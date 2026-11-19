@@ -1,6 +1,10 @@
 import { Component, inject, input, output, signal } from '@angular/core';
 import { Foto } from '../../data-access/foto.model';
-import { CloudinaryClient, TAMANIO_MAXIMO_MB, validarArchivo } from '../../data-access/cloudinary-client';
+import {
+  CloudinaryClient,
+  TAMANIO_MAXIMO_MB,
+  validarArchivo,
+} from '../../data-access/cloudinary-client';
 import { FotoClient } from '../../data-access/foto.client';
 import { firstValueFrom } from 'rxjs';
 
@@ -11,10 +15,10 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './foto-subida.html',
 })
 export class FotoSubida {
-  readonly eventoId = input.required<number>();
-  readonly retoId = input<number | null>(null);
-  readonly invitadoId = input<number | null>(null);
-  readonly subida = output<Foto>(); 
+  readonly eventoId = input<number | string | null>(null);
+  readonly retoId = input<number | string | null>(null);
+  readonly invitadoId = input<number | string | null>(null);
+  readonly subida = output<Foto>();
 
   private readonly cloudinary = inject(CloudinaryClient);
   private readonly fotoClient = inject(FotoClient);
@@ -40,7 +44,8 @@ export class FotoSubida {
     this.subiendo.set(true);
     try {
       const respuesta = await firstValueFrom(this.cloudinary.subirImagen(archivo)); // Sube el binario directo a Cloudinary
-      const foto = await firstValueFrom( // Persiste los metadatos y la URL en db.json
+      const foto = await firstValueFrom(
+        // Persiste los metadatos y la URL en db.json
         this.fotoClient.guardarFoto({
           eventoId: this.eventoId(),
           retoId: this.retoId(),

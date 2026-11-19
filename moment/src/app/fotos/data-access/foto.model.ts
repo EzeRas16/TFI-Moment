@@ -1,8 +1,8 @@
 export interface Foto {
-  id: number;
-  eventoId: number;
-  retoId: number | null;
-  invitadoId: number | null;
+  id: number | string;
+  eventoId: number | string | null;
+  retoId: number | string | null;
+  invitadoId: number | string | null;
   urlCloudinary: string;
   publicId: string;
   fechaSubida: string;
