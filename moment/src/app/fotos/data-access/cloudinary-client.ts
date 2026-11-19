@@ -28,12 +28,12 @@ export function validarArchivo(archivo: File): string | null {
 @Service()
 export class CloudinaryClient {
   private http = inject(HttpClient);
-  private url = `https://cloudinary.com{CLOUDINARY.cloudName}/image/upload`;
+  private url = `https://api.cloudinary.com/v1_1/${CLOUDINARY.cloudName}/image/upload`;
 
-  subirImagen(archivo: File) { 
-    const datos = new FormData(); // Crea un contenedor especial para empaquetar archivos binarios
-    datos.append('file', archivo); // archivo bajo la clave 'file' que pide Cloudinary
-    datos.append('upload_preset', CLOUDINARY.uploadPreset); // esto tambien sale de cloudinary, se creo en el user
-    return this.http.post<RespuestaCloudinary>(this.url, datos); // Envía la petición POST y devuelve un Observable con la respuesta
-  } // este codigo esta todo explicado con comentarios porque es una api nueva, que estamos aprendiendo a suar
+  subirImagen(archivo: File) {
+    const datos = new FormData();
+    datos.append('file', archivo);
+    datos.append('upload_preset', CLOUDINARY.uploadPreset);
+    return this.http.post<RespuestaCloudinary>(this.url, datos);
+  }
 }
