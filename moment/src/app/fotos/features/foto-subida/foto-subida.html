@@ -1,0 +1,21 @@
+<div class="subida">
+  <label class="boton-subir" [class.deshabilitado]="subiendo()">
+    {{ subiendo() ? 'Subiendo...' : 'Subir foto' }}
+    <input
+      type="file"
+      accept="image/jpeg,image/png"
+      [disabled]="subiendo()"
+      (change)="alElegirArchivo($event)"
+      hidden
+    />
+  </label>
+  <p class="ayuda">JPG o PNG, hasta {{ maximoMb }} MB.</p>
+
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+
+  @if (vistaPrevia(); as url) {
+    <img class="vista-previa" [src]="url" alt="Foto subida" />
+  }
+</div>
