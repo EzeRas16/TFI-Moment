@@ -106,3 +106,20 @@
     padding-bottom: 20px;
   }
 }
+
+.btn-mesas {
+  min-height: 44px;
+  padding: 0 16px;
+  background-color: #dfc2ad;
+  color: #0b2528;
+  border: 1px solid #dfc2ad;
+  border-radius: 4px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.btn-mesas:hover {
+  background-color: #ebd2be;
+  border-color: #ebd2be;
+}

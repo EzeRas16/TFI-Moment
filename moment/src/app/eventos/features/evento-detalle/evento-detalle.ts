@@ -72,4 +72,8 @@ export class EventoDetalle implements OnInit {
   irALista() {
     this.router.navigate(['/', ROUTE_SEGMENTS.eventos]);
   }
+
+  irAMesas(eventoId: string | number) {
+    this.router.navigate(['/', ROUTE_SEGMENTS.eventos, eventoId, ROUTE_SEGMENTS.mesas]);
+  }
 }
