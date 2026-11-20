@@ -1,0 +1,119 @@
+.detalle-panel {
+  background-color: #0f3033;
+  border: 1px solid #dfc2ad;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 28px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+.detalle-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.detalle-panel-titulo {
+  color: #ffffff;
+  font-weight: 400;
+  margin: 0;
+}
+
+.btn-cerrar-x {
+  background: transparent;
+  border: 1px solid #205053;
+  color: #9cb8ba;
+  border-radius: 4px;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn-cerrar-x:hover {
+  color: #ffffff;
+  border-color: #9cb8ba;
+}
+
+.invitados-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.invitado-item {
+  background-color: #071b1d;
+  border: 1px solid #205053;
+  border-radius: 6px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.invitado-apodo {
+  color: #dfc2ad;
+}
+
+.invitado-nombre {
+  color: #9cb8ba;
+  margin-left: 8px;
+  font-size: 0.9rem;
+}
+
+.invitado-vacio {
+  background-color: #071b1d;
+  border: 1px dashed #205053;
+  border-radius: 6px;
+  padding: 18px;
+  color: #9cb8ba;
+  text-align: center;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.btn-secundario {
+  min-height: 44px;
+  padding: 0 16px;
+  background-color: transparent;
+  color: #9cb8ba;
+  border: 1px solid #205053;
+  border-radius: 4px;
+  font-weight: bold;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+}
+
+.btn-secundario:hover {
+  background-color: rgba(28, 75, 78, 0.4);
+  border-color: #9cb8ba;
+  color: #ffffff;
+}
+
+.btn-peligro {
+  background-color: transparent;
+  color: #ff9b97;
+  border: 1px solid #ff9b97;
+  border-radius: 4px;
+  font-weight: bold;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+}
+
+.btn-peligro:hover {
+  background-color: rgba(255, 155, 151, 0.12);
+}
+
+.btn-sm-custom {
+  min-height: 36px;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+}

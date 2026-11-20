@@ -9,14 +9,14 @@
     <div class="voto-exito">{{ mensajeExito() }}</div>
   }
 
-  @if (store.cargando()) {
+  @if (store.cargando() && store.encuestasActivas().length === 0) {
     <p class="voto-muted">Cargando encuestas...</p>
   } @else if (store.encuestasActivas().length === 0) {
     <p class="voto-muted">No hay encuestas activas en este momento.</p>
   } @else {
     <div class="votos-lista">
       @for (encuesta of store.encuestasActivas(); track encuesta.id ?? encuesta.pregunta) {
-        @let opcionElegida = store.opcionVotadaPorMesa(encuesta.id);
+        @let opcionElegida = store.opcionVotadaPorInvitado(encuesta.id, invitadoId());
         @let yaVoto = !!opcionElegida;
         @let votandoEsta = !!encuesta.id && store.votandoEncuestaId() === encuesta.id;
 

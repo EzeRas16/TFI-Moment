@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, input, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, effect, inject, input, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Encuesta } from '../../../encuestas/data-access/encuesta.model';
 import { VotoStore } from '../../data-access/voto-store';
@@ -10,23 +10,46 @@ import { VotoStore } from '../../data-access/voto-store';
   templateUrl: './voto-encuesta.html',
   styleUrl: './voto-encuesta.css',
 })
-export class VotarEncuesta implements OnInit {
+export class VotarEncuesta implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   readonly store = inject(VotoStore);
 
   readonly mesaId = input<string | number | undefined>(undefined);
   readonly eventoId = input<string | number | undefined>(undefined);
+  readonly invitadoId = input<string | number | undefined>(undefined);
 
   readonly mesaActivaId = signal<string | number | null>(null);
   readonly mensajeExito = signal<string | null>(null);
 
-  ngOnInit(): void {
-    const idParam = this.route.snapshot.paramMap.get('mesaId');
-    const resolvedMesaId = this.mesaId() ?? idParam ?? null;
-    this.mesaActivaId.set(resolvedMesaId);
+  private pollingId: ReturnType<typeof setInterval> | null = null;
 
-    if (resolvedMesaId !== null && resolvedMesaId !== '') {
-      this.store.cargarPorMesa(resolvedMesaId, this.eventoId());
+  constructor() {
+    effect(() => {
+      const idParam = this.route.snapshot.paramMap.get('mesaId');
+      const resolvedMesaId = this.mesaId() ?? idParam ?? null;
+      this.mesaActivaId.set(resolvedMesaId);
+    });
+  }
+
+  ngOnInit(): void {
+    this.refrescarEncuestas();
+
+    this.pollingId = setInterval(() => {
+      this.refrescarEncuestas();
+    }, 3000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.pollingId) {
+      clearInterval(this.pollingId);
+      this.pollingId = null;
+    }
+  }
+
+  private refrescarEncuestas(): void {
+    const idMesa = this.mesaActivaId();
+    if (idMesa !== null && idMesa !== '') {
+      this.store.cargarPorMesa(idMesa, this.eventoId());
     }
   }
 
@@ -35,9 +58,10 @@ export class VotarEncuesta implements OnInit {
     if (!idMesa) return;
 
     this.mensajeExito.set(null);
-    const ok = await this.store.votar(idMesa, encuesta, opcionId);
+    const ok = await this.store.votar(idMesa, encuesta, opcionId, this.invitadoId());
     if (ok) {
-      this.mensajeExito.set('¡Voto registrado para la mesa!');
+      this.mensajeExito.set('¡Tu voto fue registrado!');
+      this.refrescarEncuestas();
     }
   }
 }

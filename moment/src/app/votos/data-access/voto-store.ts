@@ -26,6 +26,20 @@ export class VotoStore {
     this._encuestas().filter((enc) => enc.activa),
   );
 
+  private obtenerInvitadoIdActual(invitadoId?: string | number): string | number | undefined {
+    if (invitadoId !== undefined && invitadoId !== null && invitadoId !== '') {
+      return invitadoId;
+    }
+    try {
+      const guardado = localStorage.getItem('invitado_actual');
+      if (!guardado) return undefined;
+      const parsed = JSON.parse(guardado);
+      return parsed?.id;
+    } catch {
+      return undefined;
+    }
+  }
+
   async cargarPorMesa(mesaId: string | number, eventoId?: string | number): Promise<void> {
     this._cargando.set(true);
     this._error.set(null);
@@ -49,9 +63,20 @@ export class VotoStore {
     }
   }
 
-  opcionVotadaPorMesa(encuestaId: string | number | undefined): string | undefined {
+  opcionVotadaPorInvitado(
+    encuestaId: string | number | undefined,
+    invitadoId?: string | number,
+  ): string | undefined {
     if (encuestaId === undefined) return undefined;
-    const encontrado = this._votosMesa().find((v) => String(v.encuestaId) === String(encuestaId));
+    const idInv = this.obtenerInvitadoIdActual(invitadoId);
+    if (idInv === undefined || idInv === null || idInv === '') return undefined;
+
+    const encontrado = this._votosMesa().find(
+      (v) =>
+        String(v.encuestaId) === String(encuestaId) &&
+        v.invitadoId !== undefined &&
+        String(v.invitadoId) === String(idInv),
+    );
     return encontrado?.opcionId;
   }
 
@@ -59,14 +84,21 @@ export class VotoStore {
     mesaId: string | number,
     encuesta: Encuesta,
     opcionId: string,
+    invitadoId?: string | number,
   ): Promise<boolean> {
     if (!encuesta.id || !encuesta.activa) {
       this._error.set('Esta encuesta no está activa.');
       return false;
     }
 
-    if (this.opcionVotadaPorMesa(encuesta.id)) {
-      this._error.set('Esta mesa ya registró su voto en esta encuesta.');
+    const idInv = this.obtenerInvitadoIdActual(invitadoId);
+    if (idInv === undefined || idInv === null || idInv === '') {
+      this._error.set('No se pudo identificar al invitado para registrar el voto.');
+      return false;
+    }
+
+    if (this.opcionVotadaPorInvitado(encuesta.id, idInv)) {
+      this._error.set('Ya registraste tu voto en esta encuesta.');
       return false;
     }
 
@@ -84,6 +116,7 @@ export class VotoStore {
 
     const nuevoVoto: Voto = {
       mesaId,
+      invitadoId: idInv,
       encuestaId: encuesta.id,
       opcionId,
       creadoEn: new Date().toISOString(),

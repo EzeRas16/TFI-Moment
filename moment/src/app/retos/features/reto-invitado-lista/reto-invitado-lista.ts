@@ -1,4 +1,14 @@
-import { Component, Input, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RetoService } from '../../data-access/reto.service';
@@ -9,9 +19,9 @@ import { Reto } from '../../data-access/reto.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './reto-invitado-lista.html',
-  styleUrl: './reto-invitado-lista.css'
+  styleUrl: './reto-invitado-lista.css',
 })
-export class RetoInvitadoLista implements OnInit {
+export class RetoInvitadoLista implements OnInit, OnChanges, OnDestroy {
   private readonly servicioReto = inject(RetoService);
   private readonly rutaActiva = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -22,6 +32,8 @@ export class RetoInvitadoLista implements OnInit {
   readonly eventoIdActual = signal<string | number | null>(null);
   readonly cargandoLista = signal(false);
   readonly desplegableListaAbierto = signal(true);
+
+  private pollingId: ReturnType<typeof setInterval> | null = null;
 
   readonly retosVisibles = computed(() => {
     const lista = this.retos();
@@ -40,17 +52,42 @@ export class RetoInvitadoLista implements OnInit {
     if (idFinal !== null && idFinal !== undefined && idFinal !== '') {
       this.eventoIdActual.set(idFinal);
     }
-    this.cargarRetos();
+
+    this.cargarRetos(true);
+
+    this.pollingId = setInterval(() => {
+      this.cargarRetos(false);
+    }, 3000);
   }
 
-  cargarRetos(): void {
-    this.cargandoLista.set(true);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['eventoId']) {
+      const idDesdeRuta = this.rutaActiva.snapshot.paramMap.get('eventoId');
+      const idFinal = this.eventoId ?? idDesdeRuta;
+      if (idFinal !== null && idFinal !== undefined && idFinal !== '') {
+        this.eventoIdActual.set(idFinal);
+      }
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.pollingId) {
+      clearInterval(this.pollingId);
+      this.pollingId = null;
+    }
+  }
+
+  cargarRetos(mostrarCargando = true): void {
+    if (mostrarCargando && this.retos().length === 0) {
+      this.cargandoLista.set(true);
+    }
+
     this.servicioReto.obtenerRetos().subscribe({
       next: (data) => {
         this.retos.set(data);
         this.cargandoLista.set(false);
       },
-      error: () => this.cargandoLista.set(false)
+      error: () => this.cargandoLista.set(false),
     });
   }
 
