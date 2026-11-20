@@ -12,9 +12,7 @@
 
       @if (puedeModificar()) {
         <div class="detalle-botones">
-          <button type="button" class="btn-mesas" (click)="irAMesas(e.id)">
-            GESTIONAR MESAS
-          </button>
+          <button type="button" class="btn-mesas" (click)="irAMesas(e.id)">GESTIONAR MESAS</button>
           <button type="button" class="btn-encuestas" (click)="irAEncuestas(e.id)">
             GESTIONAR ENCUESTAS
           </button>
@@ -25,6 +23,7 @@
           <button type="button" class="btn-retos" (click)="irAGestionRetos(e.id)">
             GESTIONAR RETOS
           </button>
+          <button type="button" class="btn-galeria" (click)="irAGaleria(e.id)">VER GALERÍA</button>
           <button type="button" class="btn-baja" (click)="darDeBaja()">DAR DE BAJA</button>
         </div>
       }

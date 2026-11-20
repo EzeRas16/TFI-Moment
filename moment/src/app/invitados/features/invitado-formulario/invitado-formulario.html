@@ -1,6 +1,5 @@
 <div class="invitado-container">
   <div class="invitado-wrapper">
-
     <!-- ESTADO B: El invitado ya dio el presente en esta mesa -->
     @if (invitadoActual(); as invitado) {
       <div class="invitado-card">
@@ -10,9 +9,7 @@
 
         <div class="invitado-cuerpo centrado">
           <div class="mesa-badge-box">
-            <span class="mesa-badge">
-              Mesa asignada: {{ invitado.mesaId }}
-            </span>
+            <span class="mesa-badge"> Mesa asignada: {{ invitado.mesaId }} </span>
           </div>
 
           <!-- SUB-ESTADO B2: Formulario de edición de perfil -->
@@ -23,19 +20,23 @@
               </div>
             }
 
-            <form [formGroup]="formEdicion" (ngSubmit)="guardarCambiosPerfil()" class="form-invitado izquierda">
+            <form
+              [formGroup]="formEdicion"
+              (ngSubmit)="guardarCambiosPerfil()"
+              class="form-invitado izquierda"
+            >
               <div class="campo-grupo">
                 <label for="editNombre">Nombre</label>
                 <input
                   id="editNombre"
                   type="text"
                   formControlName="nombre"
-                  [class.input-error]="formEdicion.get('nombre')?.invalid && formEdicion.get('nombre')?.touched"
+                  [class.input-error]="
+                    formEdicion.get('nombre')?.invalid && formEdicion.get('nombre')?.touched
+                  "
                 />
                 @if (formEdicion.get('nombre')?.invalid && formEdicion.get('nombre')?.touched) {
-                  <span class="mensaje-error">
-                    El nombre es obligatorio (mínimo 2 letras).
-                  </span>
+                  <span class="mensaje-error"> El nombre es obligatorio (mínimo 2 letras). </span>
                 }
               </div>
 
@@ -45,21 +46,17 @@
                   id="editApodo"
                   type="text"
                   formControlName="apodo"
-                  [class.input-error]="formEdicion.get('apodo')?.invalid && formEdicion.get('apodo')?.touched"
+                  [class.input-error]="
+                    formEdicion.get('apodo')?.invalid && formEdicion.get('apodo')?.touched
+                  "
                 />
                 @if (formEdicion.get('apodo')?.invalid && formEdicion.get('apodo')?.touched) {
-                  <span class="mensaje-error">
-                    El apodo es obligatorio (mínimo 2 letras).
-                  </span>
+                  <span class="mensaje-error"> El apodo es obligatorio (mínimo 2 letras). </span>
                 }
               </div>
 
               <div class="acciones-stack">
-                <button
-                  type="submit"
-                  class="btn-acento btn-ancho"
-                  [disabled]="store.cargando()"
-                >
+                <button type="submit" class="btn-acento btn-ancho" [disabled]="store.cargando()">
                   @if (store.cargando()) {
                     <span>Guardando...</span>
                   } @else {
@@ -78,7 +75,7 @@
             </form>
           }
 
-            <!-- SUB-ESTADO B1: Vista normal de bienvenida -->
+          <!-- SUB-ESTADO B1: Vista normal de bienvenida -->
           @else {
             <h3 class="invitado-apodo">"{{ invitado.apodo }}"</h3>
             <p class="invitado-nombre">{{ invitado.nombre }}</p>
@@ -101,8 +98,12 @@
               <button
                 type="button"
                 class="btn-borde btn-ancho"
-                (click)="activarEdicion()"
+                [disabled]="cargandoGaleria()"
+                (click)="irAGaleria()"
               >
+                {{ cargandoGaleria() ? 'Abriendo galería...' : 'Ver galería' }}
+              </button>
+              <button type="button" class="btn-borde btn-ancho" (click)="activarEdicion()">
                 Editar mi perfil
               </button>
             </div>
@@ -117,15 +118,11 @@
 
             <hr class="divisor-sutil" />
 
-            <button
-              type="button"
-              class="btn-enlace"
-              (click)="salirDeLaMesa()"
-            >
+            <button type="button" class="btn-enlace" (click)="salirDeLaMesa()">
               ¿No sos {{ invitado.apodo }}? Registrar otra persona
             </button>
           }
-          </div>
+        </div>
       </div>
     }
 
@@ -155,9 +152,7 @@
                 [class.input-error]="form.get('nombre')?.invalid && form.get('nombre')?.touched"
               />
               @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
-                <span class="mensaje-error">
-                  El nombre es obligatorio (mínimo 2 letras).
-                </span>
+                <span class="mensaje-error"> El nombre es obligatorio (mínimo 2 letras). </span>
               }
             </div>
 
@@ -171,17 +166,11 @@
                 [class.input-error]="form.get('apodo')?.invalid && form.get('apodo')?.touched"
               />
               @if (form.get('apodo')?.invalid && form.get('apodo')?.touched) {
-                <span class="mensaje-error">
-                  El apodo es obligatorio (mínimo 2 letras).
-                </span>
+                <span class="mensaje-error"> El apodo es obligatorio (mínimo 2 letras). </span>
               }
             </div>
 
-            <button
-              type="submit"
-              class="btn-acento btn-ancho"
-              [disabled]="store.cargando()"
-            >
+            <button type="submit" class="btn-acento btn-ancho" [disabled]="store.cargando()">
               @if (store.cargando()) {
                 <span>Registrando...</span>
               } @else {
@@ -192,6 +181,5 @@
         </div>
       </div>
     }
-
   </div>
 </div>

@@ -50,5 +50,9 @@ export const routes: Routes = [
     path: ROUTE_SEGMENTS.eventos + '/:eventoId/' + ROUTE_SEGMENTS.encuestas,
     loadChildren: () => import('./encuestas/encuesta.routes').then((m) => m.default),
   },
-  
+  {
+    path: ROUTE_SEGMENTS.eventos + '/:eventoId/' + ROUTE_SEGMENTS.galeria,
+    loadComponent: () =>
+      import('./fotos/features/foto-galeria/foto-galeria').then((m) => m.FotoGaleria),
+  },
 ];
