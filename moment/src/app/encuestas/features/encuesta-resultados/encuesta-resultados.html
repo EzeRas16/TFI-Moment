@@ -1,0 +1,87 @@
+<section class="resultados-page">
+  <div class="resultados-topbar">
+    <button type="button" class="btn-volver" (click)="volverAlEvento()">
+      ← VOLVER AL EVENTO
+    </button>
+
+    <button type="button" class="btn-secundario" (click)="irAGestionEncuestas()">
+      GESTIONAR ENCUESTAS
+    </button>
+  </div>
+
+  <header class="resultados-header">
+    <div>
+      <h1 class="resultados-titulo">RESULTADOS EN TIEMPO REAL</h1>
+      <p class="resultados-subtitulo">
+        Seguimiento en vivo de votos y opción ganadora por encuesta.
+      </p>
+    </div>
+
+    <div class="en-vivo-badge">
+      <span class="punto-vivo"></span>
+      EN VIVO
+    </div>
+  </header>
+
+  @if (store.error()) {
+    <p class="alerta-error">{{ store.error() }}</p>
+  }
+
+  @if (store.cargando() && store.encuestas().length === 0) {
+    <div class="estado-card">
+      <p class="texto-muted">Cargando resultados...</p>
+    </div>
+  } @else if (store.encuestas().length === 0) {
+    <div class="estado-card">
+      <p class="texto-muted">Todavía no hay encuestas creadas para este evento.</p>
+    </div>
+  } @else {
+    <div class="resultados-grid">
+      @for (enc of store.encuestas(); track enc.id ?? enc.pregunta) {
+        @let total = totalVotos(enc);
+
+        <article class="resultado-card">
+          <div class="resultado-card-top">
+            <h2 class="resultado-pregunta">{{ enc.pregunta }}</h2>
+            <span class="badge-estado" [class.cerrada]="!enc.activa">
+              {{ enc.activa ? 'ACTIVA' : 'CERRADA' }}
+            </span>
+          </div>
+
+          <div class="ganador-banner" [class.sin-votos]="total === 0">
+            {{ textoGanador(enc) }}
+          </div>
+
+          <div class="opciones-resultados">
+            @for (op of enc.opciones; track op.id) {
+              @let pct = porcentajeOpcion(enc, op);
+              @let ganadora = esGanadora(enc, op);
+
+              <div class="opcion-resultado-item" [class.ganadora]="ganadora">
+                <div class="opcion-resultado-info">
+                  <span class="opcion-texto">
+                    {{ op.texto }}
+                    @if (ganadora) {
+                      <span class="tag-ganadora">★ GANADORA</span>
+                    }
+                  </span>
+                  <span class="opcion-metricas">
+                    {{ op.votos ?? 0 }} {{ (op.votos ?? 0) === 1 ? 'voto' : 'votos' }} · {{ pct }}%
+                  </span>
+                </div>
+
+                <div class="barra-track">
+                  <div class="barra-fill" [style.width.%]="pct"></div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <p class="resultado-footer">
+            Total de votos emitidos: <strong>{{ total }}</strong>
+          </p>
+        </article>
+      }
+    </div>
+  }
+</section>
