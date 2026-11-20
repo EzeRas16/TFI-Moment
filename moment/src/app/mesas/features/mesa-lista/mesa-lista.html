@@ -1,0 +1,89 @@
+<div class="mesas-container">
+  <div class="mesas-header">
+    <h2 class="mesas-titulo">Gestión de Mesas</h2>
+    <div class="mesas-acciones-top">
+      <button type="button" class="btn-secundario no-print" (click)="exportarTodosQr()">
+        Exportar / Imprimir QRs
+      </button>
+      <button type="button" class="btn-primario no-print" (click)="irNuevaMesa()">
+        + Nueva Mesa
+      </button>
+    </div>
+  </div>
+
+  @if (mesaStore.cargando() && mesaStore.mesas().length === 0) {
+    <div class="mensaje-estado no-print">
+      <p class="mensaje-texto">Cargando mesas...</p>
+    </div>
+  } @else {
+    <div class="mesas-grid">
+      @for (mesa of mesaStore.mesas(); track mesa.id) {
+        <div class="mesa-card" [class.inactiva]="!mesa.activa">
+          <div>
+            <div class="mesa-card-header">
+              <h5 class="mesa-numero">Mesa Nº {{ mesa.numero }}</h5>
+              <span class="badge-estado" [class.activa]="mesa.activa" [class.inactiva]="!mesa.activa">
+                {{ mesa.activa ? 'Activa' : 'Inactiva' }}
+              </span>
+            </div>
+
+            <p class="mesa-subtexto">Capacidad máxima: {{ mesa.capacidad || 'N/A' }}</p>
+
+            @if (mesa.codigoQr) {
+              <div class="qr-box">
+                <img
+                  [src]="'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=' + mesa.codigoQr"
+                  alt="Código QR"
+                  class="qr-img"
+                >
+                <button
+                  type="button"
+                  class="btn-secundario btn-sm-custom btn-full no-print"
+                  (click)="descargarQrIndividual(mesa)"
+                >
+                  Descargar Imagen QR
+                </button>
+              </div>
+            } @else {
+              <button
+                type="button"
+                class="btn-qr-generar btn-full no-print"
+                (click)="generarQr(mesa)"
+              >
+                Generar QR
+              </button>
+            }
+
+            <button
+              type="button"
+              class="btn-info-custom btn-full no-print"
+              (click)="verDetallesMesa(mesa)"
+            >
+              Ver Invitados ({{ (invitadosPorMesa()[mesa.id]?.length || 0) }} / {{ mesa.capacidad }})
+            </button>
+          </div>
+
+          <div class="mesa-card-acciones no-print">
+            <button type="button" class="btn-editar-custom" (click)="irEditarMesa(mesa)">
+              Editar
+            </button>
+            <button type="button" class="btn-peligro" (click)="eliminarMesa(mesa.id)">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      } @empty {
+        <p class="mensaje-texto">No hay mesas cargadas para este evento.</p>
+      }
+    </div>
+
+    @if (mesaSeleccionada(); as mesaDetalle) {
+      <app-mesa-invitados-panel
+        [mesa]="mesaDetalle"
+        [invitados]="invitadosPorMesa()[mesaDetalle.id] || []"
+        (cerrar)="cerrarDetalles()"
+        (invitadoExpulsado)="cargarInvitados()"
+      />
+    }
+  }
+</div>

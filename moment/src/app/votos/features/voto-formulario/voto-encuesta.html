@@ -9,7 +9,7 @@
     <div class="voto-exito">{{ mensajeExito() }}</div>
   }
 
-  @if (store.cargando()) {
+  @if (store.cargando() && store.encuestasActivas().length === 0) {
     <p class="voto-muted">Cargando encuestas...</p>
   } @else if (store.encuestasActivas().length === 0) {
     <p class="voto-muted">No hay encuestas activas en este momento.</p>

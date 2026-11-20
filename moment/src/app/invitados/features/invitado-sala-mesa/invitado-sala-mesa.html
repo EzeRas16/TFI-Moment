@@ -1,0 +1,70 @@
+<div class="invitado-card">
+  <div class="invitado-banner">
+    <h5 class="invitado-banner-titulo">¡Ya estás adentro de la fiesta!</h5>
+  </div>
+
+  <div class="invitado-cuerpo centrado">
+    <div class="mesa-badge-box">
+      <span class="mesa-badge"> Mesa asignada: {{ invitado().mesaId }} </span>
+    </div>
+
+    @if (errorMensaje()) {
+      <div class="alerta-error" role="alert">
+        {{ errorMensaje() }}
+      </div>
+    }
+
+    @if (editandoPerfil()) {
+      <app-invitado-perfil-editar
+        [invitado]="invitado()"
+        (guardado)="onGuardado($event)"
+        (cancelar)="editandoPerfil.set(false)"
+      />
+    } @else {
+      <h3 class="invitado-apodo">"{{ invitado().apodo }}"</h3>
+      <p class="invitado-nombre">{{ invitado().nombre }}</p>
+
+      <div class="acciones-stack">
+        <button
+          type="button"
+          class="btn-acento btn-ancho"
+          [disabled]="cargandoRetos()"
+          (click)="irARetos()"
+        >
+          {{
+            cargandoRetos()
+              ? 'Buscando retos...'
+              : mostrarRetos()
+                ? 'Ocultar retos'
+                : 'Ver retos'
+          }}
+        </button>
+        <button
+          type="button"
+          class="btn-borde btn-ancho"
+          [disabled]="cargandoGaleria()"
+          (click)="irAGaleria()"
+        >
+          {{ cargandoGaleria() ? 'Abriendo galería...' : 'Ver galería' }}
+        </button>
+        <button type="button" class="btn-borde btn-ancho" (click)="activarEdicion()">
+          Editar mi perfil
+        </button>
+      </div>
+
+      @if (mostrarRetos()) {
+        <app-reto-invitado-lista [eventoId]="eventoIdRetos()" />
+      }
+
+      @if (invitado().mesaId; as mesaId) {
+        <app-votar-encuesta [mesaId]="mesaId" />
+      }
+
+      <hr class="divisor-sutil" />
+
+      <button type="button" class="btn-enlace" (click)="salirDeLaMesa()">
+        ¿No sos {{ invitado().apodo }}? Registrar otra persona
+      </button>
+    }
+  </div>
+</div>
