@@ -1,191 +1,62 @@
 <div class="mesas-container">
+  <div class="mesa-form-card no-print">
+    <h3 class="mesa-form-titulo">
+      {{ editandoId() !== null ? 'Modificar Mesa' : 'Nueva Mesa' }}
+    </h3>
 
-  <!-- Vista 1: Listado, Baja, QR y Acceso a Detalles -->
-  @if (modoVista() === 'lista') {
-    <div class="mesas-header">
-      <h2 class="mesas-titulo">Gestión de Mesas</h2>
-      <div class="mesas-acciones-top">
-        <button type="button" class="btn-secundario no-print" (click)="exportarTodosQr()">
-          Exportar / Imprimir QRs
-        </button>
-        <button type="button" class="btn-primario no-print" (click)="irNuevo()">
-          + Nueva Mesa
-        </button>
-      </div>
-    </div>
-
-    @if (mesaStore.cargando()) {
-      <div class="mensaje-estado no-print">
-        <p class="mensaje-texto">Cargando mesas...</p>
-      </div>
-    } @else {
-      <div class="mesas-grid">
-        @for (mesa of mesaStore.mesas(); track mesa.id) {
-          <div class="mesa-card" [class.inactiva]="!mesa.activa">
-
-            <div>
-              <!-- Encabezado -->
-              <div class="mesa-card-header">
-                <h5 class="mesa-numero">Mesa Nº {{ mesa.numero }}</h5>
-                <span class="badge-estado" [class.activa]="mesa.activa" [class.inactiva]="!mesa.activa">
-                  {{ mesa.activa ? 'Activa' : 'Inactiva' }}
-                </span>
-              </div>
-
-              <p class="mesa-subtexto">Capacidad máxima: {{ mesa.capacidad || 'N/A' }}</p>
-
-              <!-- QR -->
-              @if (mesa.codigoQr) {
-                <div class="qr-box">
-                  <img
-                    [src]="'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=' + mesa.codigoQr"
-                    alt="Código QR"
-                    class="qr-img"
-                  >
-                  <button
-                    type="button"
-                    class="btn-secundario btn-sm-custom btn-full no-print"
-                    (click)="descargarQrIndividual(mesa)"
-                  >
-                    Descargar Imagen QR
-                  </button>
-                </div>
-              } @else {
-                <button
-                  type="button"
-                  class="btn-qr-generar btn-full no-print"
-                  (click)="mesaStore.generarQrParaMesa(mesa)"
-                >
-                  Generar QR
-                </button>
-              }
-
-              <!-- Botón para ver los invitados de esta mesa específica -->
-              <button
-                type="button"
-                class="btn-info-custom btn-full no-print"
-                (click)="verDetallesMesa(mesa)"
-              >
-                Ver Invitados ({{ (invitadosPorMesa()[mesa.id]?.length || 0) }} / {{ mesa.capacidad }})
-              </button>
-            </div>
-
-            <!-- Botones de Acción (Editar / Eliminar Mesa) -->
-            <div class="mesa-card-acciones no-print">
-              <button type="button" class="btn-editar-custom" (click)="irEditar(mesa)">
-                Editar
-              </button>
-              <button type="button" class="btn-peligro" (click)="eliminar(mesa.id)">
-                Eliminar
-              </button>
-            </div>
-
-          </div>
-        } @empty {
-          <p class="mensaje-texto">No hay mesas cargadas para este evento.</p>
+    <form (submit)="guardar($event)" class="mesa-form">
+      <div class="form-campo">
+        <label for="numero">Número de Mesa *</label>
+        <input
+          type="number"
+          id="numero"
+          [value]="modelo().numero ?? ''"
+          (input)="onNumeroInput($event)"
+          (blur)="marcarTocado('numero')"
+          [class.input-error]="tocados().numero && errorNumero()"
+        >
+        @if (tocados().numero && errorNumero(); as msgNum) {
+          <span class="error-texto">{{ msgNum }}</span>
         }
       </div>
 
-      <!-- PANEL DE DETALLE / EXPULSIÓN DE INVITADOS -->
-      @if (mesaSeleccionadaParaDetalle(); as mesaDetalle) {
-        <div class="detalle-panel no-print">
-          <div class="detalle-panel-header">
-            <h4 class="detalle-panel-titulo">
-              Administrar Invitados - Mesa Nº {{ mesaDetalle.numero }}
-            </h4>
-            <button type="button" class="btn-cerrar-x" (click)="cerrarDetalles()" aria-label="Cerrar">
-              ✕
-            </button>
-          </div>
+      <div class="form-campo">
+        <label for="capacidad">Capacidad *</label>
+        <input
+          type="number"
+          id="capacidad"
+          [value]="modelo().capacidad"
+          (input)="onCapacidadInput($event)"
+          (blur)="marcarTocado('capacidad')"
+          [class.input-error]="tocados().capacidad && errorCapacidad()"
+        >
+        @if (tocados().capacidad && errorCapacidad(); as msgCap) {
+          <span class="error-texto">{{ msgCap }}</span>
+        }
+      </div>
 
-          <ul class="invitados-lista">
-            @for (invitado of invitadosPorMesa()[mesaDetalle.id]; track invitado.id) {
-              <li class="invitado-item">
-                <div>
-                  <strong class="invitado-apodo">{{ invitado.apodo }}</strong>
-                  <span class="invitado-nombre">({{ invitado.nombre }})</span>
-                </div>
-                <button
-                  type="button"
-                  class="btn-peligro btn-sm-custom"
-                  (click)="expulsarInvitado(invitado.id)"
-                >
-                  Expulsar
-                </button>
-              </li>
-            } @empty {
-              <li class="invitado-vacio">
-                Aún no hay invitados registrados en esta mesa.
-              </li>
-            }
-          </ul>
+      <div class="form-check-fila">
+        <input
+          type="checkbox"
+          id="activa"
+          [checked]="modelo().activa"
+          (change)="onActivaChange($event)"
+        >
+        <label for="activa" class="check-label">Mesa Activa</label>
+      </div>
 
-          <button type="button" class="btn-secundario btn-full" (click)="cerrarDetalles()">
-            Cerrar detalle
-          </button>
-        </div>
-      }
-    }
-  }
-
-  <!-- Vista 2: Formulario de Alta y Edición -->
-  @if (modoVista() === 'formulario') {
-    <div class="mesa-form-card no-print">
-      <h3 class="mesa-form-titulo">
-        {{ editandoId() !== null ? 'Modificar Mesa' : 'Nueva Mesa' }}
-      </h3>
-
-      <form [formGroup]="mesaForm" (ngSubmit)="guardar()" class="mesa-form">
-
-        <div class="form-campo">
-          <label for="numero">Número de Mesa *</label>
-          <input
-            type="number"
-            id="numero"
-            formControlName="numero"
-            [class.input-error]="mesaForm.get('numero')?.invalid && mesaForm.get('numero')?.touched"
-          >
-
-          @if (mesaForm.get('numero')?.hasError('required') && mesaForm.get('numero')?.touched) {
-            <span class="error-texto">El número de mesa es obligatorio.</span>
-          } @else if (mesaForm.get('numero')?.hasError('min') && mesaForm.get('numero')?.touched) {
-            <span class="error-texto">El número de mesa debe ser mayor a 0.</span>
-          } @else if (mesaForm.get('numero')?.hasError('max') && mesaForm.get('numero')?.touched) {
-            <span class="error-texto">El número de mesa no puede superar 150.</span>
-          } @else if (mesaForm.get('numero')?.hasError('duplicado') && mesaForm.get('numero')?.touched) {
-            <span class="error-texto">¡Ya existe una mesa con ese número en este evento!</span>
-          }
-        </div>
-
-        <div class="form-campo">
-          <label for="capacidad">Capacidad *</label>
-          <input
-            type="number"
-            id="capacidad"
-            formControlName="capacidad"
-            [class.input-error]="mesaForm.get('capacidad')?.invalid && mesaForm.get('capacidad')?.touched"
-          >
-          @if (mesaForm.get('capacidad')?.invalid && mesaForm.get('capacidad')?.touched) {
-            <span class="error-texto">Ingresá una capacidad válida (entre 1 y 12).</span>
-          }
-        </div>
-
-        <div class="form-check-fila">
-          <input type="checkbox" id="activa" formControlName="activa">
-          <label for="activa" class="check-label">Mesa Activa</label>
-        </div>
-
-        <div class="form-acciones">
-          <button type="submit" class="btn-primario" [disabled]="mesaForm.invalid">
-            Guardar
-          </button>
-          <button type="button" class="btn-secundario" (click)="cancelar()">
-            Cancelar
-          </button>
-        </div>
-
-      </form>
-    </div>
-  }
-
+      <div class="form-acciones">
+        <button
+          type="submit"
+          class="btn-primario"
+          [disabled]="!formularioValido() || guardando()"
+        >
+          {{ guardando() ? 'Guardando...' : 'Guardar' }}
+        </button>
+        <button type="button" class="btn-secundario" (click)="volverALista()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

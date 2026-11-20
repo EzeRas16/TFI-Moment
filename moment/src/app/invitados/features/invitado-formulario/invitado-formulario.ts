@@ -1,50 +1,49 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { InvitadoStore } from '../../data-access/invitado-store';
 import { Invitado } from '../../data-access/invitado.model';
-import { VotarEncuesta } from '../../../votos/features/voto-formulario/voto-encuesta';
-import { RetoInvitadoLista } from '../../../retos/features/reto-invitado-lista/reto-invitado-lista';
-import { firstValueFrom } from 'rxjs';
-import { ROUTE_SEGMENTS } from '../../../app.route.segments';
+import { InvitadoSalaMesa } from '../invitado-sala-mesa/invitado-sala-mesa';
 
 @Component({
   selector: 'app-invitado-formulario',
   standalone: true,
-  imports: [ReactiveFormsModule, VotarEncuesta, RetoInvitadoLista],
+  imports: [InvitadoSalaMesa],
   templateUrl: './invitado-formulario.html',
   styleUrl: './invitado-formulario.css',
 })
 export class InvitadoFormulario implements OnInit {
-  private readonly http = inject(HttpClient);
-  private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   readonly store = inject(InvitadoStore);
-  protected readonly router = inject(Router);
 
   readonly invitadoActual = signal<Invitado | null>(null);
-  readonly editandoPerfil = signal<boolean>(false);
   readonly errorMensaje = signal<string | null>(null);
 
-  readonly cargandoRetos = signal<boolean>(false);
-  readonly mostrarRetos = signal<boolean>(false);
-  readonly eventoIdRetos = signal<string | number | null>(null);
-
-  readonly cargandoGaleria = signal<boolean>(false);
-
-  form: FormGroup = this.fb.group({
-    nombre: ['', [Validators.required, Validators.minLength(2)]],
-    apodo: ['', [Validators.required, Validators.minLength(2)]],
+  readonly modelo = signal<{ nombre: string; apodo: string }>({
+    nombre: '',
+    apodo: '',
+  });
+  readonly tocados = signal<{ nombre: boolean; apodo: boolean }>({
+    nombre: false,
+    apodo: false,
   });
 
-  // Formulario separado para la edición del perfil en el Estado B
-  formEdicion: FormGroup = this.fb.group({
-    nombre: ['', [Validators.required, Validators.minLength(2)]],
-    apodo: ['', [Validators.required, Validators.minLength(2)]],
-  });
+  readonly errorNombre = computed<string | null>(() =>
+    this.modelo().nombre.trim().length < 2
+      ? 'El nombre es obligatorio (mínimo 2 letras).'
+      : null,
+  );
 
-  mesaToken: string = '';
+  readonly errorApodo = computed<string | null>(() =>
+    this.modelo().apodo.trim().length < 2
+      ? 'El apodo es obligatorio (mínimo 2 letras).'
+      : null,
+  );
+
+  readonly formularioValido = computed<boolean>(
+    () => this.errorNombre() === null && this.errorApodo() === null,
+  );
+
+  mesaToken = '';
 
   ngOnInit(): void {
     const tokenParam = this.route.snapshot.paramMap.get('token');
@@ -56,7 +55,6 @@ export class InvitadoFormulario implements OnInit {
 
     try {
       const invitadoParsed: Invitado = JSON.parse(guardado);
-
       const mismaMesa = this.mesaToken
         ? String(invitadoParsed.mesaId) === String(this.mesaToken)
         : Boolean(invitadoParsed.mesaId);
@@ -69,13 +67,21 @@ export class InvitadoFormulario implements OnInit {
     }
   }
 
-  onSubmit(): void {
-    this.errorMensaje.set(null);
+  onCampoInput(campo: 'nombre' | 'apodo', event: Event): void {
+    const valor = (event.target as HTMLInputElement).value;
+    this.modelo.update((m) => ({ ...m, [campo]: valor }));
+  }
 
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
+  marcarTocado(campo: 'nombre' | 'apodo'): void {
+    this.tocados.update((t) => ({ ...t, [campo]: true }));
+  }
+
+  onSubmit(event: Event): void {
+    event.preventDefault();
+    this.errorMensaje.set(null);
+    this.tocados.set({ nombre: true, apodo: true });
+
+    if (!this.formularioValido()) return;
 
     if (!this.mesaToken) {
       this.errorMensaje.set(
@@ -85,150 +91,29 @@ export class InvitadoFormulario implements OnInit {
     }
 
     const nuevoInvitado: Invitado = {
-      nombre: this.form.value.nombre.trim(),
-      apodo: this.form.value.apodo.trim(),
+      nombre: this.modelo().nombre.trim(),
+      apodo: this.modelo().apodo.trim(),
       mesaId: this.mesaToken,
     };
 
-    // Delegamos toda la lógica de validación de cupos y apodos al Store
     this.store.registrarInvitado(
       nuevoInvitado,
       (creado) => {
         localStorage.setItem('invitado_actual', JSON.stringify(creado));
         this.invitadoActual.set(creado);
-        this.form.reset();
+        this.modelo.set({ nombre: '', apodo: '' });
+        this.tocados.set({ nombre: false, apodo: false });
       },
       (msgError) => this.errorMensaje.set(msgError),
     );
   }
 
-  activarEdicion(): void {
-    const actual = this.invitadoActual();
-    if (!actual) return;
-
-    this.errorMensaje.set(null);
-    this.formEdicion.patchValue({
-      nombre: actual.nombre,
-      apodo: actual.apodo,
-    });
-    this.editandoPerfil.set(true);
+  onInvitadoActualizado(actualizado: Invitado): void {
+    this.invitadoActual.set(actualizado);
   }
 
-  cancelarEdicion(): void {
-    this.errorMensaje.set(null);
-    this.editandoPerfil.set(false);
-    this.formEdicion.reset();
-  }
-
-  guardarCambiosPerfil(): void {
-    const actual = this.invitadoActual();
-    if (!actual || actual.id === undefined) return;
-
-    this.errorMensaje.set(null);
-
-    if (this.formEdicion.invalid) {
-      this.formEdicion.markAllAsTouched();
-      return;
-    }
-
-    const datosActualizados: Partial<Invitado> = {
-      nombre: this.formEdicion.value.nombre.trim(),
-      apodo: this.formEdicion.value.apodo.trim(),
-    };
-
-    this.store.actualizarInvitado(
-      actual.id,
-      datosActualizados,
-      (actualizado) => {
-        localStorage.setItem('invitado_actual', JSON.stringify(actualizado));
-        this.invitadoActual.set(actualizado);
-        this.editandoPerfil.set(false);
-      },
-      (msgError) => this.errorMensaje.set(msgError),
-    );
-  }
-
-  salirDeLaMesa(): void {
-    localStorage.removeItem('invitado_actual');
+  onSalirDeLaMesa(): void {
     this.invitadoActual.set(null);
-    this.editandoPerfil.set(false);
-    this.mostrarRetos.set(false);
     this.errorMensaje.set(null);
-  }
-
-  irARetos(): void {
-    if (this.mostrarRetos()) {
-      this.mostrarRetos.set(false);
-      return;
-    }
-
-    const actual = this.invitadoActual();
-    const mesaId = actual?.mesaId || this.mesaToken;
-
-    if (!mesaId) {
-      this.eventoIdRetos.set(null);
-      this.mostrarRetos.set(true);
-      return;
-    }
-
-    this.cargandoRetos.set(true);
-    this.errorMensaje.set(null);
-
-    this.http.get<any[]>('http://localhost:3000/mesas').subscribe({
-      next: (mesas) => {
-        this.cargandoRetos.set(false);
-        const mesa = mesas.find(
-          (m) =>
-            String(m.id) === String(mesaId) ||
-            (m.codigoQr && String(m.codigoQr).includes(String(mesaId))),
-        );
-
-        this.eventoIdRetos.set(mesa?.eventoId ?? null);
-        this.mostrarRetos.set(true);
-      },
-      error: () => {
-        this.cargandoRetos.set(false);
-        this.eventoIdRetos.set(null);
-        this.mostrarRetos.set(true);
-      },
-    });
-  }
-
-  private navegarAGaleria(eventoId: string | number): void {
-    this.router.navigate(['/', ROUTE_SEGMENTS.eventos, eventoId, ROUTE_SEGMENTS.galeria]);
-  }
-
-  async irAGaleria(): Promise<void> {
-    const mesaId = this.invitadoActual()?.mesaId || this.mesaToken;
-    if (!mesaId) return;
-
-    // Si ya buscamos el evento al abrir los retos, lo reutilizamos
-    const eventoIdConocido = this.eventoIdRetos();
-    if (eventoIdConocido !== null) {
-      this.navegarAGaleria(eventoIdConocido);
-      return;
-    }
-
-    this.cargandoGaleria.set(true);
-    this.errorMensaje.set(null);
-
-    try {
-      const mesas = await firstValueFrom(this.http.get<any[]>('http://localhost:3000/mesas'));
-      const mesa = mesas.find(
-        (m) =>
-          String(m.id) === String(mesaId) ||
-          (m.codigoQr && String(m.codigoQr).includes(String(mesaId))),
-      );
-
-      if (mesa?.eventoId) {
-        this.navegarAGaleria(mesa.eventoId);
-      } else {
-        this.errorMensaje.set('No se pudo encontrar el evento de tu mesa.');
-      }
-    } catch {
-      this.errorMensaje.set('No se pudo abrir la galería. Intentá de nuevo.');
-    } finally {
-      this.cargandoGaleria.set(false);
-    }
   }
 }

@@ -92,7 +92,6 @@ export class EncuestaResultados implements OnInit, OnDestroy {
   }
 
   volverAlEvento(): void {
-    this.detenerPolling();
     this.router.navigate(['/', ROUTE_SEGMENTS.eventos, this.eventoId()]);
   }
 }
