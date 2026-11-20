@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Service , inject } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { Foto, FotoNueva, Id } from './foto.model';
+import { Foto, FotoNueva, Id , FotoConAutor} from './foto.model';
 
 @Service()
 export class FotoClient {
@@ -25,4 +25,6 @@ obtenerFotoDelInvitadoEnReto(retoId: Id, invitadoId: Id): Observable<Foto | null
     .get<Foto[]>(this.url, { params: { retoId, invitadoId, estado: 'Visible' } })
     .pipe(map((fotos) => fotos[0] ?? null));
 }
+
+
 }

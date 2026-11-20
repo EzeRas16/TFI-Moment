@@ -1,3 +1,4 @@
+import { Invitado } from '../../invitados/data-access/invitado.model';
 export type Id = number | string;
 
 export interface Foto {
@@ -12,3 +13,5 @@ export interface Foto {
 }
 
 export type FotoNueva = Omit<Foto, 'id'>;
+
+export type FotoConAutor = Foto & { invitado?: Pick<Invitado, 'nombre' | 'apodo'> };

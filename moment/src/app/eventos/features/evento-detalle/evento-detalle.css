@@ -126,6 +126,15 @@
   background-color: rgba(223, 194, 173, 0.12);
 }
 
+.btn-galeria {
+  color: #9cb8ba;
+  border: 1px solid #9cb8ba;
+}
+
+.btn-galeria:hover {
+  background-color: rgba(156, 184, 186, 0.14);
+}
+
 .btn-baja {
   color: #ff9b97;
   border: 1px solid #ff9b97;

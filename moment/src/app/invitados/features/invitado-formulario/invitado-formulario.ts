@@ -1,24 +1,27 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { InvitadoStore } from '../../data-access/invitado-store';
 import { Invitado } from '../../data-access/invitado.model';
 import { VotarEncuesta } from '../../../votos/features/voto-formulario/voto-encuesta';
 import { RetoInvitadoLista } from '../../../retos/features/reto-invitado-lista/reto-invitado-lista';
+import { firstValueFrom } from 'rxjs';
+import { ROUTE_SEGMENTS } from '../../../app.route.segments';
 
 @Component({
   selector: 'app-invitado-formulario',
   standalone: true,
   imports: [ReactiveFormsModule, VotarEncuesta, RetoInvitadoLista],
   templateUrl: './invitado-formulario.html',
-  styleUrl: './invitado-formulario.css'
+  styleUrl: './invitado-formulario.css',
 })
 export class InvitadoFormulario implements OnInit {
   private readonly http = inject(HttpClient);
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   readonly store = inject(InvitadoStore);
+  protected readonly router = inject(Router);
 
   readonly invitadoActual = signal<Invitado | null>(null);
   readonly editandoPerfil = signal<boolean>(false);
@@ -28,15 +31,17 @@ export class InvitadoFormulario implements OnInit {
   readonly mostrarRetos = signal<boolean>(false);
   readonly eventoIdRetos = signal<string | number | null>(null);
 
+  readonly cargandoGaleria = signal<boolean>(false);
+
   form: FormGroup = this.fb.group({
     nombre: ['', [Validators.required, Validators.minLength(2)]],
-    apodo: ['', [Validators.required, Validators.minLength(2)]]
+    apodo: ['', [Validators.required, Validators.minLength(2)]],
   });
 
   // Formulario separado para la edición del perfil en el Estado B
   formEdicion: FormGroup = this.fb.group({
     nombre: ['', [Validators.required, Validators.minLength(2)]],
-    apodo: ['', [Validators.required, Validators.minLength(2)]]
+    apodo: ['', [Validators.required, Validators.minLength(2)]],
   });
 
   mesaToken: string = '';
@@ -52,10 +57,9 @@ export class InvitadoFormulario implements OnInit {
     try {
       const invitadoParsed: Invitado = JSON.parse(guardado);
 
-      const mismaMesa =
-        this.mesaToken
-          ? String(invitadoParsed.mesaId) === String(this.mesaToken)
-          : Boolean(invitadoParsed.mesaId);
+      const mismaMesa = this.mesaToken
+        ? String(invitadoParsed.mesaId) === String(this.mesaToken)
+        : Boolean(invitadoParsed.mesaId);
 
       if (mismaMesa) {
         this.invitadoActual.set(invitadoParsed);
@@ -74,14 +78,16 @@ export class InvitadoFormulario implements OnInit {
     }
 
     if (!this.mesaToken) {
-      this.errorMensaje.set('No se detectó una mesa válida. Por favor, volvé a escanear el código QR.');
+      this.errorMensaje.set(
+        'No se detectó una mesa válida. Por favor, volvé a escanear el código QR.',
+      );
       return;
     }
 
     const nuevoInvitado: Invitado = {
       nombre: this.form.value.nombre.trim(),
       apodo: this.form.value.apodo.trim(),
-      mesaId: this.mesaToken
+      mesaId: this.mesaToken,
     };
 
     // Delegamos toda la lógica de validación de cupos y apodos al Store
@@ -92,7 +98,7 @@ export class InvitadoFormulario implements OnInit {
         this.invitadoActual.set(creado);
         this.form.reset();
       },
-      (msgError) => this.errorMensaje.set(msgError)
+      (msgError) => this.errorMensaje.set(msgError),
     );
   }
 
@@ -103,7 +109,7 @@ export class InvitadoFormulario implements OnInit {
     this.errorMensaje.set(null);
     this.formEdicion.patchValue({
       nombre: actual.nombre,
-      apodo: actual.apodo
+      apodo: actual.apodo,
     });
     this.editandoPerfil.set(true);
   }
@@ -127,7 +133,7 @@ export class InvitadoFormulario implements OnInit {
 
     const datosActualizados: Partial<Invitado> = {
       nombre: this.formEdicion.value.nombre.trim(),
-      apodo: this.formEdicion.value.apodo.trim()
+      apodo: this.formEdicion.value.apodo.trim(),
     };
 
     this.store.actualizarInvitado(
@@ -138,7 +144,7 @@ export class InvitadoFormulario implements OnInit {
         this.invitadoActual.set(actualizado);
         this.editandoPerfil.set(false);
       },
-      (msgError) => this.errorMensaje.set(msgError)
+      (msgError) => this.errorMensaje.set(msgError),
     );
   }
 
@@ -174,7 +180,7 @@ export class InvitadoFormulario implements OnInit {
         const mesa = mesas.find(
           (m) =>
             String(m.id) === String(mesaId) ||
-            (m.codigoQr && String(m.codigoQr).includes(String(mesaId)))
+            (m.codigoQr && String(m.codigoQr).includes(String(mesaId))),
         );
 
         this.eventoIdRetos.set(mesa?.eventoId ?? null);
@@ -184,7 +190,45 @@ export class InvitadoFormulario implements OnInit {
         this.cargandoRetos.set(false);
         this.eventoIdRetos.set(null);
         this.mostrarRetos.set(true);
-      }
+      },
     });
+  }
+
+  private navegarAGaleria(eventoId: string | number): void {
+    this.router.navigate(['/', ROUTE_SEGMENTS.eventos, eventoId, ROUTE_SEGMENTS.galeria]);
+  }
+
+  async irAGaleria(): Promise<void> {
+    const mesaId = this.invitadoActual()?.mesaId || this.mesaToken;
+    if (!mesaId) return;
+
+    // Si ya buscamos el evento al abrir los retos, lo reutilizamos
+    const eventoIdConocido = this.eventoIdRetos();
+    if (eventoIdConocido !== null) {
+      this.navegarAGaleria(eventoIdConocido);
+      return;
+    }
+
+    this.cargandoGaleria.set(true);
+    this.errorMensaje.set(null);
+
+    try {
+      const mesas = await firstValueFrom(this.http.get<any[]>('http://localhost:3000/mesas'));
+      const mesa = mesas.find(
+        (m) =>
+          String(m.id) === String(mesaId) ||
+          (m.codigoQr && String(m.codigoQr).includes(String(mesaId))),
+      );
+
+      if (mesa?.eventoId) {
+        this.navegarAGaleria(mesa.eventoId);
+      } else {
+        this.errorMensaje.set('No se pudo encontrar el evento de tu mesa.');
+      }
+    } catch {
+      this.errorMensaje.set('No se pudo abrir la galería. Intentá de nuevo.');
+    } finally {
+      this.cargandoGaleria.set(false);
+    }
   }
 }
