@@ -16,6 +16,7 @@ export class VotarEncuesta implements OnInit, OnDestroy {
 
   readonly mesaId = input<string | number | undefined>(undefined);
   readonly eventoId = input<string | number | undefined>(undefined);
+  readonly invitadoId = input<string | number | undefined>(undefined);
 
   readonly mesaActivaId = signal<string | number | null>(null);
   readonly mensajeExito = signal<string | null>(null);
@@ -23,7 +24,6 @@ export class VotarEncuesta implements OnInit, OnDestroy {
   private pollingId: ReturnType<typeof setInterval> | null = null;
 
   constructor() {
-    // Si cambia el mesaId o eventoId desde el padre, re-sincronizamos
     effect(() => {
       const idParam = this.route.snapshot.paramMap.get('mesaId');
       const resolvedMesaId = this.mesaId() ?? idParam ?? null;
@@ -58,9 +58,9 @@ export class VotarEncuesta implements OnInit, OnDestroy {
     if (!idMesa) return;
 
     this.mensajeExito.set(null);
-    const ok = await this.store.votar(idMesa, encuesta, opcionId);
+    const ok = await this.store.votar(idMesa, encuesta, opcionId, this.invitadoId());
     if (ok) {
-      this.mensajeExito.set('¡Voto registrado para la mesa!');
+      this.mensajeExito.set('¡Tu voto fue registrado!');
       this.refrescarEncuestas();
     }
   }

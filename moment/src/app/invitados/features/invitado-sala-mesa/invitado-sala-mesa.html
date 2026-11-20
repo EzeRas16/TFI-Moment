@@ -57,7 +57,7 @@
       }
 
       @if (invitado().mesaId; as mesaId) {
-        <app-votar-encuesta [mesaId]="mesaId" />
+        <app-votar-encuesta [mesaId]="mesaId" [invitadoId]="invitado().id" />
       }
 
       <hr class="divisor-sutil" />

@@ -16,7 +16,7 @@
   } @else {
     <div class="votos-lista">
       @for (encuesta of store.encuestasActivas(); track encuesta.id ?? encuesta.pregunta) {
-        @let opcionElegida = store.opcionVotadaPorMesa(encuesta.id);
+        @let opcionElegida = store.opcionVotadaPorInvitado(encuesta.id, invitadoId());
         @let yaVoto = !!opcionElegida;
         @let votandoEsta = !!encuesta.id && store.votandoEncuestaId() === encuesta.id;
 
