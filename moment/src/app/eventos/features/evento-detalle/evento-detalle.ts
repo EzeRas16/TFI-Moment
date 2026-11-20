@@ -85,4 +85,8 @@ export class EventoDetalle implements OnInit {
   irAMesas(eventoId: string | number) {
     this.router.navigate(['/', ROUTE_SEGMENTS.eventos, eventoId, ROUTE_SEGMENTS.mesas]);
   }
+
+  irAGaleria(eventoId: string | number) {
+  this.router.navigate(['/', ROUTE_SEGMENTS.eventos, eventoId, ROUTE_SEGMENTS.galeria]);
+}
 }

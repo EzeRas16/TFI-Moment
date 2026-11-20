@@ -107,6 +107,7 @@
 }
 
 .evento-estado {
+  margin-right: auto;
   color: #dfc2ad;
   font-size: 0.8rem;
   text-transform: uppercase;
@@ -120,9 +121,33 @@
 
 .evento-acciones {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   align-items: center;
   gap: 12px;
+}
+
+.btn-editar {
+  min-height: 44px;
+  padding: 0 16px;
+  background-color: transparent;
+  color: #dfc2ad;
+  border: 1px solid #dfc2ad;
+  border-radius: 4px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.btn-editar:hover {
+  background-color: rgba(223, 194, 173, 0.12);
+  border-color: #ebd2be;
+  color: #ebd2be;
+}
+
+.btn-editar:focus-visible {
+  outline: 2px solid #dfc2ad;
+  outline-offset: 2px;
 }
 
 .btn-baja {

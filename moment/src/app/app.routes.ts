@@ -4,8 +4,15 @@ import { ROUTE_SEGMENTS } from './app.route.segments';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: ROUTE_SEGMENTS.auth,
+    loadComponent: () =>
+      import('./shared/inicio/inicio').then((m) => m.Inicio), 
     pathMatch: 'full',
+  },
+
+  {
+    path: ROUTE_SEGMENTS.inicio,
+    loadComponent: () =>
+      import('./shared/inicio/inicio').then((m) => m.Inicio),
   },
 
   {

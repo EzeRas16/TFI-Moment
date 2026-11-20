@@ -55,15 +55,58 @@
   margin: 0 0 6px;
 }
 
+.mensaje {
+  color: #9cb8ba;
+  text-align: center;
+}
+
+/* Botones */
 .detalle-botones {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
   margin-top: 20px;
 }
 
+.grupo-gestion,
+.grupo-acciones {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.grupo-acciones {
+  padding-top: 16px;
+  border-top: 1px solid #1c4b4e;
+}
+
+.btn-gestion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 0 16px;
+  background-color: #071b1d;
+  color: #dfc2ad;
+  border: 1px solid #205053;
+  border-radius: 4px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.btn-gestion::after {
+  content: '→';
+  margin-left: 12px;
+}
+
+.btn-gestion:hover {
+  background-color: #0c2a2d;
+  border-color: #dfc2ad;
+}
+
 .btn-editar,
-.btn-retos,
 .btn-baja {
   min-height: 44px;
   padding: 0 16px;
@@ -79,13 +122,8 @@
   border: 1px solid #dfc2ad;
 }
 
-.btn-retos {
-  color: #d4b28c;
-  border: 1px solid #d4b28c;
-}
-
-.btn-retos:hover {
-  background-color: rgba(212, 178, 140, 0.12);
+.btn-editar:hover {
+  background-color: rgba(223, 194, 173, 0.12);
 }
 
 .btn-baja {
@@ -93,9 +131,15 @@
   border: 1px solid #ff9b97;
 }
 
-.mensaje {
-  color: #9cb8ba;
-  text-align: center;
+.btn-baja:hover {
+  background-color: rgba(255, 155, 151, 0.12);
+}
+
+.btn-gestion:focus-visible,
+.btn-editar:focus-visible,
+.btn-baja:focus-visible {
+  outline: 2px solid #dfc2ad;
+  outline-offset: 2px;
 }
 
 @media (min-width: 600px) {
@@ -112,41 +156,11 @@
   }
 
   .detalle-botones {
-    flex-direction: row;
-    flex-wrap: wrap;
     padding-bottom: 20px;
   }
-}
 
-.btn-mesas {
-  min-height: 44px;
-  padding: 0 16px;
-  background-color: #dfc2ad;
-  color: #0b2528;
-  border: 1px solid #dfc2ad;
-  border-radius: 4px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  cursor: pointer;
-}
-
-.btn-mesas:hover {
-  background-color: #ebd2be;
-  border-color: #ebd2be;
-}
-
-.btn-encuestas {
-  min-height: 44px;
-  padding: 0 16px;
-  background-color: transparent;
-  color: #dfc2ad;
-  border: 1px dashed #dfc2ad;
-  border-radius: 4px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  cursor: pointer;
-}
-
-.btn-encuestas:hover {
-  background-color: rgba(223, 194, 173, 0.14);
+  .grupo-gestion,
+  .grupo-acciones {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
