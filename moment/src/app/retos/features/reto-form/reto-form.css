@@ -41,6 +41,11 @@ h2 {
   border-color: #d4b28c;
 }
 
+.acciones-form {
+  display: flex;
+  gap: 0.6rem;
+}
+
 .btn-submit {
   width: 100%;
   padding: 0.8rem;
@@ -60,6 +65,22 @@ h2 {
 .btn-submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.btn-cancelar {
+  padding: 0.8rem 1rem;
+  background: transparent;
+  color: #cbd5e0;
+  border: 1px solid #4a5568;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-cancelar:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
 }
 
 .alert-error {
@@ -127,6 +148,7 @@ h2 {
 .reto-visible-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.7rem;
   background: #0a1515;
   padding: 0.7rem 0.85rem;
@@ -141,8 +163,27 @@ h2 {
 }
 
 .reto-texto {
+  flex: 1;
   font-size: 0.95rem;
   color: #ffffff;
+}
+
+.btn-editar-item {
+  padding: 0.35rem 0.7rem;
+  background: transparent;
+  color: #d4b28c;
+  border: 1px solid #d4b28c;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  font-weight: bold;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-editar-item:hover {
+  background: #d4b28c;
+  color: #112222;
 }
 
 /* ─── DESPLEGABLE ELIMINAR RETOS ─── */
@@ -213,4 +254,5 @@ h2 {
   padding: 0.8rem;
   background: #ff6b6b;
   color: #fff;
-  border: none;}
+  border: none;
+}

@@ -29,6 +29,6 @@ export class AutenticacionStateService {
     localStorage.removeItem(this.CLAVE_STORAGE);
     this.usuarioActualSignal.set(null);
 
-    this.router.navigate(['/auth']);
+    this.router.navigate(['/']);
   }
 }

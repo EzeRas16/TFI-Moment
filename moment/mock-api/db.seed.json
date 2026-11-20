@@ -44,8 +44,40 @@
       "fecha": "2026-11-25",
       "tipo": "Casamiento",
       "usuarioId": "s5Hf2-1MXzw",
-      "estado": "Pendiente",
+      "estado": "Cancelado",
       "id": "lTHHfffP_0A"
+    },
+    {
+      "nombre": "EventoPrueba",
+      "fecha": "2026-11-21",
+      "tipo": "Casamiento",
+      "usuarioId": "s5Hf2-1MXzw",
+      "estado": "Cancelado",
+      "id": "4_JWIQjzPoo"
+    },
+    {
+      "nombre": "Evento2",
+      "fecha": "2026-11-20",
+      "tipo": "Casamiento",
+      "usuarioId": "s5Hf2-1MXzw",
+      "estado": "Cancelado",
+      "id": "Mc6uHaAE-SA"
+    },
+    {
+      "nombre": "Evento3",
+      "fecha": "2026-11-20",
+      "tipo": "Casamiento",
+      "usuarioId": "s5Hf2-1MXzw",
+      "estado": "Cancelado",
+      "id": "ONlpdpMOVcw"
+    },
+    {
+      "nombre": "Evento3",
+      "fecha": "2026-11-26",
+      "tipo": "Casamiento",
+      "usuarioId": "s5Hf2-1MXzw",
+      "estado": "Pendiente",
+      "id": "HL_NsynaFi4"
     }
   ],
   "mesas": [
@@ -71,6 +103,30 @@
       "eventoId": "lTHHfffP_0A",
       "id": "hbXai5fwWQc",
       "codigoQr": "http://localhost:4200/unirse?mesaId=hbXai5fwWQc&token=mesa-1-mf0ea98"
+    },
+    {
+      "numero": 1,
+      "capacidad": 4,
+      "activa": true,
+      "eventoId": "4_JWIQjzPoo",
+      "id": "ey2Q2rCqLK8",
+      "codigoQr": "http://localhost:4200/unirse?mesaId=ey2Q2rCqLK8&token=mesa-1-m76l67k"
+    },
+    {
+      "numero": 12,
+      "capacidad": 4,
+      "activa": true,
+      "eventoId": "Mc6uHaAE-SA",
+      "id": "Pcmkjrt1mXM",
+      "codigoQr": "http://localhost:4200/unirse?mesaId=Pcmkjrt1mXM&token=mesa-12-3r8lhuu"
+    },
+    {
+      "numero": 23,
+      "capacidad": 4,
+      "activa": true,
+      "eventoId": "ONlpdpMOVcw",
+      "id": "7AkJEyTIS3Y",
+      "codigoQr": "http://localhost:4200/unirse?mesaId=7AkJEyTIS3Y&token=mesa-23-kvybfi8"
     }
   ],
   "invitados": [
@@ -103,6 +159,36 @@
       "apodo": "Pedrin",
       "mesaId": "mesa-1-mf0ea98",
       "id": "FywtJAYDgiU"
+    },
+    {
+      "nombre": "Matias",
+      "apodo": "Mat",
+      "mesaId": "mesa-1-m76l67k",
+      "id": "AjwM9GJR3pA"
+    },
+    {
+      "nombre": "Fran",
+      "apodo": "Franchi",
+      "mesaId": "mesa-1-m76l67k",
+      "id": "j7KzWU3u8FQ"
+    },
+    {
+      "nombre": "Matias",
+      "apodo": "Matiu",
+      "mesaId": "mesa-12-3r8lhuu",
+      "id": "vsSk7CHYT_s"
+    },
+    {
+      "nombre": "Eze",
+      "apodo": "Esi",
+      "mesaId": "mesa-12-3r8lhuu",
+      "id": "cSz65u1aTZ0"
+    },
+    {
+      "nombre": "Lucas",
+      "apodo": "Luqui",
+      "mesaId": "mesa-12-3r8lhuu",
+      "id": "lCI3BrFN1FM"
     }
   ],
   "retos": [
@@ -129,11 +215,77 @@
       "descripcion": "hola",
       "eventoId": "lTHHfffP_0A",
       "id": "EiO4paWRq_w"
+    },
+    {
+      "descripcion": "Toma ferne",
+      "eventoId": "4_JWIQjzPoo",
+      "id": "_SOb47D9ORU"
+    },
+    {
+      "descripcion": "Reto1",
+      "eventoId": "Mc6uHaAE-SA",
+      "id": "TbEHocsCA9M"
+    },
+    {
+      "descripcion": "hola",
+      "eventoId": "ONlpdpMOVcw",
+      "id": "HvcD3bIztpU"
+    },
+    {
+      "descripcion": "pepe",
+      "eventoId": "HL_NsynaFi4",
+      "id": "okTmulBFTio"
+    },
+    {
+      "descripcion": "hola",
+      "eventoId": "HL_NsynaFi4",
+      "id": "QuVfjoWIAjc"
     }
   ],
-  "fotos": [],
+  "fotos": [
+    {
+      "eventoId": "4_JWIQjzPoo",
+      "retoId": "_SOb47D9ORU",
+      "invitadoId": "j7KzWU3u8FQ",
+      "urlCloudinary": "https://res.cloudinary.com/z1ad9cmt/image/upload/v1795129304/acgftcrnng2zhelnpdpt.png",
+      "publicId": "acgftcrnng2zhelnpdpt",
+      "fechaSubida": "2026-11-19T23:01:49.444Z",
+      "estado": "Visible",
+      "id": "JD3jmInVSgE"
+    },
+    {
+      "eventoId": "Mc6uHaAE-SA",
+      "retoId": "TbEHocsCA9M",
+      "invitadoId": "vsSk7CHYT_s",
+      "urlCloudinary": "https://res.cloudinary.com/z1ad9cmt/image/upload/v1795131375/r7cnpaucwiukoe9w6jwr.png",
+      "publicId": "r7cnpaucwiukoe9w6jwr",
+      "fechaSubida": "2026-11-19T23:36:19.743Z",
+      "estado": "Visible",
+      "id": "FNuFp25eygo"
+    }
+  ],
   "albumes": [],
-  "encuestas": [],
+  "encuestas": [
+    {
+      "eventoId": "4_JWIQjzPoo",
+      "pregunta": "Una tanga rosa",
+      "opciones": [
+        {
+          "id": "op-1795129244857-1",
+          "texto": "si",
+          "votos": 0
+        },
+        {
+          "id": "op-1795129244857-2",
+          "texto": "no",
+          "votos": 0
+        }
+      ],
+      "activa": true,
+      "creadaEn": "2026-11-19T23:00:44.857Z",
+      "id": "6QLzHglqgsw"
+    }
+  ],
   "votos": [],
   "$schema": "./node_modules/json-server/schema.json"
 }

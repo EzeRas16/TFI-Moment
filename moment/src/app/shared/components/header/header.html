@@ -1,36 +1,38 @@
 <header class="main-header">
-  <div class="header-logo">
-    <span class="brand-title"></span>
-  </div>
+  <a routerLink="/" class="moments-logo" aria-label="Moments">
+    <span class="moments-m">M</span><span>oments</span>
+  </a>
 
-  
-  <nav class="header-nav">
-  
-  </nav>
+  <div class="header-derecha">
+    <nav class="nav-acciones">
+      <a routerLink="/" class="btn-inicio">Inicio</a>
 
-  
-  @if (estaAutenticado()) {
-    <div class="user-menu-container">
-      <button class="user-icon-btn" (click)="alternarDesplegable()" aria-label="Menú de usuario">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-        
-        @if (usuarioActual(); as usuario) {
-          <span class="user-name">{{ usuario.nombre }}</span>
-        }
-      </button>
-
-      
-      @if (menuDesplegableAbierto) {
-        <div class="dropdown-menu">
-          <button class="dropdown-item logout-btn" (click)="alCerrarSesion()">
-            Cerrar sesión
-          </button>
-        </div>
+      @if (!estaAutenticado()) {
+        <a routerLink="/auth" class="btn-login">Iniciar sesión</a>
       }
-    </div>
-  }
+    </nav>
+
+    @if (estaAutenticado()) {
+      <div class="user-menu-container">
+        <button class="user-icon-btn" (click)="alternarDesplegable()" aria-label="Menú de usuario">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+
+          @if (usuarioActual(); as usuario) {
+            <span class="user-name">{{ usuario.nombre }}</span>
+          }
+        </button>
+
+        @if (menuDesplegableAbierto) {
+          <div class="dropdown-menu">
+            <button class="dropdown-item logout-btn" (click)="alCerrarSesion()">
+              Cerrar sesión
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
 </header>

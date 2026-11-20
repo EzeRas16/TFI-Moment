@@ -29,4 +29,8 @@ export class RetoService {
   eliminarReto(id: number | string): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`);
   }
+
+  actualizarReto(id: number | string, cambios: Partial<Reto>): Observable<Reto> {
+    return this.http.patch<Reto>(`${this.url}/${id}`, cambios);
+  }
 }

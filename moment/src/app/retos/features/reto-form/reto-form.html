@@ -26,9 +26,21 @@
       </div>
     }
 
-    <button type="submit" class="btn-submit" [disabled]="cargando()">
-      {{ cargando() ? 'Guardando...' : 'GUARDAR RETO' }}
-    </button>
+    <div class="acciones-form">
+      <button type="submit" class="btn-submit" [disabled]="cargando()">
+        {{
+          cargando()
+            ? (retoEditandoId() !== null ? 'Actualizando...' : 'Guardando...')
+            : (retoEditandoId() !== null ? 'ACTUALIZAR RETO' : 'GUARDAR RETO')
+        }}
+      </button>
+
+      @if (retoEditandoId() !== null) {
+        <button type="button" class="btn-cancelar" (click)="cancelarEdicion()" [disabled]="cargando()">
+          Cancelar
+        </button>
+      }
+    </div>
   </form>
 
   <hr class="divider" />
@@ -49,6 +61,13 @@
             <li class="reto-visible-item">
               <span class="reto-numero">#{{ $index + 1 }}</span>
               <span class="reto-texto">{{ reto.descripcion }}</span>
+              <button
+                type="button"
+                class="btn-editar-item"
+                (click)="iniciarEdicion(reto)"
+              >
+                Actualizar
+              </button>
             </li>
           }
         </ul>

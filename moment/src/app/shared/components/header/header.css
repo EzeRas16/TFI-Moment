@@ -7,13 +7,12 @@
   background-color: #0f3033;
   border-bottom: 1px solid #eaeaea;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-  
   position: sticky;
   top: 0;
   left: 0;
   width: 100%;
-  box-sizing: border-box; 
-  z-index: 1000;         
+  box-sizing: border-box;
+  z-index: 1000;
 }
 
 .brand-title {
@@ -77,4 +76,69 @@
 
 .dropdown-item:hover {
   background-color: #fdf2f2;
+}
+
+.moments-logo {
+  display: inline-flex;
+  align-items: baseline;
+  text-decoration: none;
+  color: #f3dfd0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  user-select: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.moments-m {
+  color: #e6c2a8;
+  font-weight: 800;
+}
+
+.moments-logo:hover {
+  opacity: 0.9;
+}
+
+.btn-inicio {
+  color: #dfc2ad;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+}
+
+.btn-inicio:hover,
+.btn-inicio.activo {
+  color: #ffffff;
+  background-color: #1a3333;
+  border-color: #3a5a5c;
+}
+
+.nav-acciones {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-login {
+  color: #112222;
+  background-color: #d4b28c;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 0.4rem 0.85rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.btn-login:hover {
+  background-color: #c39e75;
+}
+.header-derecha {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }

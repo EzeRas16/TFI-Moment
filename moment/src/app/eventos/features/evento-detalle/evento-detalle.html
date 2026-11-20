@@ -10,23 +10,35 @@
       <p class="detalle-dato">Fecha: {{ e.fecha }}</p>
       <p class="detalle-dato">Tipo: {{ e.tipo }}</p>
 
-      @if (puedeModificar()) {
-        <div class="detalle-botones">
-          <button type="button" class="btn-mesas" (click)="irAMesas(e.id)">GESTIONAR MESAS</button>
-          <button type="button" class="btn-encuestas" (click)="irAEncuestas(e.id)">
-            GESTIONAR ENCUESTAS
+      <div class="detalle-botones">
+        <div class="grupo-gestion">
+          @if (puedeModificar()) {
+            <button type="button" class="btn-gestion" (click)="irAMesas(e.id)">
+              GESTIONAR MESAS
+            </button>
+            <button type="button" class="btn-gestion" (click)="irAGestionRetos(e.id)">
+              GESTIONAR RETOS
+            </button>
+            <button type="button" class="btn-gestion" (click)="irAEncuestas(e.id)">
+              GESTIONAR ENCUESTAS
+            </button>
+          }
+
+          <!-- La galería se puede ver aunque el evento esté cancelado -->
+          <button type="button" class="btn-gestion" (click)="irAGaleria(e.id)">
+            VER GALERÍA
           </button>
-          
-          <button type="button" class="btn-editar" (click)="editando.update((v) => !v)">
-            {{ editando() ? 'CERRAR EDICIÓN' : 'EDITAR EVENTO' }}
-          </button>
-          <button type="button" class="btn-retos" (click)="irAGestionRetos(e.id)">
-            GESTIONAR RETOS
-          </button>
-          <button type="button" class="btn-galeria" (click)="irAGaleria(e.id)">VER GALERÍA</button>
-          <button type="button" class="btn-baja" (click)="darDeBaja()">DAR DE BAJA</button>
         </div>
-      }
+
+        @if (puedeModificar()) {
+          <div class="grupo-acciones">
+            <button type="button" class="btn-editar" (click)="editando.update((v) => !v)">
+              {{ editando() ? 'CERRAR EDICIÓN' : 'EDITAR EVENTO' }}
+            </button>
+            <button type="button" class="btn-baja" (click)="darDeBaja()">DAR DE BAJA</button>
+          </div>
+        }
+      </div>
 
       @if (editando()) {
         <app-evento-formulario [aEditar]="e" (aCargar)="editar($event)" />

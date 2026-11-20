@@ -31,6 +31,8 @@ export class RetoForm implements OnInit {
   desplegableListaAbierto = signal(false);
   desplegableAbierto = signal(false);
 
+  retoEditandoId = signal<number | string | null>(null);
+
   retosVisibles = computed(() => {
     const lista = this.retos();
     const idEvento = this.eventoIdActual();
@@ -71,6 +73,20 @@ export class RetoForm implements OnInit {
     this.desplegableAbierto.update(valor => !valor);
   }
 
+  iniciarEdicion(reto: Reto) {
+    this.retoEditandoId.set(reto.id);
+    this.descripcion = reto.descripcion;
+    this.mensajeError.set('');
+    this.mensajeExito.set('');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  cancelarEdicion() {
+    this.retoEditandoId.set(null);
+    this.descripcion = '';
+    this.mensajeError.set('');
+  }
+
   guardarReto() {
     if (!this.descripcion.trim()) {
       this.mensajeError.set('Por favor, ingresa una descripción para el reto.');
@@ -81,9 +97,30 @@ export class RetoForm implements OnInit {
     this.mensajeError.set('');
     this.mensajeExito.set('');
 
+    const idEditando = this.retoEditandoId();
+    const descripcionLimpia = this.descripcion.trim();
+
+    if (idEditando !== null) {
+      this.servicioReto.actualizarReto(idEditando, { descripcion: descripcionLimpia }).subscribe({
+        next: () => {
+          this.cargando.set(false);
+          this.mensajeExito.set('¡Reto actualizado con éxito!');
+          this.retoEditandoId.set(null);
+          this.descripcion = '';
+          this.cargarRetos();
+        },
+        error: (err) => {
+          this.cargando.set(false);
+          console.error('Error al actualizar el reto:', err);
+          this.mensajeError.set('No se pudo actualizar el reto.');
+        }
+      });
+      return;
+    }
+
     const idEvento = this.eventoIdActual();
     const nuevoReto: Omit<Reto, 'id'> = {
-      descripcion: this.descripcion.trim(),
+      descripcion: descripcionLimpia,
       ...(idEvento !== null ? { eventoId: idEvento } : {}),
     };
 
