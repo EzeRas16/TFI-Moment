@@ -7,4 +7,5 @@ export const ROUTE_SEGMENTS = {
   retos: 'retos',
   encuestas: 'encuestas',
   votos: 'votos',
+  galeria : 'galeria',
 } as const;

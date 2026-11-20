@@ -1,0 +1,73 @@
+.galeria {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.titulo {
+  margin: 0 0 16px;
+  text-align: center;
+  color: #dfc2ad;
+}
+
+.mensaje {
+  text-align: center;
+  color: #9cb8ba;
+}
+
+.mensaje.error {
+  color: #ff9b97;
+}
+
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tarjeta {
+  overflow: hidden;
+  background: #0f3033;
+  border: 1px solid #1c4b4e;
+  border-radius: 8px;
+}
+
+.imagen {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.epigrafe {
+  margin: 0;
+  padding: 8px 10px;
+  font-size: 0.85rem;
+  color: #dfc2ad;
+  text-align: center;
+}
+
+@media (min-width: 600px) {
+  .grilla {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .grilla {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+
+.separador {
+  margin: 0 6px;
+  color: #9cb8ba;
+}
+
+.nombre-evento {
+  color: #dfc2ad;
+}

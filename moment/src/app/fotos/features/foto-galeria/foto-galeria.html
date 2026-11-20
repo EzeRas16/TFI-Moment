@@ -1,0 +1,31 @@
+<section class="galeria">
+  <h2 class="titulo">
+  Galería del evento
+  @if (nombreEvento()) {
+    <span class="separador">|</span>
+    <span class="nombre-evento">{{nombreEvento() }}</span>
+  }
+</h2>
+
+  @if (cargando()) {
+    <p class="mensaje">Cargando fotos...</p>
+  } @else if (error()) {
+    <p class="mensaje error" role="alert">{{ error() }}</p>
+  } @else if (fotos().length === 0) {
+    <p class="mensaje">Todavía no hay fotos en este evento.</p>
+  } @else {
+    <ul class="grilla">
+      @for (foto of fotos(); track foto.id) {
+        <li class="tarjeta">
+          <img
+            class="imagen"
+            [src]="miniatura(foto.urlCloudinary)"
+            [alt]="'Foto de ' + autor(foto)"
+            loading="lazy"
+          />
+          <p class="epigrafe">{{ autor(foto) }}</p>
+        </li>
+      }
+    </ul>
+  }
+</section>
