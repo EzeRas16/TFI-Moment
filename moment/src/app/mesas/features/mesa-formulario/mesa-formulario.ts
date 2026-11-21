@@ -1,194 +1,162 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { MesaClient } from '../../data-access/mesa-client';
 import { MesaStore } from '../../data-access/mesa-store';
-import { Mesa } from '../../data-access/mesa.model';
-import { InvitadoClient } from '../../../invitados/data-access/invitado-client';
+import { ROUTE_SEGMENTS } from '../../../app.route.segments';
+
+interface MesaFormState {
+  numero: number | null;
+  capacidad: number;
+  activa: boolean;
+}
 
 @Component({
   selector: 'app-mesa-formulario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [],
   templateUrl: './mesa-formulario.html',
-  styleUrl: './mesa-formulario.css'
+  styleUrl: './mesa-formulario.css',
 })
 export class MesaFormulario implements OnInit {
-  private readonly fb = inject(FormBuilder);
+  private readonly mesaClient = inject(MesaClient);
   protected readonly mesaStore = inject(MesaStore);
   private readonly route = inject(ActivatedRoute);
-  private readonly invitadoClient = inject(InvitadoClient);
+  private readonly router = inject(Router);
 
-  modoVista = signal<'lista' | 'formulario'>('lista');
-  editandoId = signal<number | string | null>(null);
-  mesaForm: FormGroup;
+  protected readonly editandoId = signal<string | number | null>(null);
+  protected readonly eventoId = signal<string | number>(1);
+  protected readonly guardando = signal<boolean>(false);
 
-  // SCRUM-23: Estado para control de invitados y panel de detalles por mesa
-  invitadosPorMesa = signal<{ [mesaId: string | number]: any[] }>({});
-  mesaSeleccionadaParaDetalle = signal<Mesa | null>(null);
+  readonly modelo = signal<MesaFormState>({
+    numero: null,
+    capacidad: 4,
+    activa: true,
+  });
 
-  constructor() {
-    this.mesaForm = this.fb.group({
-      numero: ['', [Validators.required, Validators.min(1), Validators.max(150)]],
-      capacidad: [4, [Validators.required, Validators.min(1), Validators.max(12)]],
-      activa: [true, Validators.required]
-    });
-  }
+  readonly tocados = signal<{ numero: boolean; capacidad: boolean }>({
+    numero: false,
+    capacidad: false,
+  });
 
-  ngOnInit(): void {
-    const eventoId = this.obtenerEventoId();
-    this.mesaStore.cargarMesasPorEvento(eventoId).then(() => {
-      // Cargamos los invitados una vez que las mesas están disponibles en el store
-      this.cargarInvitados();
-    });
-  }
+  readonly errorNumero = computed<string | null>(() => {
+    const val = this.modelo().numero;
+    if (val === null || val === undefined || Number.isNaN(Number(val))) {
+      return 'El número de mesa es obligatorio.';
+    }
+    const num = Number(val);
+    if (num < 1) {
+      return 'El número de mesa debe ser mayor a 0.';
+    }
+    if (num > 150) {
+      return 'El número de mesa no puede superar 150.';
+    }
+    const duplicada = this.mesaStore
+      .mesas()
+      .some((m) => Number(m.numero) === num && String(m.id) !== String(this.editandoId()));
+    if (duplicada) {
+      return '¡Ya existe una mesa con ese número en este evento!';
+    }
+    return null;
+  });
 
-  private obtenerEventoId(): string | number {
-    const eventoId = this.route.snapshot.paramMap.get('eventoId') || 
-                     this.route.snapshot.parent?.paramMap.get('eventoId');
-    return eventoId ? eventoId : 1; 
-  }
+  readonly errorCapacidad = computed<string | null>(() => {
+    const cap = Number(this.modelo().capacidad);
+    if (!cap || Number.isNaN(cap) || cap < 1 || cap > 12) {
+      return 'Ingresá una capacidad válida (entre 1 y 12).';
+    }
+    return null;
+  });
 
-  cargarInvitados(): void {
-    this.invitadoClient.obtenerInvitados().subscribe({
-      next: (invitados) => {
-        const agrupados: { [key: string]: any[] } = {};
-        const mesas = this.mesaStore.mesas();
+  readonly formularioValido = computed<boolean>(
+    () => this.errorNumero() === null && this.errorCapacidad() === null,
+  );
 
-        invitados.forEach(inv => {
-          // Relacionamos el invitado con la mesa comparando el ID directo o buscando el token en el codigoQr
-          const mesaEncontrada = mesas.find(m => 
-            String(m.id) === String(inv.mesaId) || 
-            (m.codigoQr && m.codigoQr.includes(String(inv.mesaId)))
-          );
+  async ngOnInit(): Promise<void> {
+    const idEvento =
+      this.route.snapshot.paramMap.get('eventoId') ||
+      this.route.snapshot.parent?.paramMap.get('eventoId') ||
+      1;
+    this.eventoId.set(idEvento);
 
-          if (mesaEncontrada) {
-            const mesaIdStr = String(mesaEncontrada.id);
-            if (!agrupados[mesaIdStr]) agrupados[mesaIdStr] = [];
-            agrupados[mesaIdStr].push(inv);
-          }
+    if (this.mesaStore.mesas().length === 0) {
+      await this.mesaStore.cargarMesasPorEvento(idEvento);
+    }
+
+    const idMesa = this.route.snapshot.paramMap.get('id');
+    if (idMesa) {
+      this.editandoId.set(idMesa);
+      try {
+        const mesa = await firstValueFrom(this.mesaClient.getMesaById(idMesa));
+        this.modelo.set({
+          numero: mesa.numero,
+          capacidad: mesa.capacidad ?? 4,
+          activa: mesa.activa,
         });
-
-        this.invitadosPorMesa.set(agrupados);
-      },
-      error: (err) => console.error('Error al cargar invitados para las mesas', err)
-    });
-  }
-
-  irNuevo(): void {
-    this.editandoId.set(null);
-    this.mesaForm.reset({ numero: '', capacidad: 4, activa: true });
-    this.modoVista.set('formulario');
-  }
-
-  irEditar(mesa: Mesa): void {
-    this.editandoId.set(mesa.id);
-    this.mesaForm.setValue({
-      numero: mesa.numero,
-      capacidad: mesa.capacidad || 4,
-      activa: mesa.activa
-    });
-    this.modoVista.set('formulario');
-  }
-
-  volverALista(): void {
-    this.modoVista.set('lista');
-    this.mesaForm.reset({ numero: '', capacidad: 4, activa: true });
-    this.editandoId.set(null);
-  }
-
-  guardar(): void {
-    if (this.mesaForm.invalid) {
-      this.mesaForm.markAllAsTouched();
-      return;
-    }
-
-    const numeroIngresado = Number(this.mesaForm.get('numero')?.value);
-    const idActual = this.editandoId();
-
-    const mesasActuales = this.mesaStore.mesas();
-    const mesaDuplicada = mesasActuales.find(m => Number(m.numero) === numeroIngresado && m.id !== idActual);
-
-    if (mesaDuplicada) {
-      this.mesaForm.get('numero')?.setErrors({ duplicado: true });
-      return;
-    }
-
-    const eventoId = this.obtenerEventoId();
-    const formValues = { ...this.mesaForm.value, eventoId };
-
-    if (idActual !== null) {
-      this.mesaStore.actualizarMesa(idActual, formValues); 
-    } else {
-      this.mesaStore.crearMesa(formValues);
-    }
-
-    this.volverALista();
-  }
-
-  eliminar(id: string | number): void {
-    if (confirm('¿Estás seguro de eliminar esta mesa?')) {
-      this.mesaStore.eliminarMesa(id);
+      } catch (err) {
+        console.error('Error al cargar mesa para editar', err);
+      }
     }
   }
 
-  // --- ACCIONES SCRUM-23 (Detalles y Expulsión) ---
-
-  verDetallesMesa(mesa: Mesa): void {
-    this.mesaSeleccionadaParaDetalle.set(mesa);
+  onNumeroInput(event: Event): void {
+    const raw = (event.target as HTMLInputElement).value;
+    const parsed = raw === '' ? null : Number(raw);
+    this.modelo.update((m) => ({ ...m, numero: parsed }));
   }
 
-  cerrarDetalles(): void {
-    this.mesaSeleccionadaParaDetalle.set(null);
+  onCapacidadInput(event: Event): void {
+    const raw = (event.target as HTMLInputElement).value;
+    const parsed = raw === '' ? 0 : Number(raw);
+    this.modelo.update((m) => ({ ...m, capacidad: parsed }));
   }
 
-  expulsarInvitado(invitadoId: string | number): void {
-    if (confirm('¿Estás seguro de que querés expulsar a este invitado de la mesa?')) {
-      const eventoId = this.obtenerEventoId();
-      this.mesaStore.expulsarInvitadoDeMesa(invitadoId, eventoId).then(() => {
-        this.cargarInvitados(); // Actualizamos la lista local en tiempo real
-      });
-    }
+  onActivaChange(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.modelo.update((m) => ({ ...m, activa: checked }));
   }
 
-  // --- SCRUM-19: Utilidades de QR ---
+  marcarTocado(campo: 'numero' | 'capacidad'): void {
+    this.tocados.update((t) => ({ ...t, [campo]: true }));
+  }
 
-  async descargarQrIndividual(mesa: Mesa): Promise<void> {
-    if (!mesa.codigoQr) return;
+  async guardar(event: Event): Promise<void> {
+    event.preventDefault();
+    this.tocados.set({ numero: true, capacidad: true });
 
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(mesa.codigoQr)}`;
-    
+    if (!this.formularioValido() || this.guardando()) return;
+
+    this.guardando.set(true);
+    const actual = this.modelo();
+    const payload = {
+      numero: Number(actual.numero),
+      capacidad: Number(actual.capacidad),
+      activa: actual.activa,
+      eventoId: this.eventoId(),
+    };
+
     try {
-      const response = await fetch(qrUrl);
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-      
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.download = `QR-Mesa-${mesa.numero}.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
+      const idActual = this.editandoId();
+      if (idActual !== null) {
+        await this.mesaStore.actualizarMesa(idActual, payload);
+      } else {
+        await this.mesaStore.crearMesa(payload);
+      }
+      await this.volverALista();
     } catch (err) {
-      console.error('Error al descargar el código QR', err);
-      alert('No se pudo descargar el código QR.');
+      console.error('Error al guardar mesa', err);
+    } finally {
+      this.guardando.set(false);
     }
   }
 
-  exportarTodosQr(): void {
-    const mesasConQr = this.mesaStore.mesas().filter(m => m.codigoQr);
-    
-    if (mesasConQr.length === 0) {
-      alert('No hay mesas con códigos QR generados para exportar.');
-      return;
-    }
-    window.print();
-  }
-  
-  cancelar() {
-    this.modoVista.set('lista');
-    this.mesaForm.reset();
-    this.editandoId.set(null);
+  async volverALista(): Promise<void> {
+    await this.router.navigate([
+      '/',
+      ROUTE_SEGMENTS.eventos,
+      this.eventoId(),
+      ROUTE_SEGMENTS.mesas,
+      'gestion',
+    ]);
   }
 }

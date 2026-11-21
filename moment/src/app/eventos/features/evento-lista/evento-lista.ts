@@ -5,7 +5,7 @@ import { AutenticacionStateService } from '../../../autenticacion/data-access/au
 import { Router } from '@angular/router';
 import { ESTADOS, Evento } from '../../data-access/evento.model';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   imports: [], // aca se puede importar datepipe para formatear fechas en el html con slash y no con xxxx-xx-xx

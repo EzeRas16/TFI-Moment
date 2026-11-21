@@ -1,0 +1,59 @@
+@if (errorMensaje()) {
+  <div class="alerta-error izquierda" role="alert">
+    {{ errorMensaje() }}
+  </div>
+}
+
+<form (submit)="guardarCambiosPerfil($event)" class="form-invitado izquierda">
+  <div class="campo-grupo">
+    <label for="editNombre">Nombre</label>
+    <input
+      id="editNombre"
+      type="text"
+      [value]="modelo().nombre"
+      (input)="onCampoInput('nombre', $event)"
+      (blur)="marcarTocado('nombre')"
+      [class.input-error]="tocados().nombre && errorNombre()"
+    />
+    @if (tocados().nombre && errorNombre(); as msgNombre) {
+      <span class="mensaje-error">{{ msgNombre }}</span>
+    }
+  </div>
+
+  <div class="campo-grupo">
+    <label for="editApodo">Apodo de fiesta</label>
+    <input
+      id="editApodo"
+      type="text"
+      [value]="modelo().apodo"
+      (input)="onCampoInput('apodo', $event)"
+      (blur)="marcarTocado('apodo')"
+      [class.input-error]="tocados().apodo && errorApodo()"
+    />
+    @if (tocados().apodo && errorApodo(); as msgApodo) {
+      <span class="mensaje-error">{{ msgApodo }}</span>
+    }
+  </div>
+
+  <div class="acciones-stack">
+    <button
+      type="submit"
+      class="btn-acento btn-ancho"
+      [disabled]="store.cargando() || !formularioValido()"
+    >
+      @if (store.cargando()) {
+        <span>Guardando...</span>
+      } @else {
+        <span>Guardar cambios</span>
+      }
+    </button>
+    <button
+      type="button"
+      class="btn-borde btn-ancho"
+      (click)="cancelar.emit()"
+      [disabled]="store.cargando()"
+    >
+      Cancelar
+    </button>
+  </div>
+</form>

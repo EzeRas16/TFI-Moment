@@ -1,4 +1,3 @@
-/* Base mobile-first (celulares) */
 .invitado-container {
   min-height: calc(100vh - 70px);
   background-color: #0b2528;
@@ -24,55 +23,8 @@
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
 }
 
-.invitado-banner {
-  background-color: rgba(223, 194, 173, 0.14);
-  border-bottom: 1px solid #1c4b4e;
-  padding: 14px 16px;
-  text-align: center;
-}
-
-.invitado-banner-titulo {
-  margin: 0;
-  color: #dfc2ad;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.6px;
-}
-
 .invitado-cuerpo {
   padding: 22px 18px;
-}
-
-.invitado-cuerpo.centrado {
-  text-align: center;
-}
-
-.mesa-badge-box {
-  margin-bottom: 16px;
-}
-
-.mesa-badge {
-  display: inline-block;
-  background-color: #071b1d;
-  color: #9cb8ba;
-  border: 1px solid #205053;
-  border-radius: 999px;
-  padding: 6px 14px;
-  font-size: 0.8rem;
-  letter-spacing: 0.4px;
-}
-
-.invitado-apodo {
-  color: #ffffff;
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin: 0 0 4px;
-}
-
-.invitado-nombre {
-  color: #9cb8ba;
-  font-size: 0.95rem;
-  margin: 0 0 22px;
 }
 
 .invitado-titulo {
@@ -89,10 +41,6 @@
   text-align: center;
   margin: 0 0 22px;
   line-height: 1.4;
-}
-
-.form-invitado.izquierda {
-  text-align: left;
 }
 
 .campo-grupo {
@@ -153,16 +101,6 @@
   margin-bottom: 16px;
 }
 
-.alerta-error.izquierda {
-  text-align: left;
-}
-
-.acciones-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
 .btn-ancho {
   width: 100%;
 }
@@ -190,53 +128,6 @@
   cursor: not-allowed;
 }
 
-.btn-borde {
-  min-height: 42px;
-  padding: 8px 16px;
-  background-color: transparent;
-  color: #9cb8ba;
-  border: 1px solid #205053;
-  border-radius: 4px;
-  font-size: 0.88rem;
-  font-weight: bold;
-  letter-spacing: 0.6px;
-  cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-}
-
-.btn-borde:hover:not(:disabled) {
-  background-color: rgba(28, 75, 78, 0.4);
-  border-color: #9cb8ba;
-  color: #ffffff;
-}
-
-.btn-borde:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.divisor-sutil {
-  border: none;
-  border-top: 1px solid #1c4b4e;
-  margin: 20px 0 12px;
-}
-
-.btn-enlace {
-  background: transparent;
-  border: none;
-  color: #9cb8ba;
-  font-size: 0.84rem;
-  cursor: pointer;
-  padding: 6px 8px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.btn-enlace:hover {
-  color: #ffffff;
-}
-
-/* Escalado para pantallas medianas y grandes */
 @media (min-width: 600px) {
   .invitado-container {
     padding: 36px 20px;
@@ -245,9 +136,5 @@
 
   .invitado-cuerpo {
     padding: 28px 30px;
-  }
-
-  .invitado-apodo {
-    font-size: 1.7rem;
   }
 }

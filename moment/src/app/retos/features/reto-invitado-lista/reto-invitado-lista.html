@@ -20,7 +20,7 @@
 
   @if (desplegableListaAbierto()) {
     <div class="list-section">
-      @if (cargandoLista()) {
+      @if (cargandoLista() && retos().length === 0) {
         <p class="estado-texto">Cargando retos...</p>
       } @else if (retosVisibles().length === 0) {
         <p class="estado-texto">No hay retos cargados todavía.</p>

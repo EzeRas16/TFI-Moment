@@ -1,0 +1,36 @@
+<div class="detalle-panel no-print">
+  <div class="detalle-panel-header">
+    <h4 class="detalle-panel-titulo">
+      Administrar Invitados - Mesa Nº {{ mesa().numero }}
+    </h4>
+    <button type="button" class="btn-cerrar-x" (click)="cerrar.emit()" aria-label="Cerrar">
+      ✕
+    </button>
+  </div>
+
+  <ul class="invitados-lista">
+    @for (invitado of invitados(); track invitado.id) {
+      <li class="invitado-item">
+        <div>
+          <strong class="invitado-apodo">{{ invitado.apodo }}</strong>
+          <span class="invitado-nombre">({{ invitado.nombre }})</span>
+        </div>
+        <button
+          type="button"
+          class="btn-peligro btn-sm-custom"
+          (click)="expulsarInvitado(invitado.id)"
+        >
+          Expulsar
+        </button>
+      </li>
+    } @empty {
+      <li class="invitado-vacio">
+        Aún no hay invitados registrados en esta mesa.
+      </li>
+    }
+  </ul>
+
+  <button type="button" class="btn-secundario btn-full" (click)="cerrar.emit()">
+    Cerrar detalle
+  </button>
+</div>
